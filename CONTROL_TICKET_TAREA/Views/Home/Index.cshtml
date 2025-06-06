@@ -1,0 +1,186 @@
+﻿@model List<CONTROL_TICKET_TAREA.Dtos.TbControlTicketTareaResponseProv>
+
+@{
+    ViewData["Title"] = "CONTROL_TICKET_TAREA";
+}
+
+<div class="d-flex gap-4 p-3" style="height: 100vh; align-items: flex-start;">
+    <!-- Tabla: 75% -->
+    <div style="width: 75%; height: 100%; overflow-y: auto;">
+        <fieldset class="mb-3">
+            <legend>Búsqueda</legend>
+            <div class="d-flex flex-wrap gap-3">
+                <div class="d-flex align-items-center gap-2">
+                    <label for="txtReceptor" class="form-label mb-0">Receptor:</label>
+                    <input type="text" class="form-control" id="txtReceptor" name="receptor" placeholder="RECEPTOR">
+                </div>
+                <div class="d-flex align-items-center gap-2 flex-grow-1">
+                    <label for="txtDescripcion" class="form-label mb-0">Descripción:</label>
+                    <input type="text" class="form-control" id="txtDescripcion" name="descripcion" placeholder="DESCRIPCIÓN">
+                </div>
+            </div>
+        </fieldset>
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th scope="col">GE</th>
+                    <th scope="col">EMPRESA</th>
+                    <th scope="col">RECEPTOR</th>
+                    <th scope="col">MEDIO</th>
+                    <th scope="col">CONTACTO</th>
+                    <th scope="col">PRIORIDAD</th>
+                    <th scope="col">ITEMS</th>
+                    <th scope="col">SERIE</th>
+                    <th scope="col">TIPO</th>
+                    <th scope="col">DESCRIPCIÓN</th>
+                    <th scope="col">TICKET</th>
+                    <th scope="col">ESTADO</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Count != 0)
+                {
+                    foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@item.GE</td>
+                            <td>@item.Empresa</td>
+                            <td>@item.Receptor</td>
+                            <td>@item.Medio</td>
+                            <td>@item.Contacto</td>
+                            <td>@item.Prioridad</td>
+                            <td>5</td>
+                            <td>@item.NSerie</td>
+                            <td>@item.Tipo</td>
+                            <td>@item.Descripcion</td>
+                            <td>@item.CodTicket</td>
+                            <td>@item.Estado</td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="12" class="text-center text-muted">No se encontraron resultados.</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Aside: 25% -->
+    <aside role="form" style="width: 25%;" class="d-flex flex-column gap-1 border border-2 border-dark p-3">
+        <header class="h4 alert alert-info mb-2">Panel de Registro</header>
+        <form action="#" class="d-flex flex-column gap-3">
+                <div>
+                    <label for="cboGrupoEconomico" class="form-label">Grupo Económico</label>
+                    <select class="form-select" id="cboGrupoEconomico" asp-items="@ViewBag.GruposEconomicos">
+                        <option selected value="">-SELECCIONAR-</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="cboEntidad" class="form-label">Entidad / Empresa</label>
+                    <select class="form-select" id="cboEntidad" asp-items="@ViewBag.Empresas">
+                        <option selected value="">-SELECCIONAR-</option>
+                    </select>
+                </div>
+            <div>
+                <label for="cboResponsable" class="form-label">Responsable</label>
+                <select class="form-select" id="cboResponsable" asp-items="@ViewBag.Responsables">
+                    <option selected value="">-SELECCIONAR-</option>
+                </select>
+            </div>
+            <div>
+                <label for="cboItem" class="form-label">Items</label>
+                <select class="form-select" id="cboItem">
+                    <option selected value="0">-SELECCIONAR-</option>
+                </select>
+            </div>
+            <div class="d-flex flex-row gap-3">
+                <div class="flex-grow-2">
+                    <label for="txtItem" class="form-label">Nuevo Item</label>
+                    <input type="text" class="form-control" id="txtItem">
+                </div>
+                <div class="flex-grow-1">
+                    <label for="txtCantItems" class="form-label">Cantidad Items</label>
+                    <input type="text" class="form-control" id="txtCantItems" placeholder="0">
+                </div>
+            </div>
+            <div class="d-flex flex-row gap-3">
+                <div class="flex-grow-2">
+                    <label for="cboPrioridad" class="form-label">Prioridad</label>
+                    <select class="form-select" id="cboPrioridad" asp-items="@ViewBag.Prioridades">
+                        <option selected value="">-SELECCIONAR-</option>
+                    </select>
+                </div>
+                <div class="flex-grow-1">
+                    <label for="txtCodTicket" class="form-label">Cod. Ticket</label>
+                    <input type="text" class="form-control" id="txtCodTicket" placeholder="COD. TICKET">
+                </div>
+            </div>
+            <div>
+                <label for="txtContacto" class="form-label">Contacto</label>
+                <input type="text" class="form-control" id="txtContacto" placeholder="COD. TICKET">
+            </div>
+            <div>
+                <label for="cboEstado" class="form-label">Estado</label>
+                <select class="form-select" id="cboEstado" asp-items="@ViewBag.Estados">
+                    <option selected value="">-SELECCIONAR-</option>
+                </select>
+            </div>
+            <div>
+                <label for="txtTarea" class="form-label">Tarea</label>
+                <textarea class="form-control" id="txtTarea" rows="3"></textarea>
+            </div>
+            <div class="d-flex gap-2">
+                <button class="btn btn-primary col">Guardar</button>
+                <button class="btn btn-secondary col">Editar</button>
+            </div>
+        </form>
+    </aside>
+</div>
+
+@section Scripts{
+<script>
+    const cboItem = document.getElementById('cboItem');
+    const txtItem = document.getElementById('txtItem');
+
+    cboItem.addEventListener("change", function () {
+        const seleccionado = this.value;
+        txtItem.disabled = seleccionado !== "0";
+        txtItem.value = seleccionado !== "0" ? "" : txtItem.value;
+    });
+</script>
+
+<script>
+    $(function () {
+        $('#cboGrupoEconomico').on('change', function () {
+            const grupoId = $(this).val();
+
+            $('#cboEntidad').empty();
+            $('#cboEntidad').append('<option value="">Cargando...</option>');
+
+            if (grupoId) {
+                $.ajax({
+                    url: '/Home/ListarEmpresasParaSelect',
+                    type: 'GET',
+                    data: { grupoId: grupoId },
+                    success: function (data) {
+                        $('#cboEntidad').empty();
+                        $('#cboEntidad').append('<option value="">-SELECCIONAR-</option>');
+                        $.each(data, function (i, empresa) {
+                            $('#cboEntidad').append(`<option value="${empresa.value}">${empresa.text}</option>`);
+                        });
+                    },
+                    error: function () {
+                        $('#cboEntidad').empty();
+                        $('#cboEntidad').append('<option value="">Error al cargar</option>');
+                    }
+                });
+            } else {
+                $('#cboEntidad').html('<option value="">-SELECCIONAR-</option>');
+            }
+        });
+    });
+</script>
+}

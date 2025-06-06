@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36202.13 d17.14
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CONTROL_TICKET_TAREA", "CONTROL_TICKET_TAREA\CONTROL_TICKET_TAREA.csproj", "{BEF0C595-67FB-4CB5-AEDA-5CB6B5F6E995}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BEF0C595-67FB-4CB5-AEDA-5CB6B5F6E995}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BEF0C595-67FB-4CB5-AEDA-5CB6B5F6E995}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BEF0C595-67FB-4CB5-AEDA-5CB6B5F6E995}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BEF0C595-67FB-4CB5-AEDA-5CB6B5F6E995}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {7FB83ED4-67BE-49D5-88D5-3932088FF153}
+	EndGlobalSection
+EndGlobal
