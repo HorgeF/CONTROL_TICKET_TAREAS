@@ -29,5 +29,27 @@ namespace CONTROL_TICKET_TAREA.Repository
                 })
                 .OrderBy(ge => ge.Nombre)
                 .ToListAsync();
+
+        public async Task<List<CboGeneral>> ListarMediosParaSelect()
+            => await _context.Generals
+                .Where(ge => ge.IdSecundaria == "S1102")
+                .Select(ge => new CboGeneral
+                {
+                    IdGeneral = ge.IdGeneral,
+                    Nombre = ge.Nombre
+                })
+                .OrderBy(ge => ge.Nombre)
+                .ToListAsync();
+
+        public async Task<List<CboGeneral>> ListarTiposParaSelect()
+            => await _context.Generals
+                .Where(ge => ge.IdSecundaria == "S1053")
+                .Select(ge => new CboGeneral
+                {
+                    IdGeneral = ge.IdGeneral,
+                    Nombre = ge.Nombre
+                })
+                .OrderBy(ge => ge.Nombre)
+                .ToListAsync();
     }
 }

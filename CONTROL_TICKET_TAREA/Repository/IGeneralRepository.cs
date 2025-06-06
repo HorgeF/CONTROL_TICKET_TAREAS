@@ -6,5 +6,7 @@ namespace CONTROL_TICKET_TAREA.Repository
     {
         Task<List<CboGeneral>> ListarPrioridadesParaSelect();
         Task<List<CboGeneral>> ListarEstadosParaSelect();
+        Task<List<CboGeneral>> ListarMediosParaSelect();
+        Task<List<CboGeneral>> ListarTiposParaSelect();
     }
 }

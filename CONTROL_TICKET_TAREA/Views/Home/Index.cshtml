@@ -5,21 +5,31 @@
 }
 
 <div class="d-flex gap-4 p-3" style="height: 100vh; align-items: flex-start;">
+
     <!-- Tabla: 75% -->
     <div style="width: 75%; height: 100%; overflow-y: auto;">
-        <fieldset class="mb-3">
-            <legend>Búsqueda</legend>
-            <div class="d-flex flex-wrap gap-3">
-                <div class="d-flex align-items-center gap-2">
-                    <label for="txtReceptor" class="form-label mb-0">Receptor:</label>
-                    <input type="text" class="form-control" id="txtReceptor" name="receptor" placeholder="RECEPTOR">
+        <form asp-action="Index" method="get">
+            <fieldset class="mb-3">
+                <legend>Búsqueda</legend>
+                <div class="d-flex flex-wrap gap-3">
+                    <div class="d-flex align-items-center gap-2 flex-grow-1">
+                        <label for="prioridad" class="form-label mb-0">Prioridad</label>
+                        <select class="form-select" id="prioridad" name="prioridad">
+                            <option value="0">-SELECCIONAR-</option>
+                            @foreach (var item in ViewBag.Prioridades as SelectList)
+                            {
+                                <option value="@item.Value" selected="@(ViewBag.FiltroPrioridad?.ToString() == item.Value ? "selected" : null)">
+                                    @item.Text
+                                </option>
+                            }
+                        </select>
+                    </div>
+                    <div>
+                        <button type="submit" class="btn btn-primary">Buscar</button>
+                    </div>
                 </div>
-                <div class="d-flex align-items-center gap-2 flex-grow-1">
-                    <label for="txtDescripcion" class="form-label mb-0">Descripción:</label>
-                    <input type="text" class="form-control" id="txtDescripcion" name="descripcion" placeholder="DESCRIPCIÓN">
-                </div>
-            </div>
-        </fieldset>
+            </fieldset>
+        </form>
         <table class="table table-hover">
             <thead>
                 <tr>
@@ -67,77 +77,7 @@
             </tbody>
         </table>
     </div>
-
-    <!-- Aside: 25% -->
-    <aside role="form" style="width: 25%;" class="d-flex flex-column gap-1 border border-2 border-dark p-3">
-        <header class="h4 alert alert-info mb-2">Panel de Registro</header>
-        <form action="#" class="d-flex flex-column gap-3">
-                <div>
-                    <label for="cboGrupoEconomico" class="form-label">Grupo Económico</label>
-                    <select class="form-select" id="cboGrupoEconomico" asp-items="@ViewBag.GruposEconomicos">
-                        <option selected value="">-SELECCIONAR-</option>
-                    </select>
-                </div>
-                <div>
-                    <label for="cboEntidad" class="form-label">Entidad / Empresa</label>
-                    <select class="form-select" id="cboEntidad" asp-items="@ViewBag.Empresas">
-                        <option selected value="">-SELECCIONAR-</option>
-                    </select>
-                </div>
-            <div>
-                <label for="cboResponsable" class="form-label">Responsable</label>
-                <select class="form-select" id="cboResponsable" asp-items="@ViewBag.Responsables">
-                    <option selected value="">-SELECCIONAR-</option>
-                </select>
-            </div>
-            <div>
-                <label for="cboItem" class="form-label">Items</label>
-                <select class="form-select" id="cboItem">
-                    <option selected value="0">-SELECCIONAR-</option>
-                </select>
-            </div>
-            <div class="d-flex flex-row gap-3">
-                <div class="flex-grow-2">
-                    <label for="txtItem" class="form-label">Nuevo Item</label>
-                    <input type="text" class="form-control" id="txtItem">
-                </div>
-                <div class="flex-grow-1">
-                    <label for="txtCantItems" class="form-label">Cantidad Items</label>
-                    <input type="text" class="form-control" id="txtCantItems" placeholder="0">
-                </div>
-            </div>
-            <div class="d-flex flex-row gap-3">
-                <div class="flex-grow-2">
-                    <label for="cboPrioridad" class="form-label">Prioridad</label>
-                    <select class="form-select" id="cboPrioridad" asp-items="@ViewBag.Prioridades">
-                        <option selected value="">-SELECCIONAR-</option>
-                    </select>
-                </div>
-                <div class="flex-grow-1">
-                    <label for="txtCodTicket" class="form-label">Cod. Ticket</label>
-                    <input type="text" class="form-control" id="txtCodTicket" placeholder="COD. TICKET">
-                </div>
-            </div>
-            <div>
-                <label for="txtContacto" class="form-label">Contacto</label>
-                <input type="text" class="form-control" id="txtContacto" placeholder="COD. TICKET">
-            </div>
-            <div>
-                <label for="cboEstado" class="form-label">Estado</label>
-                <select class="form-select" id="cboEstado" asp-items="@ViewBag.Estados">
-                    <option selected value="">-SELECCIONAR-</option>
-                </select>
-            </div>
-            <div>
-                <label for="txtTarea" class="form-label">Tarea</label>
-                <textarea class="form-control" id="txtTarea" rows="3"></textarea>
-            </div>
-            <div class="d-flex gap-2">
-                <button class="btn btn-primary col">Guardar</button>
-                <button class="btn btn-secondary col">Editar</button>
-            </div>
-        </form>
-    </aside>
+    @await Html.PartialAsync("Create", new CONTROL_TICKET_TAREA.Dtos.TbControlTicketTareaRequest())
 </div>
 
 @section Scripts{

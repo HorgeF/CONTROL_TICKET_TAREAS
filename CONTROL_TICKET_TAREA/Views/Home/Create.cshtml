@@ -1,0 +1,96 @@
+﻿@model CONTROL_TICKET_TAREA.Dtos.TbControlTicketTareaRequest
+
+<aside role="form" style="width: 25%;" class="d-flex flex-column gap-1 border border-2 border-dark p-3">
+    <header class="h4 alert alert-info mb-2">Panel de Registro</header>
+    <form asp-action="Insertar" method="POST" class="d-flex flex-column gap-3">
+        <input type="hidden" value="" />
+        <div>
+            <label for="cboGrupoEconomico" class="form-label">Grupo Económico</label>
+            <select asp-for="@Model.IdGe" class="form-select" id="cboGrupoEconomico" asp-items="@ViewBag.GruposEconomicos">
+                <option selected value="0">-SELECCIONAR-</option>
+            </select>
+        </div>
+        <div>
+            <label for="cboEntidad" class="form-label">Entidad / Empresa</label>
+            <select asp-for="@Model.IdEmpresa" class="form-select" id="cboEntidad" asp-items="@ViewBag.Empresas">
+                <option selected value="0">-SELECCIONAR-</option>
+            </select>
+        </div>
+        <div>
+            <label for="cboResponsable" class="form-label">Responsable</label>
+            <select asp-for="@Model.IdReceptor" class="form-select" id="cboResponsable" asp-items="@ViewBag.Responsables">
+                <option selected value="0">-SELECCIONAR-</option>
+            </select>
+        </div>
+        <div>
+            <label for="cboItem" class="form-label">Items</label>
+            <select asp-for="@Model.IdItemCenter" class="form-select" id="cboItem" asp-items="@ViewBag.Items">
+                <option selected value="0">-SELECCIONAR-</option>
+            </select>
+        </div>
+        <div class="d-flex flex-row gap-3">
+            <div class="flex-grow-2">
+                <label for="txtItem" class="form-label">Nuevo Item</label>
+                <input asp-for="@Model.IdItemCenterDesc" type="text" class="form-control" id="txtItem">
+            </div>
+
+            <div class="flex-grow-1">
+                <label for="txtCantItems" class="form-label">Cantidad Items</label>
+                <input asp-for="@Model.CantidadItems" type="text" class="form-control" id="txtCantItems" placeholder="0">
+            </div>
+        </div>
+        <div class="d-flex flex-row gap-3">
+            <div class="flex-grow-2">
+                <label for="cboMedio" class="form-label">Medio</label>
+                <select asp-for="@Model.IdMedio" class="form-select" id="cboMedio" asp-items="@ViewBag.Medios">
+                    <option selected value="0">-SELECCIONAR-</option>
+                </select>
+            </div>
+            <div class="flex-grow-1">
+                <label for="cboTipo" class="form-label">Tipo</label>
+                <select asp-for="@Model.IdTipo" class="form-select" id="cboTipo" asp-items="@ViewBag.Tipos">
+                    <option selected value="0">-SELECCIONAR-</option>
+                </select>
+            </div>
+        </div>
+        <div class="d-flex flex-row gap-3">
+            <div class="flex-grow-2">
+                <label for="cboPrioridad" class="form-label">Prioridad</label>
+                <select asp-for="@Model.IdPrioridad" class="form-select" id="cboPrioridad" asp-items="@ViewBag.Prioridades">
+                    <option selected value="0">-SELECCIONAR-</option>
+                </select>
+            </div>
+            <div class="flex-grow-1">
+                <label for="txtCodTicket" class="form-label">Cod. Ticket</label>
+                <input asp-for="@Model.CodTicket" type="text" class="form-control" id="txtCodTicket" placeholder="COD. TICKET">
+            </div>
+        </div>
+        <div>
+            <label for="txtContacto" class="form-label">Contacto</label>
+            <input asp-for="@Model.Contacto" type="text" class="form-control" id="txtContacto">
+        </div>
+        @*  <div>
+                <label for="txtDescripcion" class="form-label">Descripción</label>
+                <input type="text" class="form-control" id="txtDescripcion">
+            </div> *@
+        <div class="d-flex flex-row gap-3">
+            <div>
+                <label for="cboEstado" class="form-label">Estado</label>
+                <select asp-for="@Model.IdEstado" class="form-select" id="cboEstado" asp-items="@ViewBag.Estados">
+                    <option selected value="0">-SELECCIONAR-</option>
+                </select>
+            </div>
+            <div class="flex-grow-1">
+                <label for="txtNSerie" class="form-label text-uppercase">N° Serie</label>
+                <input asp-for="@Model.NSerie" type="text" class="form-control" id="txtNSerie">
+            </div>
+        </div>
+        <div>
+            <label for="txtTarea" class="form-label">Tarea</label>
+            <textarea asp-for="@Model.Descripcion" class="form-control text-uppercase" id="txtTarea" rows="3"></textarea>
+        </div>
+        <div class="d-flex gap-2">
+            <button type="submit" class="btn btn-primary col">Guardar</button>
+        </div>
+    </form>
+</aside>
