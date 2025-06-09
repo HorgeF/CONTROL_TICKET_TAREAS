@@ -7,11 +7,11 @@ namespace CONTROL_TICKET_TAREA.Controllers
     {
         private readonly IControlTicketTareaRepository _controlTicketTareaRepository = controlTicketTareaRepository;
 
-        [HttpGet]
-        public async Task<IActionResult> SPListarTicketTarea()
-        {
-            var ticketTareas = await _controlTicketTareaRepository.SPListarTicketTarea();
-            return View(ticketTareas);
-        }
+        //[HttpGet]
+        //public async Task<IActionResult> SPListarTicketTarea()
+        //{
+        //    var ticketTareas = await _controlTicketTareaRepository.SPListarTicketTarea();
+        //    return View(ticketTareas);
+        //}
     }
 }

@@ -8,7 +8,7 @@ namespace CONTROL_TICKET_TAREA.Repository
     {
         private readonly AppDbContext _context = context;
 
-        public async Task<List<CboGrupoEconomico>> ListarGruposEconomicosParaSelect()
+        public async Task<List<CboGrupoEconomico>> ListarGruposEconomicos()
             => await _context.Gep1Grupoes
                 .Select(ge => new CboGrupoEconomico
                 {

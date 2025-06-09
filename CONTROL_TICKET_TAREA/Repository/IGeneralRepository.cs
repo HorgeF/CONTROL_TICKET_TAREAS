@@ -4,9 +4,10 @@ namespace CONTROL_TICKET_TAREA.Repository
 {
     public interface IGeneralRepository
     {
-        Task<List<CboGeneral>> ListarPrioridadesParaSelect();
-        Task<List<CboGeneral>> ListarEstadosParaSelect();
-        Task<List<CboGeneral>> ListarMediosParaSelect();
-        Task<List<CboGeneral>> ListarTiposParaSelect();
+        Task<List<CboGeneral>> ListarPrioridades();
+        Task<List<CboGeneral>> ListarEstados();
+        Task<List<CboGeneral>> ListarMedios();
+        Task<List<CboGeneral>> ListarTipos();
+        Task<List<CboGeneral>> ListarNiveles();
     }
 }

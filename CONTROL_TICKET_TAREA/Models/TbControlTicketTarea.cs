@@ -54,4 +54,10 @@ public partial class TbControlTicketTarea
     public string? CorrelSup { get; set; }
 
     public int? IdRef { get; set; }
+
+    public int? IdNivel { get; set; }
+
+    public string? Correo { get; set; }
+
+    public string? Whatsapp { get; set; }
 }

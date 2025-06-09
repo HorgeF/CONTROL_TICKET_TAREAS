@@ -8,16 +8,15 @@ namespace CONTROL_TICKET_TAREA.Repository
     {
         private readonly AppDbContext _context = context;
 
-        public async Task<List<CboUsuario>> ListarUsuariosParaSelect()
+        public async Task<List<CboUsuario>> ListarUsuarios()
             => await _context.Usuarios
                 .Where(u => u.IdTipoEmpleado > 0 && u.Flag == 1)
                 .Select(u => new CboUsuario
                 {
                     IdUsuario = u.IdUsuario,
-                    NombreReducido =
-                        u.Nombres + " " + u.ApellidoP
+                    Nombre = u.Nombres + " " + u.ApellidoP
                 })
-                .OrderBy(u => u.NombreReducido)
+                .OrderBy(u => u.Nombre)
                 .ToListAsync();
     }
 }

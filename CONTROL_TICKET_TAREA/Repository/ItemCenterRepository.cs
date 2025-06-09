@@ -8,15 +8,15 @@ namespace CONTROL_TICKET_TAREA.Repository
     {
         private readonly AppDbContext _context = context;
 
-        public async Task<List<CboItem>> ListarItemsParaSelect()
+        public async Task<List<CboItem>> ListarItems()
             => await _context.ItemCenters
                 .Where(ic => ic.IndInventario == 1 && ic.IdItemCenter != 0 && ic.IdEmpresa != 0)
+                .OrderBy(u => u.Descripcion)
                 .Select(u => new CboItem
                 {
                     IdItemCenter = u.IdItemCenter,
-                    Nombre = u.Descripcion!
+                    Descripcion = u.Descripcion!
                 })
-                .OrderBy(u => u.Nombre)
                 .ToListAsync();
 
         public async Task<string?> ObtenerNombrePorIdItemCenter(int idItemCenter)

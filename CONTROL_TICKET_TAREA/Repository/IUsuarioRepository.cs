@@ -4,6 +4,6 @@ namespace CONTROL_TICKET_TAREA.Repository
 {
     public interface IUsuarioRepository
     {
-        Task<List<CboUsuario>> ListarUsuariosParaSelect();
+        Task<List<CboUsuario>> ListarUsuarios();
     }
 }

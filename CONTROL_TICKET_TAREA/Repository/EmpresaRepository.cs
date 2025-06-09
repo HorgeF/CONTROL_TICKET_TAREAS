@@ -8,7 +8,7 @@ namespace CONTROL_TICKET_TAREA.Repository
     {
         private readonly AppDbContext _context = context;
 
-        public async Task<List<CboEmpresa>> ListarEmpresasParaSelect(int IdGe)
+        public async Task<List<CboEmpresa>> ListarEmpresas(int IdGe)
             => await _context.Gep2Empresas
                 .Where(ge => ge.IdGe == IdGe)
                 .Select(ge => new CboEmpresa

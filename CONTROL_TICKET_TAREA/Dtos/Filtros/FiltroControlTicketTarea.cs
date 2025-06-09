@@ -2,7 +2,7 @@
 {
     public class FiltroControlTicketTarea
     {
-        public int IdReceptor { get; set; }
-        public string? Descripcion { get; set; } = string.Empty;
+        public List<int> Prioridad { get; set; } = [];
+        public List<int> Nivel { get; set; } = [];
     }
 }

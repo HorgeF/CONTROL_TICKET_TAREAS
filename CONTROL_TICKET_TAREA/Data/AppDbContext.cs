@@ -1,6 +1,8 @@
 ﻿using CONTROL_TICKET_TAREA.Dtos;
 using CONTROL_TICKET_TAREA.Models;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
 
 namespace CONTROL_TICKET_TAREA.Data;
 
@@ -27,8 +29,7 @@ public partial class AppDbContext : DbContext
 
     public virtual DbSet<Usuario> Usuarios { get; set; }
 
-
-    public DbSet<TbControlTicketTareaResponseProv> TbControlTicketTareaResponses { get; set; }
+    public virtual DbSet<TbControlTicketTareaResponse> TbControlTicketTareaResponses { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -451,6 +452,10 @@ public partial class AppDbContext : DbContext
                 .HasMaxLength(50)
                 .IsUnicode(false)
                 .HasColumnName("CORREL_SUP");
+            entity.Property(e => e.Correo)
+                .HasMaxLength(50)
+                .IsUnicode(false)
+                .HasColumnName("CORREO");
             entity.Property(e => e.Descripcion)
                 .HasMaxLength(1000)
                 .IsUnicode(false)
@@ -474,6 +479,7 @@ public partial class AppDbContext : DbContext
                 .IsUnicode(false)
                 .HasColumnName("ID_ITEM_CENTER_DESC");
             entity.Property(e => e.IdMedio).HasColumnName("ID_MEDIO");
+            entity.Property(e => e.IdNivel).HasColumnName("ID_NIVEL");
             entity.Property(e => e.IdPrioridad).HasColumnName("ID_PRIORIDAD");
             entity.Property(e => e.IdReceptor).HasColumnName("ID_RECEPTOR");
             entity.Property(e => e.IdRef).HasColumnName("ID_REF");
@@ -484,6 +490,10 @@ public partial class AppDbContext : DbContext
                 .HasColumnName("N_SERIE");
             entity.Property(e => e.UsuAct).HasColumnName("USU_ACT");
             entity.Property(e => e.UsuReg).HasColumnName("USU_REG");
+            entity.Property(e => e.Whatsapp)
+                .HasMaxLength(50)
+                .IsUnicode(false)
+                .HasColumnName("WHATSAPP");
         });
 
         modelBuilder.Entity<Usuario>(entity =>
@@ -688,7 +698,7 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.UsuReg).HasColumnName("USU_REG");
         });
 
-        modelBuilder.Entity<TbControlTicketTareaResponseProv>(entity =>
+        modelBuilder.Entity<TbControlTicketTareaResponse>(entity =>
         {
             entity.HasNoKey();
 
@@ -709,13 +719,24 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.IdTipo).HasColumnName("ID_TIPO");
             entity.Property(e => e.Tipo).HasColumnName("TIPO");
             entity.Property(e => e.Descripcion).HasColumnName("DESCRIPCION");
+            entity.Property(e => e.IdItemCenter).HasColumnName("ID_ITEM_CENTER");
+            entity.Property(e => e.IdItemCenterDesc).HasColumnName("ID_ITEM_CENTER_DESC");
+            entity.Property(e => e.CantidadItems).HasColumnName("CANTIDAD_ITEMS");
+
+            entity.Property(e => e.IdNivel).HasColumnName("ID_NIVEL");
+            entity.Property(e => e.Nivel).HasColumnName("NIVEL");
 
             entity.Property(e => e.CodTicket).HasColumnName("COD_TICKET");
+            entity.Property(e => e.Correo).HasColumnName("CORREO");
+            entity.Property(e => e.Whatsapp).HasColumnName("WHATSAPP");
 
             entity.Property(e => e.IdEstado).HasColumnName("ID_ESTADO");
             entity.Property(e => e.Estado).HasColumnName("ESTADO");
             entity.Property(e => e.Contacto).HasColumnName("CONTACTO");
         });
+
+        modelBuilder.Entity<TbControlTicketTarea>()
+            .ToTable("TB_CONTROL_TICKET_TAREA", t => t.HasTrigger("ENVIAR_TAREAS_V1"));
 
         OnModelCreatingPartial(modelBuilder);
     }

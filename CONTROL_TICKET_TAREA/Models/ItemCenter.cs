@@ -1,4 +1,7 @@
-﻿namespace CONTROL_TICKET_TAREA.Models;
+﻿using System;
+using System.Collections.Generic;
+
+namespace CONTROL_TICKET_TAREA.Models;
 
 public partial class ItemCenter
 {

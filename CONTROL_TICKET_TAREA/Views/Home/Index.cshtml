@@ -1,36 +1,72 @@
-﻿@model List<CONTROL_TICKET_TAREA.Dtos.TbControlTicketTareaResponseProv>
+﻿@model List<CONTROL_TICKET_TAREA.Dtos.TbControlTicketTareaResponse>
 
 @{
     ViewData["Title"] = "CONTROL_TICKET_TAREA";
+    var prioridadesSeleccionadas = ViewBag.FiltroPrioridad as List<int> ?? new List<int>();
+    var nivelesSeleccionadas = ViewBag.FiltroNivel as List<int> ?? new List<int>();
 }
 
-<div class="d-flex gap-4 p-3" style="height: 100vh; align-items: flex-start;">
-
-    <!-- Tabla: 75% -->
-    <div style="width: 75%; height: 100%; overflow-y: auto;">
-        <form asp-action="Index" method="get">
+<div class="d-flex flex-column gap-1 p-3">
+        <div class="d-flex justify-content-end">
+            <button class="btn btn-success" id="btnNuevaTarea">+ Nueva Tarea</button>
+        </div>
+        <form id="filtroForm" asp-action="Index" method="get">
             <fieldset class="mb-3">
-                <legend>Búsqueda</legend>
-                <div class="d-flex flex-wrap gap-3">
-                    <div class="d-flex align-items-center gap-2 flex-grow-1">
-                        <label for="prioridad" class="form-label mb-0">Prioridad</label>
-                        <select class="form-select" id="prioridad" name="prioridad">
-                            <option value="0">-SELECCIONAR-</option>
+                <legend class="fw-bold"><u>Búsqueda</u></legend>
+                <div class="d-flex gap-4">
+                    <fieldset>
+                        <legend class="h5">Prioridades</legend>
+                        <div class="d-flex flex-wrap gap-2">
+
                             @foreach (var item in ViewBag.Prioridades as SelectList)
                             {
-                                <option value="@item.Value" selected="@(ViewBag.FiltroPrioridad?.ToString() == item.Value ? "selected" : null)">
+                                var id = $"prioridad{item.Value}";
+                                var estaSeleccionado = prioridadesSeleccionadas.Contains(int.Parse(item.Value));
+
+                                var claseColorActivo = item.Value switch
+                                {
+                                    "1066" => "btn-danger",   // Alta
+                                    "1065" => "btn-warning",  // Media
+                                    "1064" => "btn-success",  // Baja
+                                    _ => "btn-outline-secondary"
+                                };
+
+                                var clasesBtn = estaSeleccionado ? $"{claseColorActivo} active" : "btn-outline-secondary";
+
+                                <input type="checkbox" name="prioridad" value="@item.Value" class="d-none" id="@id" @(estaSeleccionado ? "checked" : "") />
+                                <button type="button"
+                                        class="btn @clasesBtn"
+                                        data-target="#@id">
                                     @item.Text
-                                </option>
+                                </button>
                             }
-                        </select>
-                    </div>
-                    <div>
-                        <button type="submit" class="btn btn-primary">Buscar</button>
-                    </div>
+                        </div>
+                    </fieldset>
+                    <fieldset>
+                        <legend class="h5">Niveles</legend>
+                        <div class="d-flex flex-wrap gap-2">
+                            @foreach (var item in ViewBag.Niveles as SelectList)
+                            {
+                                var id = $"nivel{item.Value}";
+                                var estaSeleccionado = nivelesSeleccionadas.Contains(int.Parse(item.Value));
+
+                                var claseColor = estaSeleccionado
+                                    ? $"btn-nivel nivel-{item.Value}"
+                                    : "btn-nivel nivel-inactivo";
+
+                                <input type="checkbox" name="nivel" value="@item.Value" class="d-none" id="@id" @(estaSeleccionado ? "checked" : "") />
+                                <button type="button"
+                                        class="btn @claseColor"
+                                        data-target="#@id">
+                                    @item.Text
+                                </button>
+                            }
+                        </div>
+                    </fieldset>
                 </div>
             </fieldset>
         </form>
-        <table class="table table-hover">
+        <table id="tabla-tareas" class="table table-hover">
             <thead>
                 <tr>
                     <th scope="col">GE</th>
@@ -52,14 +88,14 @@
                 {
                     foreach (var item in Model)
                     {
-                        <tr>
+                        <tr data-id="@item.IdTarea" draggable="true" style="cursor:pointer" class="fila-editable">
                             <td>@item.GE</td>
                             <td>@item.Empresa</td>
                             <td>@item.Receptor</td>
                             <td>@item.Medio</td>
                             <td>@item.Contacto</td>
                             <td>@item.Prioridad</td>
-                            <td>5</td>
+                            <td>@item.CantidadItems</td>
                             <td>@item.NSerie</td>
                             <td>@item.Tipo</td>
                             <td>@item.Descripcion</td>
@@ -76,51 +112,58 @@
                 }
             </tbody>
         </table>
-    </div>
-    @await Html.PartialAsync("Create", new CONTROL_TICKET_TAREA.Dtos.TbControlTicketTareaRequest())
+@*     @await Html.PartialAsync("Create", new CONTROL_TICKET_TAREA.Dtos.TbControlTicketTareaRequest()) *@
 </div>
 
+<div id="crearTareaModalContainer"></div>
+
 @section Scripts{
-<script>
-    const cboItem = document.getElementById('cboItem');
-    const txtItem = document.getElementById('txtItem');
+    <script src="~/js/model-tarea.js"></script>
 
-    cboItem.addEventListener("change", function () {
-        const seleccionado = this.value;
-        txtItem.disabled = seleccionado !== "0";
-        txtItem.value = seleccionado !== "0" ? "" : txtItem.value;
-    });
-</script>
+    <script>
+        $(function () {
+            $("#tabla-tareas tbody").sortable({
+                helper: fixHelper,
+                update: function (event, ui) {
+                    let orden = [];
+                    $("#tabla-tareas tbody tr").each(function () {
+                        orden.push($(this).data("id")); // data-id del tr
+                    });
 
-<script>
-    $(function () {
-        $('#cboGrupoEconomico').on('change', function () {
-            const grupoId = $(this).val();
+                    console.log("Nuevo orden:", orden);
 
-            $('#cboEntidad').empty();
-            $('#cboEntidad').append('<option value="">Cargando...</option>');
+                    // Ejemplo: enviar al backend
+                    /*
+                    $.post("/ruta/ordenar", { orden: orden }, function(response) {
+                        console.log("Orden guardado");
+                    });
+                    */
+                }
+            });
 
-            if (grupoId) {
-                $.ajax({
-                    url: '/Home/ListarEmpresasParaSelect',
-                    type: 'GET',
-                    data: { grupoId: grupoId },
-                    success: function (data) {
-                        $('#cboEntidad').empty();
-                        $('#cboEntidad').append('<option value="">-SELECCIONAR-</option>');
-                        $.each(data, function (i, empresa) {
-                            $('#cboEntidad').append(`<option value="${empresa.value}">${empresa.text}</option>`);
-                        });
-                    },
-                    error: function () {
-                        $('#cboEntidad').empty();
-                        $('#cboEntidad').append('<option value="">Error al cargar</option>');
-                    }
+            // Mantiene el ancho de las celdas al arrastrar
+            var fixHelper = function (e, ui) {
+                ui.children().each(function () {
+                    $(this).width($(this).width());
                 });
-            } else {
-                $('#cboEntidad').html('<option value="">-SELECCIONAR-</option>');
-            }
+                return ui;
+            };
         });
-    });
-</script>
+    </script>
+
+    <script>
+        document.querySelectorAll('button[data-target]').forEach(btn => {
+            btn.addEventListener('click', function () {
+                const checkbox = document.querySelector(this.dataset.target);
+                checkbox.checked = !checkbox.checked;
+
+                this.classList.toggle('active');
+                this.classList.toggle('btn-primary');
+                this.classList.toggle('btn-outline-primary');
+
+                document.getElementById('filtroForm').submit();
+            });
+        });
+    </script>
+
 }

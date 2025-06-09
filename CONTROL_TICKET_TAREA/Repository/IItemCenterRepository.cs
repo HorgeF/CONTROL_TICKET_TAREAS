@@ -4,7 +4,7 @@ namespace CONTROL_TICKET_TAREA.Repository
 {
     public interface IItemCenterRepository
     {
-        Task<List<CboItem>> ListarItemsParaSelect();
+        Task<List<CboItem>> ListarItems();
         Task<string?> ObtenerNombrePorIdItemCenter(int idItemCenter);
     }
 }

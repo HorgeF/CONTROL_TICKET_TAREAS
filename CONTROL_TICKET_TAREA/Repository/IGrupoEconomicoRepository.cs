@@ -4,6 +4,6 @@ namespace CONTROL_TICKET_TAREA.Repository
 {
     public interface IGrupoEconomicoRepository
     {
-        Task<List<CboGrupoEconomico>> ListarGruposEconomicosParaSelect();
+        Task<List<CboGrupoEconomico>> ListarGruposEconomicos();
     }
 }

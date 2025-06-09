@@ -5,6 +5,8 @@ using CONTROL_TICKET_TAREA.Mappers;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Diagnostics;
+using Microsoft.Extensions.Caching.Memory;
+using CONTROL_TICKET_TAREA.Dtos.Filtros;
 
 namespace CONTROL_TICKET_TAREA.Controllers
 {
@@ -14,7 +16,8 @@ namespace CONTROL_TICKET_TAREA.Controllers
         IEmpresaRepository empresaRepository,
         IUsuarioRepository usuarioRepository,
         IGeneralRepository generalRepository,
-        IItemCenterRepository itemCenterRepository) : Controller
+        IItemCenterRepository itemCenterRepository,
+        IMemoryCache cache) : Controller
     {
 
         private readonly IControlTicketTareaRepository _controlTicketTareaRepository = controlTicketTareaRepository;
@@ -24,27 +27,18 @@ namespace CONTROL_TICKET_TAREA.Controllers
         private readonly IGeneralRepository _generalRepository = generalRepository;
         private readonly IItemCenterRepository _itemCenterRepository = itemCenterRepository;
 
-        public async Task<IActionResult> Index(int? prioridad)
+        private readonly IMemoryCache _cache = cache;
+
+        public async Task<IActionResult> Index(FiltroControlTicketTarea filtro)
         {
-            var ticketTareas = await _controlTicketTareaRepository.SPListarTicketTarea();
+            var prioridades = await _generalRepository.ListarPrioridades();
+            var niveles = await _generalRepository.ListarNiveles();
+            var ticketTareas = await _controlTicketTareaRepository.SPListarTicketTarea(filtro);
 
-            var selectGrupoEconomico = await _grupoEconomicoRepository.ListarGruposEconomicosParaSelect();
-            var selectResponsable = await _usuarioRepository.ListarUsuariosParaSelect();
-            var selectPrioridad = await _generalRepository.ListarPrioridadesParaSelect();
-            var selectEstados = await _generalRepository.ListarEstadosParaSelect();
-            var selectItems = await _itemCenterRepository.ListarItemsParaSelect();
-            var selectTipos = await _generalRepository.ListarTiposParaSelect();
-            var selectMedios = await _generalRepository.ListarMediosParaSelect();
-
-            ViewBag.GruposEconomicos = new SelectList(selectGrupoEconomico, "IdGe", "Nombre");
-            ViewBag.Responsables = new SelectList(selectResponsable, "IdUsuario", "NombreReducido");
-            ViewBag.Prioridades = new SelectList(selectPrioridad, "IdGeneral", "Nombre");
-            ViewBag.Estados = new SelectList(selectEstados, "IdGeneral", "Nombre");
-            ViewBag.Items = new SelectList(selectItems, "IdItemCenter", "Nombre");
-            ViewBag.Tipos = new SelectList(selectTipos, "IdGeneral", "Nombre");
-            ViewBag.Medios = new SelectList(selectMedios, "IdGeneral", "Nombre");
-
-            ViewBag.FiltroPrioridad = prioridad;
+            ViewBag.Prioridades = new SelectList(prioridades.OrderByDescending(p => p.IdGeneral), "IdGeneral", "Nombre");
+            ViewBag.Niveles = new SelectList(niveles, "IdGeneral", "Nombre");
+            ViewBag.FiltroPrioridad = filtro.Prioridad;
+            ViewBag.FiltroNivel = filtro.Nivel;
 
             return View(ticketTareas);
         }
@@ -52,7 +46,7 @@ namespace CONTROL_TICKET_TAREA.Controllers
         [HttpGet]
         public async Task<IActionResult> ListarEmpresasParaSelect(int grupoId)
         {
-            var empresas = await _empresaRepository.ListarEmpresasParaSelect(grupoId);
+            var empresas = await _empresaRepository.ListarEmpresas(grupoId);
 
             var resultado = empresas.Select(e => new
             {
@@ -63,30 +57,83 @@ namespace CONTROL_TICKET_TAREA.Controllers
             return Json(resultado);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Insertar(TbControlTicketTareaRequest peticion)
+        [HttpGet("/Home/FormTicketTarea/{idTarea}")]
+        public async Task<IActionResult> FormTicketTarea(int idTarea)
         {
-            if (peticion.IdItemCenter != 0)
+            var ticketTarea = new TbControlTicketTareaRequest();
+
+            await CargarCombos();
+
+            if (idTarea != 0)
             {
-                peticion.IdItemCenterDesc = await _itemCenterRepository.ObtenerNombrePorIdItemCenter(peticion.IdItemCenter);
+                var ticketObtenido = await _controlTicketTareaRepository.ObtenerTicketTarea(idTarea);
+                var selectEmpresas = await _empresaRepository.ListarEmpresas(ticketObtenido!.IdGE);
+                ViewBag.Empresas = new SelectList(selectEmpresas, "IdEmpresa", "RazonSocial");
+                ticketTarea = ticketObtenido.ToRequest();
             }
 
-            await _controlTicketTareaRepository.Insertar(peticion.ToEntity());
-            return RedirectToAction("Index");
+            return PartialView("Create", ticketTarea);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Actualizar(TbControlTicketTareaRequest peticion)
+        public async Task<IActionResult> Guardar(TbControlTicketTareaRequest peticion)
         {
-            //await _controlTicketTareaRepository.Actualizar(peticion.ToEntity());
-            //return Json(request);
-            throw new Exception();
+            if (peticion.IdItemCenter != 0)
+            {
+                ModelState.Remove(nameof(peticion.IdItemCenterDesc));
+                peticion.IdItemCenterDesc = await _itemCenterRepository.ObtenerNombrePorIdItemCenter(peticion.IdItemCenter);
+            }
+
+            if (string.IsNullOrWhiteSpace(peticion.Correo) && string.IsNullOrWhiteSpace(peticion.Whatsapp))
+            {
+                ModelState.AddModelError("Correo", "Debe ingresar al menos Correo o Whatsapp.");
+                ModelState.AddModelError("Whatsapp", "Debe ingresar al menos Correo o Whatsapp.");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                await CargarCombos();
+                if(peticion.IdGe != 0)
+                {
+                    var selectEmpresas = await _empresaRepository.ListarEmpresas(peticion.IdGe);
+                    ViewBag.Empresas = new SelectList(selectEmpresas, "IdEmpresa", "RazonSocial");
+                }
+                return PartialView("Create", peticion);
+            }
+
+            if (peticion.IdTarea == 0)
+                await _controlTicketTareaRepository.Insertar(peticion.ToEntity());
+            else
+                await _controlTicketTareaRepository.Actualizar(peticion.ToEntity());
+
+            return Json(peticion);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+
+        private async Task CargarCombos()
+        {
+            var selectGrupoEconomico = await _grupoEconomicoRepository.ListarGruposEconomicos();
+            var selectResponsable = await _usuarioRepository.ListarUsuarios();
+            var selectNiveles = await _generalRepository.ListarNiveles();
+            var selectPrioridad = await _generalRepository.ListarPrioridades();
+            var selectEstados = await _generalRepository.ListarEstados();
+            var selectItems = await _itemCenterRepository.ListarItems();
+            var selectTipos = await _generalRepository.ListarTipos();
+            var selectMedios = await _generalRepository.ListarMedios();
+
+            ViewBag.GruposEconomicos = new SelectList(selectGrupoEconomico, "IdGe", "Nombre");
+            ViewBag.Responsables = new SelectList(selectResponsable, "IdUsuario", "Nombre");
+            ViewBag.Prioridades = new SelectList(selectPrioridad, "IdGeneral", "Nombre");
+            ViewBag.Estados = new SelectList(selectEstados, "IdGeneral", "Nombre");
+            ViewBag.Items = new SelectList(selectItems, "IdItemCenter", "Descripcion");
+            ViewBag.Tipos = new SelectList(selectTipos, "IdGeneral", "Nombre");
+            ViewBag.Niveles = new SelectList(selectNiveles, "IdGeneral", "Nombre");
+            ViewBag.Medios = new SelectList(selectMedios, "IdGeneral", "Nombre");
         }
     }
 }

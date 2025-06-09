@@ -4,6 +4,6 @@ namespace CONTROL_TICKET_TAREA.Repository
 {
     public interface IEmpresaRepository
     {
-        Task<List<CboEmpresa>> ListarEmpresasParaSelect(int IdGe);
+        Task<List<CboEmpresa>> ListarEmpresas(int IdGe);
     }
 }
