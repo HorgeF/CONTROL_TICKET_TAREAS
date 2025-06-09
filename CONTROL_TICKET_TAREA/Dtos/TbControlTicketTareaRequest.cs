@@ -42,7 +42,6 @@ namespace CONTROL_TICKET_TAREA.Dtos
 
         public string DescripcionTrimmed => Descripcion?.Trim() ?? "";
 
-        [Required(ErrorMessage = "Ingrese un código ticket")]
         public string? CodTicket { get; set; }
 
         [Required(ErrorMessage = "Ingrese un contacto")]
