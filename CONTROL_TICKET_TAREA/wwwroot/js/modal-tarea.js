@@ -31,10 +31,33 @@
 
     // Cargar el modal con AJAX
     $(document).on('click','#btnNuevaTarea',function () {
-        $.get(`/Home/FormTicketTarea/0`, function (html) {
-            $('#crearTareaModalContainer').html(html);
-            const modal = new bootstrap.Modal(document.getElementById('crearTareaModal'));
-            modal.show();
+        var $btn = $(this);
+        var $spinner = $btn.find('.spinner-border');
+
+        $.ajax({
+            url: "/Home/FormTicketTarea/0",
+            type: "GET",
+            beforeSend: function () {
+                $btn.prop('disabled', true);
+                $spinner.removeClass('d-none');
+            },
+            success: function (html) {
+                $('#crearTareaModalContainer').html(html);
+                const modalElement = document.getElementById('crearTareaModal');
+                const modal = new bootstrap.Modal(modalElement);
+                modal.show();
+
+                $(modalElement).on('hidden.bs.modal', function () {
+                    $btn.prop('disabled', false);
+                    $spinner.addClass('d-none');
+                });
+            },
+            error: function (err) {
+                $btn.prop('disabled', false);
+                $spinner.addClass('d-none');
+                console.error("Error inesperado: " + err);
+                alert('Error al cargar el formulario'); 
+            }
         });
     });
 
@@ -71,6 +94,9 @@
                     const modal = new bootstrap.Modal(modalElement);
                     modal.show();
                 }
+            },
+            error: function (err) {
+                console.error("Error inesperado: " + err);
             }
         });
     });

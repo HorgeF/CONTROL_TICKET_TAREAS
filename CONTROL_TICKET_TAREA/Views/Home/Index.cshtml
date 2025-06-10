@@ -8,7 +8,10 @@
 
 <div class="d-flex flex-column gap-1 p-3">
     <div class="d-flex justify-content-end">
-        <button class="btn btn-success" id="btnNuevaTarea">+ Nueva Tarea</button>
+        <button class="btn btn-success" id="btnNuevaTarea">
+            <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+            + Nueva Tarea
+        </button>
     </div>
     <form id="filtroForm" asp-action="Index" method="get">
         <fieldset class="mb-3">
@@ -105,7 +108,7 @@
             {
                 foreach (var item in Model)
                 {
-                    <tr data-id="@item.IdTarea" draggable="true" style="cursor:pointer" class="text-center fila-editable">
+                    <tr data-id="@item.IdTarea" draggable="true" style="cursor:pointer" class="text-center fila-editable align-middle">
                     <!--
                         <td>
                             <input type="checkbox" name="selectedIds" value="@item.IdTarea" class="row-checkbox" />
@@ -118,8 +121,20 @@
                         <td>@item.Receptor</td>
                         <td>@item.Medio</td>
                         <td>@item.Contacto</td>
-                        <td>@item.Prioridad</td>
-                        <td>@item.Nivel</td>
+                        <td class="fw-bold @(
+                            item.IdPrioridad switch
+                            {
+                                1064 => "bg-success",
+                                1065 => "bg-warning",
+                                1066 => "bg-danger",    
+                                _ => ""           
+                            })">
+                            @item.Prioridad
+                        </td>
+                        @{
+                            var claseNivel = $"btn-nivel nivel-{item.IdNivel} fw-bold";
+                        }
+                        <td class="@claseNivel">@item.Nivel</td>
                         <td>@item.CantidadItems</td>
                         <td>@item.NSerie</td>
                         <td>@item.Tipo</td>

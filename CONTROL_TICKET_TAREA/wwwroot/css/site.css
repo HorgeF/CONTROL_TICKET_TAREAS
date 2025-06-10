@@ -27,6 +27,12 @@ body {
     padding: 0.5rem 1rem;
 }
 
+td.btn-nivel {
+    color: #000;
+    border: none;
+    padding: 0.5rem 1rem;
+}
+
 .nivel-1263 {
     background-color: #A8E6CF;
 }
@@ -47,6 +53,28 @@ body {
     background-color: #E57373;
     color: #fff;
 }
+
+td.nivel-1263 {
+    background-color: #A8E6CF;
+}
+/* Nivel 1 */
+td.nivel-1264 {
+    background-color: #81D4FA;
+}
+/* Nivel 2 */
+td.nivel-1265 {
+    background-color: #FFF176;
+}
+/* Nivel 3 */
+td.nivel-1266 {
+    background-color: #FFB74D;
+}
+/* Nivel 4 */
+td.nivel-1267 {
+    background-color: #E57373;
+    color: #fff;
+}
+
 /* Nivel 5 (texto blanco por contraste) */
 
 .nivel-inactivo {
