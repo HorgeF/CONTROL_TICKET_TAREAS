@@ -7,6 +7,7 @@ namespace CONTROL_TICKET_TAREA.Repository
     public interface IControlTicketTareaRepository
     {
         Task<List<TbControlTicketTareaResponse>> SPListarTicketTarea(FiltroControlTicketTarea filtro);
+        Task<TicketResponse?> RegistrarTicket(TicketRequest ticket);
         Task<TbControlTicketTareaResponse?> ObtenerTicketTarea(int idTarea);
         Task Insertar(TbControlTicketTarea entidad);
         Task Actualizar(TbControlTicketTarea entidad);

@@ -86,8 +86,8 @@ namespace CONTROL_TICKET_TAREA.Controllers
 
             if (string.IsNullOrWhiteSpace(peticion.Correo) && string.IsNullOrWhiteSpace(peticion.Whatsapp))
             {
-                ModelState.AddModelError("Correo", "Debe ingresar al menos Correo o Whatsapp.");
-                ModelState.AddModelError("Whatsapp", "Debe ingresar al menos Correo o Whatsapp.");
+                ModelState.AddModelError("Correo", "Debe ingresar al menos Correo o Teléfono.");
+                ModelState.AddModelError("Whatsapp", "Debe ingresar al menos Correo o Teléfono.");
             }
 
             if (!ModelState.IsValid)
@@ -107,6 +107,22 @@ namespace CONTROL_TICKET_TAREA.Controllers
                 await _controlTicketTareaRepository.Actualizar(peticion.ToEntity());
 
             return Json(peticion);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> RegistrarTicket(int idTarea)
+        {
+            var ticketTarea = await _controlTicketTareaRepository.ObtenerTicketTarea(idTarea);
+
+            Debug.WriteLine(ticketTarea.ToRequest().ToTicketRequest());
+
+            var ticketRespuesta = await _controlTicketTareaRepository.RegistrarTicket(ticketTarea!.ToRequest().ToTicketRequest());
+
+            ticketTarea!.CodTicket = ticketRespuesta?.CORREL_SUP_EXTERNO;
+
+            await _controlTicketTareaRepository.Actualizar(ticketTarea!.ToRequest().ToEntity());
+
+            return Json(new { CodTicketTarea = ticketTarea?.CodTicket, IdTicket = ticketRespuesta?.ID });
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

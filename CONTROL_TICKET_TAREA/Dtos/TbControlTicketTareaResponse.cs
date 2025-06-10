@@ -30,5 +30,7 @@ namespace CONTROL_TICKET_TAREA.Dtos
         public string? Nivel { get; set; } = string.Empty;
         public string? Correo { get; set; } = string.Empty;
         public string? Whatsapp { get; set; } = string.Empty;
+        public string? Dni { get; set; } = string.Empty;
+        public DateTime? FecReg { get; set; }
     }
 }

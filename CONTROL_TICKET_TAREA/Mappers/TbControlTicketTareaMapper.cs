@@ -24,13 +24,40 @@ namespace CONTROL_TICKET_TAREA.Mappers
                 Descripcion = request.DescripcionTrimmed.ToUpper(),
                 CodTicket = request.CodTicket?.Trim().ToUpper(),
                 Contacto = request.Contacto?.Trim().ToUpper(),
+                Dni = request.Dni?.Trim(),
                 IdEstado = request.IdEstado,
                 IdNivel = request.IdNivel,
                 Correo = request.Correo,
                 Whatsapp = request.Whatsapp,
                 Flag = request.Flag,
                 UsuReg = request.UsuReg,
-                FecReg = DateTime.Now
+                FecReg = DateTime.Now,
+            };
+        }
+
+        public static TicketRequest ToTicketRequest(this TbControlTicketTareaRequest request)
+        {
+            return new TicketRequest
+            {
+                V_ID_USUARIO = request.IdReceptor.ToString(),
+                V_NOMBRE = request.DescripcionTrimmed,
+                V_DESCRIPCION = request.DescripcionTrimmed,
+                V_CANTIDAD = request.CantidadItems,
+                V_USUARIO = 959,
+                V_FLAG = 1,
+                V_ACCION = 1,
+                V_DEFECTO = 0,
+                V_ID_GE = request.IdGe.ToString(),
+                V_ID_EMPRESA = request.IdEmpresa.ToString(),
+                V_CORREO = request.Correo,
+                V_TELEFONO = request.Whatsapp,
+                V_NUM_DOC = request.Dni,
+                V_SERIE = request.NSerie,
+                V_NOMBRE_CONTACTO = request.Contacto,
+                V_ESTADO_TICKET = 1057, // REGISTRADO
+                V_ID_MEDIO_CONTACTO = request.IdMedio,
+                V_ID_PRIORIDAD = request.IdPrioridad,
+                V_FECHA_TICKET = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
             };
         }
 
@@ -54,6 +81,7 @@ namespace CONTROL_TICKET_TAREA.Mappers
                 Contacto = response.Contacto,
                 IdEstado = response.IdEstado,
                 IdNivel = response.IdNivel,
+                Dni = response.Dni,
                 Correo = response.Correo,
                 Whatsapp = response.Whatsapp
             };

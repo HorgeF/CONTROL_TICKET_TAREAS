@@ -1,157 +1,160 @@
 ﻿@model List<CONTROL_TICKET_TAREA.Dtos.TbControlTicketTareaResponse>
 
 @{
-    ViewData["Title"] = "CONTROL_TICKET_TAREA";
+    ViewData["Title"] = "TAREAS";
     var prioridadesSeleccionadas = ViewBag.FiltroPrioridad as List<int> ?? new List<int>();
     var nivelesSeleccionadas = ViewBag.FiltroNivel as List<int> ?? new List<int>();
 }
 
 <div class="d-flex flex-column gap-1 p-3">
-        <div class="d-flex justify-content-end">
-            <button class="btn btn-success" id="btnNuevaTarea">+ Nueva Tarea</button>
-        </div>
-        <form id="filtroForm" asp-action="Index" method="get">
-            <fieldset class="mb-3">
-                <legend class="fw-bold"><u>Búsqueda</u></legend>
-                <div class="d-flex gap-4">
-                    <fieldset>
-                        <legend class="h5">Prioridades</legend>
-                        <div class="d-flex flex-wrap gap-2">
-
-                            @foreach (var item in ViewBag.Prioridades as SelectList)
-                            {
-                                var id = $"prioridad{item.Value}";
-                                var estaSeleccionado = prioridadesSeleccionadas.Contains(int.Parse(item.Value));
-
-                                var claseColorActivo = item.Value switch
-                                {
-                                    "1066" => "btn-danger",   // Alta
-                                    "1065" => "btn-warning",  // Media
-                                    "1064" => "btn-success",  // Baja
-                                    _ => "btn-outline-secondary"
-                                };
-
-                                var clasesBtn = estaSeleccionado ? $"{claseColorActivo} active" : "btn-outline-secondary";
-
-                                <input type="checkbox" name="prioridad" value="@item.Value" class="d-none" id="@id" @(estaSeleccionado ? "checked" : "") />
-                                <button type="button"
-                                        class="btn @clasesBtn"
-                                        data-target="#@id">
-                                    @item.Text
-                                </button>
-                            }
-                        </div>
-                    </fieldset>
-                    <fieldset>
-                        <legend class="h5">Niveles</legend>
-                        <div class="d-flex flex-wrap gap-2">
-                            @foreach (var item in ViewBag.Niveles as SelectList)
-                            {
-                                var id = $"nivel{item.Value}";
-                                var estaSeleccionado = nivelesSeleccionadas.Contains(int.Parse(item.Value));
-
-                                var claseColor = estaSeleccionado
-                                    ? $"btn-nivel nivel-{item.Value}"
-                                    : "btn-nivel nivel-inactivo";
-
-                                <input type="checkbox" name="nivel" value="@item.Value" class="d-none" id="@id" @(estaSeleccionado ? "checked" : "") />
-                                <button type="button"
-                                        class="btn @claseColor"
-                                        data-target="#@id">
-                                    @item.Text
-                                </button>
-                            }
-                        </div>
-                    </fieldset>
-                </div>
-            </fieldset>
-        </form>
-        <table id="tabla-tareas" class="table table-hover">
-            <thead>
-                <tr>
-                    <th scope="col">GE</th>
-                    <th scope="col">EMPRESA</th>
-                    <th scope="col">RECEPTOR</th>
-                    <th scope="col">MEDIO</th>
-                    <th scope="col">CONTACTO</th>
-                    <th scope="col">PRIORIDAD</th>
-                    <th scope="col">ITEMS</th>
-                    <th scope="col">SERIE</th>
-                    <th scope="col">TIPO</th>
-                    <th scope="col">DESCRIPCIÓN</th>
-                    <th scope="col">TICKET</th>
-                    <th scope="col">ESTADO</th>
-                </tr>
-            </thead>
-            <tbody>
-                @if (Model.Count != 0)
-                {
-                    foreach (var item in Model)
+    <div class="d-flex justify-content-end">
+        <button class="btn btn-success" id="btnNuevaTarea">+ Nueva Tarea</button>
+    </div>
+    <form id="filtroForm" asp-action="Index" method="get">
+        <fieldset class="mb-3">
+            <legend class="fw-bold"><u>Búsqueda</u></legend>
+            <div class="d-flex gap-4">
+                <fieldset>
+                    <legend class="h5">Prioridades</legend>
+                    <div class="d-flex flex-wrap gap-2">
+                    @if(ViewBag.Prioridades is SelectList prioridades)
                     {
-                        <tr data-id="@item.IdTarea" draggable="true" style="cursor:pointer" class="fila-editable">
-                            <td>@item.GE</td>
-                            <td>@item.Empresa</td>
-                            <td>@item.Receptor</td>
-                            <td>@item.Medio</td>
-                            <td>@item.Contacto</td>
-                            <td>@item.Prioridad</td>
-                            <td>@item.CantidadItems</td>
-                            <td>@item.NSerie</td>
-                            <td>@item.Tipo</td>
-                            <td>@item.Descripcion</td>
-                            <td>@item.CodTicket</td>
-                            <td>@item.Estado</td>
-                        </tr>
+                        @foreach (var item in prioridades)
+                        {
+                            var id = $"prioridad{item.Value}";
+                            var estaSeleccionado = prioridadesSeleccionadas.Contains(int.Parse(item.Value));
+
+                            var claseColorActivo = item.Value switch
+                            {
+                                "1066" => "btn-danger",   // Alta
+                                "1065" => "btn-warning",  // Media
+                                "1064" => "btn-success",  // Baja
+                                _ => "btn-outline-secondary"
+                            };
+
+                            var clasesBtn = estaSeleccionado ? $"{claseColorActivo} active" : "btn-outline-secondary";
+
+                            <input type="checkbox" name="prioridad" value="@item.Value" class="d-none" id="@id" @(estaSeleccionado ? "checked" : "") />
+                            <button type="button"
+                                    class="btn @clasesBtn"
+                                    data-target="#@id">
+                                @item.Text
+                            </button>
+                        }        
                     }
-                }
-                else
+                    </div>
+                </fieldset>
+                <fieldset>
+                    <legend class="h5">Niveles</legend>
+                    <div class="d-flex flex-wrap gap-2">
+                    @if(ViewBag.Niveles is SelectList niveles)
+                    {
+                        @foreach (var item in niveles)
+                        {
+                            var id = $"nivel{item.Value}";
+                            var estaSeleccionado = nivelesSeleccionadas.Contains(int.Parse(item.Value));
+
+                            var claseColor = estaSeleccionado
+                                ? $"btn-nivel nivel-{item.Value}"
+                                : "btn-nivel nivel-inactivo";
+
+                            <input type="checkbox" name="nivel" value="@item.Value" class="d-none" id="@id" @(estaSeleccionado ? "checked" : "") />
+                            <button type="button"
+                                    class="btn @claseColor"
+                                    data-target="#@id">
+                                @item.Text
+                            </button>
+                        }          
+                    }
+                    </div>
+                </fieldset>
+                <fieldset>
+                    <legend class="5"></legend>
+                </fieldset>
+            </div>
+        </fieldset>
+    </form>
+    <!--
+    <div class="d-none gap-2 mb-2" id="accionesSeleccionados">
+        <button type="button" class="btn btn-dark" id="btnActualizarSeleccionados">Actualizar estados seleccionados</button>
+        <button type="button" class="btn btn-danger" id="btnEliminarSeleccionados">Eliminar seleccionados</button>
+    </div>
+    -->
+    <table id="tabla-tareas" class="table table-hover"> 
+        <thead>
+            <tr class="text-center">
+                <!-- <th><input type="checkbox" id="checkAll" /></th> -->
+                <th scope="col" style="width: 4%;">GE</th>
+                <th scope="col" style="width: 4%;">EMPRESA</th>
+                <th scope="col" style="width: 8%;">FECHA REG.</th>
+                <th scope="col" style="width: 8%;">RECEPTOR</th>
+                <th scope="col" style="width: 6%;">MEDIO</th>
+                <th scope="col" style="width: 8%;">CONTACTO</th>
+                <th scope="col" style="width: 4%;">PRIORIDAD</th>
+                <th scope="col" style="width: 6%;">NIVEL</th>
+                <th scope="col" style="width: 5%;">ITEMS</th>
+                <th scope="col" style="width: 6%;">SERIE</th>
+                <th scope="col" style="width: 6%;">TIPO</th>
+                <th scope="col" style="width: 26%;">DESCRIPCIÓN</th>
+                <th scope="col" style="width: 6%;">TICKET</th>
+                <th scope="col" style="width: 7%;">ESTADO</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.Count != 0)
+            {
+                foreach (var item in Model)
                 {
-                    <tr>
-                        <td colspan="12" class="text-center text-muted">No se encontraron resultados.</td>
+                    <tr data-id="@item.IdTarea" draggable="true" style="cursor:pointer" class="text-center fila-editable">
+                    <!--
+                        <td>
+                            <input type="checkbox" name="selectedIds" value="@item.IdTarea" class="row-checkbox" />
+                        </td>
+                        -->
+                        <input class="input-idTarea" value="@item.IdTarea" type="hidden"/>
+                        <td>@item.GE</td>
+                        <td>@item.Empresa</td>
+                        <td>@item.FecReg</td>
+                        <td>@item.Receptor</td>
+                        <td>@item.Medio</td>
+                        <td>@item.Contacto</td>
+                        <td>@item.Prioridad</td>
+                        <td>@item.Nivel</td>
+                        <td>@item.CantidadItems</td>
+                        <td>@item.NSerie</td>
+                        <td>@item.Tipo</td>
+                        <td>@item.Descripcion</td>
+                        <td>@if (string.IsNullOrWhiteSpace(item.CodTicket))
+                            {
+                                <button class="btn btn-dark btn-registrar-ticket">Registrar Ticket</button>
+                            } else
+                            {
+                                @item.CodTicket
+                            }
+                        </td>
+                        <td>@item.Estado</td>
                     </tr>
                 }
-            </tbody>
-        </table>
-@*     @await Html.PartialAsync("Create", new CONTROL_TICKET_TAREA.Dtos.TbControlTicketTareaRequest()) *@
+            }
+            else
+            {
+                <tr>
+                    <td colspan="12" class="text-center text-muted">No se encontraron resultados.</td>
+                </tr>
+            }
+        </tbody>
+    </table>
 </div>
 
 <div id="crearTareaModalContainer"></div>
 
 @section Scripts{
-    <script src="~/js/model-tarea.js"></script>
-
+    <script src="~/js/modal-tarea.js"></script>
+    <script src="~/js/dragDrop.js"></script>
+    <script src="~/js/selectedRows.js"></script>
+    <script src="~/js/registrarTicket.js"></script>
     <script>
-        $(function () {
-            $("#tabla-tareas tbody").sortable({
-                helper: fixHelper,
-                update: function (event, ui) {
-                    let orden = [];
-                    $("#tabla-tareas tbody tr").each(function () {
-                        orden.push($(this).data("id")); // data-id del tr
-                    });
-
-                    console.log("Nuevo orden:", orden);
-
-                    // Ejemplo: enviar al backend
-                    /*
-                    $.post("/ruta/ordenar", { orden: orden }, function(response) {
-                        console.log("Orden guardado");
-                    });
-                    */
-                }
-            });
-
-            // Mantiene el ancho de las celdas al arrastrar
-            var fixHelper = function (e, ui) {
-                ui.children().each(function () {
-                    $(this).width($(this).width());
-                });
-                return ui;
-            };
-        });
-    </script>
-
-    <script>
+        // Cambio de estilos al seleccionar los botones que filtraras la lista
         document.querySelectorAll('button[data-target]').forEach(btn => {
             btn.addEventListener('click', function () {
                 const checkbox = document.querySelector(this.dataset.target);
@@ -165,5 +168,4 @@
             });
         });
     </script>
-
 }

@@ -35,6 +35,8 @@ public partial class TbControlTicketTarea
 
     public string? Contacto { get; set; }
 
+    public string? Dni { get; set; }
+
     public int IdEstado { get; set; }
 
     public int? Flag { get; set; }

@@ -21,7 +21,7 @@ namespace CONTROL_TICKET_TAREA.Repository
 
         public async Task<List<CboGeneral>> ListarEstados()
             => await _context.Generals
-                .Where(ge => ge.IdSecundaria == "S1100")
+                .Where(ge => ge.IdSecundaria == "S1128")
                 .OrderBy(ge => ge.Nombre)
                 .Select(ge => new CboGeneral
                 {

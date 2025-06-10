@@ -6,9 +6,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CONTROL_TICKET_TAREA.Repository
 {
-    public class ControlTicketTareaRepository(Data.AppDbContext context) : IControlTicketTareaRepository
+    public class ControlTicketTareaRepository(AppDbContext context) : IControlTicketTareaRepository
     {
-        private readonly Data.AppDbContext _context = context;
+        private readonly AppDbContext _context = context;
 
         public async Task<List<TbControlTicketTareaResponse>> SPListarTicketTarea(FiltroControlTicketTarea filtro)
         {
@@ -24,6 +24,58 @@ namespace CONTROL_TICKET_TAREA.Repository
                 .FromSqlInterpolated($"EXEC SP_LISTAR_TICKET_TAREA @ID_PRIORIDAD={prioridadesCsv},@ID_NIVEL={nivelesCsv}")
                 .ToListAsync();
         }
+
+        public async Task<TicketResponse?> RegistrarTicket(TicketRequest ticket)
+        {
+            // Asegura que los campos opcionales no sean null (si el SP no los admite)
+            ticket.V_CORREO ??= "";
+            ticket.V_TELEFONO ??= "";
+            ticket.V_SERIE ??= "";
+            ticket.V_NOMBRE_CONTACTO ??= "";
+
+            var result = await _context.TicketResponses
+                .FromSqlInterpolated($@"
+            EXEC [dbo].[SP_MANT_TICKET_V3] 
+                @V_ID_TICKET = {ticket.V_ID_TICKET}, 
+                @V_ID_USUARIO = {ticket.V_ID_USUARIO}, 
+                @V_NOMBRE = {ticket.V_NOMBRE}, 
+                @V_DESCRIPCION = {ticket.V_DESCRIPCION}, 
+                @V_SIGLA = {ticket.V_SIGLA}, 
+                @V_IMG = {ticket.V_IMG}, 
+                @V_CANTIDAD = {ticket.V_CANTIDAD}, 
+                @V_DEFECTO = {ticket.V_DEFECTO}, 
+                @V_HABILITADO = {ticket.V_HABILITADO}, 
+                @V_AUTORIZADO = {ticket.V_AUTORIZADO}, 
+                @V_USUARIO = {ticket.V_USUARIO}, 
+                @V_FLAG = {ticket.V_FLAG}, 
+                @V_ACCION = {ticket.V_ACCION}, 
+                @V_ID_GE = {ticket.V_ID_GE}, 
+                @V_ID_EMPRESA = {ticket.V_ID_EMPRESA}, 
+                @V_UBICACION = {ticket.V_UBICACION}, 
+                @V_CORREO = {ticket.V_CORREO}, 
+                @V_TELEFONO = {ticket.V_TELEFONO}, 
+                @V_SERIE = {ticket.V_SERIE}, 
+                @V_NOMBRE_CONTACTO = {ticket.V_NOMBRE_CONTACTO}, 
+                @V_NUM_DOC = {ticket.V_NUM_DOC}, 
+                @V_ESTADO_TICKET = {ticket.V_ESTADO_TICKET}, 
+                @V_ID_MOTIVO = {ticket.V_ID_MOTIVO}, 
+                @V_ID_PROYECTO = {ticket.V_ID_PROYECTO}, 
+                @V_ID_SUBPROYECTO = {ticket.V_ID_SUBPROYECTO}, 
+                @V_ID_SITE = {ticket.V_ID_SITE}, 
+                @V_ID_MEDIO_CONTACTO = {ticket.V_ID_MEDIO_CONTACTO}, 
+                @V_ID_PRIORIDAD = {ticket.V_ID_PRIORIDAD}, 
+                @V_ID_NIVEL = {ticket.V_ID_NIVEL}, 
+                @V_FECHA_TICKET = {ticket.V_FECHA_TICKET}, 
+                @V_ID_CATEGORIA = {ticket.V_ID_CATEGORIA}, 
+                @V_ID_WEB_EXT = {ticket.V_ID_WEB_EXT}, 
+                @V_MOTIVO_CIERRA = {ticket.V_MOTIVO_CIERRA}
+            ")
+                .AsNoTracking()
+                .ToListAsync();
+
+            return result.FirstOrDefault();
+        }
+
 
         public async Task<TbControlTicketTareaResponse?> ObtenerTicketTarea(int idTarea)
         {
@@ -44,6 +96,7 @@ namespace CONTROL_TICKET_TAREA.Repository
 
         public async Task Actualizar(TbControlTicketTarea entidad)
         {
+            entidad.FecAct = DateTime.Today;
             _context.TbControlTicketTareas.Update(entidad);
             await _context.SaveChangesAsync();
         }

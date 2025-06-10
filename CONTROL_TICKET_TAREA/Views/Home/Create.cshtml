@@ -30,7 +30,7 @@
                         <span asp-validation-for="@Model.IdEmpresa" class="text-danger pb-2"></span>
                     </div>
 
-                    <div class="col-md-6">
+                    <div class="col-md-12">
                         <label for="cboResponsable" class="form-label">Responsable</label>
                         <select asp-for="@Model.IdReceptor" class="form-select" id="cboResponsable" asp-items="@ViewBag.Responsables">
                             <option selected value="0">-SELECCIONAR-</option>
@@ -38,7 +38,31 @@
                         <span asp-validation-for="@Model.IdReceptor" class="text-danger pb-2"></span>
                     </div>
 
-                    <div class="col-md-6">
+                    <div class="col-md-4">
+                        <label for="txtContacto" class="form-label">Nombre de Contacto</label>
+                        <input asp-for="@Model.Contacto" type="text" class="form-control text-uppercase" id="txtContacto">
+                        <span asp-validation-for="@Model.Contacto" class="text-danger pb-2"></span>
+                    </div>
+
+                    <div class="col-md-2">
+                        <label for="txtDni" class="form-label">DNI</label>
+                        <input asp-for="@Model.Dni" type="text" class="form-control" id="txtDni">
+                        <span asp-validation-for="@Model.Dni" class="text-danger pb-2"></span>
+                    </div>
+
+                    <div class="col-md-2">
+                        <label for="txtWhatsApp" class="form-label">Teléfono</label>
+                        <input asp-for="@Model.Whatsapp" type="text" class="form-control text-uppercase" id="txtWhatsApp">
+                        <span asp-validation-for="@Model.Whatsapp" class="text-danger pb-2"></span>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label for="txtCorreo" class="form-label">Correo</label>
+                        <input asp-for="@Model.Correo" type="text" class="form-control text-uppercase" id="txtCorreo">
+                        <span asp-validation-for="@Model.Correo" class="text-danger pb-2"></span>
+                    </div>
+
+                    <div class="col-md-12">
                         <label for="cboItem" class="form-label">Items</label>
                         <select asp-for="@Model.IdItemCenter" class="form-select" id="cboItem" asp-items="@ViewBag.Items">
                             <option selected value="0">-SELECCIONAR-</option>
@@ -56,7 +80,7 @@
                         <span asp-validation-for="@Model.CantidadItems" class="text-danger pb-2"></span>
                     </div>
 
-                    <div class="col-md-6">
+                    <div class="col-md-3">
                         <label for="cboMedio" class="form-label">Medio</label>
                         <select asp-for="@Model.IdMedio" class="form-select" id="cboMedio" asp-items="@ViewBag.Medios">
                             <option selected value="0">-SELECCIONAR-</option>
@@ -64,14 +88,13 @@
                         <span asp-validation-for="@Model.IdMedio" class="text-danger pb-2"></span>
                     </div>
 
-                    <div class="col-md-6">
+                    <div class="col-md-3">
                         <label for="cboTipo" class="form-label">Tipo</label>
                         <select asp-for="@Model.IdTipo" class="form-select" id="cboTipo" asp-items="@ViewBag.Tipos">
                             <option selected value="0">-SELECCIONAR-</option>
                         </select>
                         <span asp-validation-for="@Model.IdTipo" class="text-danger pb-2"></span>
                     </div>
-
 
                     <div class="col-md-3">
                         <label for="cboPrioridad" class="form-label">Prioridad</label>
@@ -89,31 +112,20 @@
                         <span asp-validation-for="@Model.IdNivel" class="text-danger pb-2"></span>
                     </div>
 
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <label for="txtCodTicket" class="form-label">Cod. Ticket</label>
                         <input asp-for="@Model.CodTicket" type="text" class="form-control text-uppercase" id="txtCodTicket" placeholder="COD. TICKET">
                         <span asp-validation-for="@Model.CodTicket" class="text-danger pb-2"></span>
                     </div>
 
-                    <div class="col-md-12">
-                        <label for="txtContacto" class="form-label">Contacto</label>
-                        <input asp-for="@Model.Contacto" type="text" class="form-control text-uppercase" id="txtContacto">
-                        <span asp-validation-for="@Model.Contacto" class="text-danger pb-2"></span>
+
+                    <div class="col-md-4">
+                        <label for="txtNSerie" class="form-label text-uppercase">N° Serie</label>
+                        <input asp-for="@Model.NSerie" type="text" class="form-control text-uppercase" id="txtNSerie">
+                        <span asp-validation-for="@Model.NSerie" class="text-danger pb-2"></span>
                     </div>
 
-                    <div class="col-md-6">
-                        <label for="txtWhatsApp" class="form-label">WhatsApp</label>
-                        <input asp-for="@Model.Whatsapp" type="text" class="form-control text-uppercase" id="txtWhatsApp">
-                        <span asp-validation-for="@Model.Whatsapp" class="text-danger pb-2"></span>
-                    </div>
-
-                    <div class="col-md-6">
-                        <label for="txtCorreo" class="form-label">Correo</label>
-                        <input asp-for="@Model.Correo" type="text" class="form-control text-uppercase" id="txtCorreo">
-                        <span asp-validation-for="@Model.Correo" class="text-danger pb-2"></span>
-                    </div>
-
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <label for="cboEstado" class="form-label">Estado</label>
                         <select asp-for="@Model.IdEstado" class="form-select" id="cboEstado" asp-items="@ViewBag.Estados">
                             <option selected value="0">-SELECCIONAR-</option>
@@ -121,14 +133,8 @@
                         <span asp-validation-for="@Model.IdEstado" class="text-danger pb-2"></span>
                     </div>
 
-                    <div class="col-md-6">
-                        <label for="txtNSerie" class="form-label text-uppercase">N° Serie</label>
-                        <input asp-for="@Model.NSerie" type="text" class="form-control text-uppercase" id="txtNSerie">
-                        <span asp-validation-for="@Model.NSerie" class="text-danger pb-2"></span>
-                    </div>
-
                     <div class="col-12">
-                        <label for="txtTarea" class="form-label">Tarea</label>
+                        <label for="txtTarea" class="form-label">Descripción Tarea</label>
                         <textarea asp-for="@Model.Descripcion" class="form-control text-uppercase" id="txtTarea" rows="3"></textarea>
                         <span asp-validation-for="@Model.Descripcion" class="text-danger pb-2"></span>
                     </div>

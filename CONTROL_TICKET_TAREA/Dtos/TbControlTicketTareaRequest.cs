@@ -47,6 +47,9 @@ namespace CONTROL_TICKET_TAREA.Dtos
         [Required(ErrorMessage = "Ingrese un contacto")]
         public string? Contacto { get; set; }
 
+        [RegularExpression(@"^\d{8}$", ErrorMessage = "El DNI debe contener exactamente 8 números.")]
+        public string? Dni { get; set; }
+
         [Range(1, int.MaxValue, ErrorMessage = "Debe seleccionar un estado")]
         public int IdEstado { get; set; }
 

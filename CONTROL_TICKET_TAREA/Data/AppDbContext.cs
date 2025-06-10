@@ -31,6 +31,8 @@ public partial class AppDbContext : DbContext
 
     public virtual DbSet<TbControlTicketTareaResponse> TbControlTicketTareaResponses { get; set; }
 
+    public virtual DbSet<TicketResponse> TicketResponses { get; set; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<General>(entity =>
@@ -460,6 +462,10 @@ public partial class AppDbContext : DbContext
                 .HasMaxLength(1000)
                 .IsUnicode(false)
                 .HasColumnName("DESCRIPCION");
+            entity.Property(e => e.Dni)
+                .HasMaxLength(9)
+                .IsUnicode(false)
+                .HasColumnName("DNI");
             entity.Property(e => e.FecAct)
                 .HasColumnType("datetime")
                 .HasColumnName("FEC_ACT");
@@ -733,6 +739,17 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.IdEstado).HasColumnName("ID_ESTADO");
             entity.Property(e => e.Estado).HasColumnName("ESTADO");
             entity.Property(e => e.Contacto).HasColumnName("CONTACTO");
+            entity.Property(e => e.Dni).HasColumnName("DNI");
+
+            entity.Property(e => e.FecReg).HasColumnName("FEC_REG");
+        });
+
+        modelBuilder.Entity<TicketResponse>(entity =>
+        {
+            entity.HasNoKey();
+
+            entity.Property(e => e.CORREL_SUP_EXTERNO).HasColumnName("CORREL_SUP_EXTERNO");
+            entity.Property(e => e.ID).HasColumnName("ID");
         });
 
         modelBuilder.Entity<TbControlTicketTarea>()
