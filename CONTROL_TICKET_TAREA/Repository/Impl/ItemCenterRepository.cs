@@ -12,11 +12,11 @@ namespace CONTROL_TICKET_TAREA.Repository.Impl
         public async Task<List<CboItem>> ListarItems()
             => await _context.ItemCenters
                 .Where(ic => ic.IndInventario == 1 && ic.IdItemCenter != 0 && ic.IdEmpresa != 0)
-                .OrderBy(u => u.Descripcion)
-                .Select(u => new CboItem
+                .OrderBy(ic => ic.Descripcion)
+                .Select(ic => new CboItem
                 {
-                    IdItemCenter = u.IdItemCenter,
-                    Descripcion = u.Descripcion!
+                    IdItemCenter = ic.IdItemCenter,
+                    Descripcion = ic.Descripcion!
                 })
                 .ToListAsync();
 
@@ -25,5 +25,16 @@ namespace CONTROL_TICKET_TAREA.Repository.Impl
                 .Where(ic => ic.IdItemCenter == idItemCenter)
                 .Select(u => u.Descripcion)
                 .FirstOrDefaultAsync();
+
+        public async Task<List<CboItem>> BuscarItems(string nombre)
+            => await _context.ItemCenters
+                .Where(ic => ic.Descripcion!.ToLower().Contains(nombre) && ic.IndInventario == 1 && ic.IdItemCenter != 0 && ic.IdEmpresa != 0)
+                .OrderBy(ic => ic.Descripcion)
+                .Select(ic => new CboItem
+                {
+                    IdItemCenter = ic.IdItemCenter,
+                    Descripcion = ic.Descripcion!
+                })
+                .ToListAsync();
     }
 }

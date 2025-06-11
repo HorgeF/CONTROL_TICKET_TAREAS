@@ -19,5 +19,17 @@ namespace CONTROL_TICKET_TAREA.Repository.Impl
                 })
                 .OrderBy(u => u.Nombre)
                 .ToListAsync();
+
+        public async Task<List<CboUsuario>> BuscarResponsables(string nombre)
+            => await _context.Usuarios
+                .Where(u => (u.Nombres + " " + u.ApellidoP).ToLower().Contains(nombre) && !string.IsNullOrWhiteSpace(u.Nombres))
+                .Select(u => new CboUsuario
+                {
+                    IdUsuario = u.IdUsuario,
+                    Nombre = u.Nombres + " " + u.ApellidoP
+                })
+                .OrderBy(u => u.Nombre)
+                .Take(10)
+                .ToListAsync();
     }
 }

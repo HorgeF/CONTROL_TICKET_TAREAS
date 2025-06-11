@@ -9,12 +9,16 @@ namespace CONTROL_TICKET_TAREA.Dtos.Peticiones
         [Range(1, int.MaxValue, ErrorMessage = "Debe seleccionar un grupo económico.")]
         public int IdGe { get; set; }
 
+        public string? Ge { get; set; }
+
         [Required(ErrorMessage = "Debe seleccionar una empresa / entidad.")]
         [Range(1, int.MaxValue, ErrorMessage = "Debe seleccionar una empresa / entidad.")]
         public int IdEmpresa { get; set; }
 
         [Range(1, int.MaxValue, ErrorMessage = "Debe seleccionar un receptor.")]
         public int IdReceptor { get; set; }
+
+        public string? Receptor { get; set; }
 
         [Range(1, int.MaxValue, ErrorMessage = "Debe seleccionar un medio.")]
         public int IdMedio { get; set; }
@@ -23,6 +27,8 @@ namespace CONTROL_TICKET_TAREA.Dtos.Peticiones
         public int IdPrioridad { get; set; }
 
         public int IdItemCenter { get; set; }
+
+        public string? ItemCenter { get; set; }
 
         [Required(ErrorMessage = "Ingrese un item")]
         public string? IdItemCenterDesc { get; set; }
@@ -56,8 +62,10 @@ namespace CONTROL_TICKET_TAREA.Dtos.Peticiones
         [Range(1, int.MaxValue, ErrorMessage = "Debe seleccionar un nivel")]
         public int? IdNivel { get; set; }
 
+        [RegularExpression(@"^[\w\.-]+@[\w\.-]+\.\w{2,4}$", ErrorMessage = "El formato del correo no es válido.")]
         public string? Correo { get; set; } = string.Empty;
 
+        [RegularExpression(@"^\d{9,10}$", ErrorMessage = "El Teléfono debe tener entre 9 y 10 números.")]
         public string? Whatsapp { get; set; } = string.Empty;
 
         public int? Flag { get; set; } = 1;

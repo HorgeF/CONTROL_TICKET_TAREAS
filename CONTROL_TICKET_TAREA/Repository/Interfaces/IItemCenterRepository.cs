@@ -6,5 +6,6 @@ namespace CONTROL_TICKET_TAREA.Repository.Interfaces
     {
         Task<List<CboItem>> ListarItems();
         Task<string?> ObtenerNombrePorIdItemCenter(int idItemCenter);
+        Task<List<CboItem>> BuscarItems(string nombre);
     }
 }

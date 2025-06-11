@@ -21,10 +21,18 @@ body {
   margin-bottom: 60px;
 }
 
-.btn-nivel {
+.btn-default {
+    color: #000;
+    transition: all 0.2s linear;
+}
+
+.btn-default:hover {
+    background-color: #cbcaca;
+}
+
+.row-nivel {
     color: #000;
     border: none;
-    padding: 0.5rem 1rem;
 }
 
 td.btn-nivel {
@@ -83,7 +91,6 @@ td.nivel-1267 {
     color: #333;
 }
 
-
 tr.selected {
     background-color: #cfe2ff; /* celeste suave */
 }
@@ -100,29 +107,29 @@ tr.selected {
 }
 
 /* Estilos base del formulario */
-#crearTareaModal .modal-content {
+#guardarTareaModal .modal-content {
     font-size: 0.95rem; /* Base para desktop */
 }
 
 /* Ajustes de inputs y selects */
-#crearTareaModal .form-control,
-#crearTareaModal .form-select {
+#guardarTareaModal .form-control,
+#guardarTareaModal .form-select {
     font-size: inherit;
     padding: 0.375rem 0.75rem;
 }
 
 /* Ajuste del botón */
-#crearTareaModal button {
+#guardarTareaModal button {
     font-size: inherit;
 }
 
 /* Responsive - pantallas pequeñas */
 @media (max-width: 1366px) {
-    #crearTareaModal .modal-content {
+    #guardarTareaModal .modal-content {
         font-size: 10px;
     }
 
-    #crearTareaModal .modal-content .modal-header{
+    #guardarTareaModal .modal-content .modal-header{
         font-size: 11px;
     }
 }

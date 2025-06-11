@@ -1,12 +1,12 @@
-using CONTROL_TICKET_TAREA.Models;
+using CONTROL_TICKET_TAREA.Dtos.Filtros;
+using CONTROL_TICKET_TAREA.Dtos.Peticiones;
 using CONTROL_TICKET_TAREA.Mappers;
+using CONTROL_TICKET_TAREA.Models;
+using CONTROL_TICKET_TAREA.Repository.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using System.Diagnostics;
 using Microsoft.Extensions.Caching.Memory;
-using CONTROL_TICKET_TAREA.Dtos.Filtros;
-using CONTROL_TICKET_TAREA.Repository.Interfaces;
-using CONTROL_TICKET_TAREA.Dtos.Peticiones;
+using System.Diagnostics;
 
 namespace CONTROL_TICKET_TAREA.Controllers
 {
@@ -57,6 +57,27 @@ namespace CONTROL_TICKET_TAREA.Controllers
             return Json(resultado);
         }
 
+        [HttpGet]
+        public async Task<IActionResult> BuscarResponsables(string nombre)
+        {
+            var responsables = await _usuarioRepository.BuscarResponsables(nombre);
+            return Json(responsables);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> BuscarGE(string nombre)
+        {
+            var gruposEconomicos = await _grupoEconomicoRepository.BuscarGE(nombre);
+            return Json(gruposEconomicos);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> BuscarItems(string nombre)
+        {
+            var items = await _itemCenterRepository.BuscarItems(nombre);
+            return Json(items);
+        }
+
         [HttpGet("/Home/FormTicketTarea/{idTarea}")]
         public async Task<IActionResult> FormTicketTarea(int idTarea)
         {
@@ -81,11 +102,15 @@ namespace CONTROL_TICKET_TAREA.Controllers
         [HttpPost]
         public async Task<IActionResult> Guardar(TbControlTicketTareaRequest peticion)
         {
+            Debug.WriteLine("ID CENTER ITEM: " + peticion.IdItemCenter);
+
             if (peticion.IdItemCenter != 0)
             {
                 ModelState.Remove(nameof(peticion.IdItemCenterDesc));
                 peticion.IdItemCenterDesc = await _itemCenterRepository.ObtenerNombrePorIdItemCenter(peticion.IdItemCenter);
             }
+
+            Debug.WriteLine("ITEM DESCRIPCION: " + peticion.IdItemCenterDesc);
 
             if (string.IsNullOrWhiteSpace(peticion.Correo) && string.IsNullOrWhiteSpace(peticion.Whatsapp))
             {
@@ -134,20 +159,37 @@ namespace CONTROL_TICKET_TAREA.Controllers
 
         private async Task CargarCombos()
         {
-            var selectGrupoEconomico = await _grupoEconomicoRepository.ListarGruposEconomicos();
-            var selectResponsable = await _usuarioRepository.ListarUsuarios();
-            var selectNiveles = await _generalRepository.ListarNiveles();
-            var selectPrioridad = await _generalRepository.ListarPrioridades();
-            var selectEstados = await _generalRepository.ListarEstados();
-            var selectItems = await _itemCenterRepository.ListarItems();
-            var selectTipos = await _generalRepository.ListarTipos();
-            var selectMedios = await _generalRepository.ListarMedios();
+            var selectPrioridad = await _cache.GetOrCreateAsync("Prioridades", async entry =>
+            {
+                entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromDays(7);
+                return await _generalRepository.ListarPrioridades();
+            });
 
-            ViewBag.GruposEconomicos = new SelectList(selectGrupoEconomico, "IdGe", "Nombre");
-            ViewBag.Responsables = new SelectList(selectResponsable, "IdUsuario", "Nombre");
+            var selectNiveles = await _cache.GetOrCreateAsync("Niveles", async entry =>
+            {
+                entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromDays(7);
+                return await _generalRepository.ListarNiveles();
+            });
+            var selectEstados = await _cache.GetOrCreateAsync("Estados", async entry =>
+            {
+                entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromDays(7);
+                return await _generalRepository.ListarEstados();
+            });
+
+            var selectTipos = await _cache.GetOrCreateAsync("Tipos", async entry =>
+            {
+                entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromDays(3);
+                return await _generalRepository.ListarTipos();
+            });
+
+            var selectMedios = await _cache.GetOrCreateAsync("Medios", async entry =>
+            {
+                entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromDays(3);
+                return await _generalRepository.ListarMedios();
+            });
+
             ViewBag.Prioridades = new SelectList(selectPrioridad, "IdGeneral", "Nombre");
             ViewBag.Estados = new SelectList(selectEstados, "IdGeneral", "Nombre");
-            ViewBag.Items = new SelectList(selectItems, "IdItemCenter", "Descripcion");
             ViewBag.Tipos = new SelectList(selectTipos, "IdGeneral", "Nombre");
             ViewBag.Niveles = new SelectList(selectNiveles, "IdGeneral", "Nombre");
             ViewBag.Medios = new SelectList(selectMedios, "IdGeneral", "Nombre");

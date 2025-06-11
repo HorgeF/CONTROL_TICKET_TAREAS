@@ -19,5 +19,17 @@ namespace CONTROL_TICKET_TAREA.Repository.Impl
                 .Where(ge => !string.IsNullOrWhiteSpace(ge.Nombre))
                 .OrderBy(ge => ge.Nombre)
                 .ToListAsync();
+
+        public async Task<List<CboGrupoEconomico>> BuscarGE(string nombre)
+            => await _context.Gep1Grupoes
+                .Where(ge => ge.Nombre!.ToLower().Contains(nombre) && !string.IsNullOrWhiteSpace(ge.Nombre))
+                .Select(ge => new CboGrupoEconomico
+                {
+                    IdGe = ge.IdGe,
+                    Nombre = ge.Nombre
+                })
+                .OrderBy(ge => ge.Nombre)
+                .Take(10)
+                .ToListAsync();
     }
 }

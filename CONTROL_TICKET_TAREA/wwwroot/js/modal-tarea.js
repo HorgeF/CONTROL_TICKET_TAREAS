@@ -1,35 +1,35 @@
 ﻿
-    $(document).on('change', '#cboGrupoEconomico', function () {
-        const grupoId = $(this).val();
+    //$(document).on('change', '#cboGrupoEconomico', function () {
+    //    const grupoId = $(this).val();
 
-        console.log("Id grupo economico:" + grupoId);
+    //    console.log("Id grupo economico:" + grupoId);
 
-        $('#cboEntidad').empty();
-        $('#cboEntidad').append('<option value="">Cargando...</option>');
+    //    $('#cboEntidad').empty();
+    //    $('#cboEntidad').append('<option value="">Cargando...</option>');
 
-        if (grupoId) {
-            $.ajax({
-                url: '/Home/ListarEmpresasParaSelect',
-                type: 'GET',
-                data: { grupoId: grupoId },
-                success: function (data) {
-                    $('#cboEntidad').empty();
-                    $('#cboEntidad').append('<option value="">-SELECCIONAR-</option>');
-                    $.each(data, function (i, empresa) {
-                        $('#cboEntidad').append(`<option value="${empresa.value}">${empresa.text}</option>`);
-                    });
-                },
-                error: function () {
-                    $('#cboEntidad').empty();
-                    $('#cboEntidad').append('<option value="">Error al cargar</option>');
-                }
-            });
-        } else {
-            $('#cboEntidad').html('<option value="">-SELECCIONAR-</option>');
-        }
-    });
+    //    if (grupoId) {
+    //        $.ajax({
+    //            url: '/Home/ListarEmpresasParaSelect',
+    //            type: 'GET',
+    //            data: { grupoId: grupoId },
+    //            success: function (data) {
+    //                $('#cboEntidad').empty();
+    //                $('#cboEntidad').append('<option value="">-SELECCIONAR-</option>');
+    //                $.each(data, function (i, empresa) {
+    //                    $('#cboEntidad').append(`<option value="${empresa.value}">${empresa.text}</option>`);
+    //                });
+    //            },
+    //            error: function () {
+    //                $('#cboEntidad').empty();
+    //                $('#cboEntidad').append('<option value="">Error al cargar</option>');
+    //            }
+    //        });
+    //    } else {
+    //        $('#cboEntidad').html('<option value="">-SELECCIONAR-</option>');
+    //    }
+    //});
 
-    // Cargar el modal con AJAX
+    // Cargar el modal
     $(document).on('click','#btnNuevaTarea',function () {
         const $btn = $(this);
         const $spinner = $btn.find('.spinner-border');
@@ -163,19 +163,4 @@
         $('body').css('overflow', 'auto');
         $('body').css('padding-right', '0');
 
-    });
-
-    $(document).on('change', '#cboItem', function () {
-        const seleccionado = $(this).val();
-        const txtItem = $('#txtItem');
-
-        console.log("Item seleccionado: " + seleccionado);
-
-        if (txtItem.length) {
-            const debeDeshabilitar = seleccionado !== "0";
-            txtItem.prop('disabled', debeDeshabilitar);
-            if (debeDeshabilitar) {
-                txtItem.val('');
-            }
-        }
     });
