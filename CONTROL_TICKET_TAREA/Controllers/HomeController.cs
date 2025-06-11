@@ -1,11 +1,11 @@
 using CONTROL_TICKET_TAREA.Dtos.Filtros;
 using CONTROL_TICKET_TAREA.Dtos.Peticiones;
+using CONTROL_TICKET_TAREA.Helpers;
 using CONTROL_TICKET_TAREA.Mappers;
 using CONTROL_TICKET_TAREA.Models;
 using CONTROL_TICKET_TAREA.Repository.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.Extensions.Caching.Memory;
 using System.Diagnostics;
 
 namespace CONTROL_TICKET_TAREA.Controllers
@@ -17,7 +17,7 @@ namespace CONTROL_TICKET_TAREA.Controllers
         IUsuarioRepository usuarioRepository,
         IGeneralRepository generalRepository,
         IItemCenterRepository itemCenterRepository,
-        IMemoryCache cache) : Controller
+        ICacheHelper cache) : Controller
     {
 
         private readonly IControlTicketTareaRepository _controlTicketTareaRepository = controlTicketTareaRepository;
@@ -27,7 +27,7 @@ namespace CONTROL_TICKET_TAREA.Controllers
         private readonly IGeneralRepository _generalRepository = generalRepository;
         private readonly IItemCenterRepository _itemCenterRepository = itemCenterRepository;
 
-        private readonly IMemoryCache _cache = cache;
+        private readonly ICacheHelper _cache = cache;
 
         public async Task<IActionResult> Index(FiltroControlTicketTarea filtro)
         {
@@ -159,34 +159,14 @@ namespace CONTROL_TICKET_TAREA.Controllers
 
         private async Task CargarCombos()
         {
-            var selectPrioridad = await _cache.GetOrCreateAsync("Prioridades", async entry =>
-            {
-                entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromDays(7);
-                return await _generalRepository.ListarPrioridades();
-            });
+            var expiracionLarga = TimeSpan.FromDays(7);
+            var expiracionCorta = TimeSpan.FromDays(3);
 
-            var selectNiveles = await _cache.GetOrCreateAsync("Niveles", async entry =>
-            {
-                entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromDays(7);
-                return await _generalRepository.ListarNiveles();
-            });
-            var selectEstados = await _cache.GetOrCreateAsync("Estados", async entry =>
-            {
-                entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromDays(7);
-                return await _generalRepository.ListarEstados();
-            });
-
-            var selectTipos = await _cache.GetOrCreateAsync("Tipos", async entry =>
-            {
-                entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromDays(3);
-                return await _generalRepository.ListarTipos();
-            });
-
-            var selectMedios = await _cache.GetOrCreateAsync("Medios", async entry =>
-            {
-                entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromDays(3);
-                return await _generalRepository.ListarMedios();
-            });
+            var selectPrioridad = await _cache.ObtenerListaAsync("Prioridades", _generalRepository.ListarPrioridades, expiracionLarga);
+            var selectNiveles = await _cache.ObtenerListaAsync("Niveles", _generalRepository.ListarNiveles, expiracionLarga);
+            var selectEstados = await _cache.ObtenerListaAsync("Estados", _generalRepository.ListarEstados, expiracionLarga);
+            var selectTipos = await _cache.ObtenerListaAsync("Tipos", _generalRepository.ListarTipos, expiracionCorta);
+            var selectMedios = await _cache.ObtenerListaAsync("Medios", _generalRepository.ListarMedios, expiracionCorta);
 
             ViewBag.Prioridades = new SelectList(selectPrioridad, "IdGeneral", "Nombre");
             ViewBag.Estados = new SelectList(selectEstados, "IdGeneral", "Nombre");

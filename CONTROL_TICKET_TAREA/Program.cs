@@ -1,4 +1,5 @@
 using CONTROL_TICKET_TAREA.Data;
+using CONTROL_TICKET_TAREA.Helpers;
 using CONTROL_TICKET_TAREA.Repository.Impl;
 using CONTROL_TICKET_TAREA.Repository.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -16,6 +17,8 @@ builder.Services.AddScoped<IEmpresaRepository, EmpresaRepository>();
 builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 builder.Services.AddScoped<IGeneralRepository, GeneralRepository>();
 builder.Services.AddScoped<IItemCenterRepository, ItemCenterRepository>();
+
+builder.Services.AddScoped<ICacheHelper, CacheHelper>();
 
 var app = builder.Build();
 

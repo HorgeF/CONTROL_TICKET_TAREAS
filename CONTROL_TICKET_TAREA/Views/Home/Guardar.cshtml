@@ -18,7 +18,7 @@
 
                     <div class="col-md-4">
                         <label for="txtGE" class="form-label">Grupo Económico</label>
-                        <input asp-for="@Model.Ge" type="text" class="form-control" id="txtGE" autocomplete="off" placeholder="Buscar grupo económico..." />
+                        <input asp-for="@Model.Ge" type="text" class="form-control text-uppercase" id="txtGE" autocomplete="off" placeholder="Buscar grupo económico..." />
                         <input asp-for="@Model.IdGe" type="hidden" id="IdGE" name="IdGE" />
                         <div id="suggestions-GE" class="list-group position-absolute z-3"></div>
                         <span asp-validation-for="@Model.IdGe" class="text-danger pb-2"></span>
@@ -34,7 +34,7 @@
 
                     <div class="col-md-4">
                         <label for="txtResponsable" class="form-label">Responsable</label>
-                        <input asp-for="@Model.Receptor" type="text" class="form-control" id="txtResponsable" autocomplete="off" placeholder="Buscar responsable..." />
+                        <input asp-for="@Model.Receptor" type="text" class="form-control text-uppercase" id="txtResponsable" autocomplete="off" placeholder="Buscar responsable..." />
                         <input asp-for="@Model.IdReceptor" type="hidden" id="IdReceptor" name="IdReceptor" />
                         <div id="suggestions-receptor" class="list-group position-absolute z-3"></div>
                         <span asp-validation-for="@Model.IdReceptor" class="text-danger pb-2"></span>
@@ -73,7 +73,7 @@
 
                     <div class="col-md-12">
                         <label for="txtItem" class="form-label">Item</label>
-                        <input asp-for="@Model.ItemCenter" type="text" class="form-control" id="txtItem" autocomplete="off" placeholder="Buscar item..." />
+                        <input asp-for="@Model.ItemCenter" type="text" class="form-control text-uppercase" id="txtItem" autocomplete="off" placeholder="Buscar item..." />
                         <input asp-for="@Model.IdItemCenter" type="hidden" id="IdItemCenter" name="IdItemCenter" />
                         <div id="suggestions-item" class="list-group position-absolute z-3"></div>
                         <span asp-validation-for="@Model.IdItemCenter" class="text-danger pb-2"></span>

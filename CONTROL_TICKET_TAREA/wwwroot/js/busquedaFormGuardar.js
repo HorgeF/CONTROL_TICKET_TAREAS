@@ -1,21 +1,45 @@
 ﻿// RESPONSABLE
 
 $(document).on('input', '#txtResponsable', function () {
+    let suggestions = $('#suggestions-receptor');
     let nombre = $(this).val();
     $('#IdReceptor').val("0");
 
     if (nombre.length < 3) {
-        $('#suggestions-receptor').empty();
+        suggestions.empty();
         return;
     }
 
-    $.get('/Home/BuscarResponsables', { nombre: nombre }, function (data) {
-        let suggestions = $('#suggestions-receptor');
-        suggestions.empty();    
+    //$.get('/Home/BuscarResponsables', { nombre: nombre }, function (data) {
+    //    let suggestions = $('#suggestions-receptor');
+    //    suggestions.empty();
 
-        data.forEach(item => {
-            suggestions.append(`<a href="#" class="list-group-item list-group-item-action" data-id="${item.idUsuario}">${item.nombre}</a>`);
-        });
+    //    data.forEach(item => {
+    //        suggestions.append(`<a href="#" class="list-group-item list-group-item-action" data-id="${item.idUsuario}">${item.nombre}</a>`);
+    //    });
+    //});
+
+    suggestions.html('<span class="list-group-item list-group-item-action">Cargando...</span>');
+
+    $.ajax({
+        url: "/Home/BuscarResponsables",
+        type: "GET",
+        data: { nombre: nombre },
+        success: function (data) {
+            suggestions.empty();
+
+            if (data.length > 0) {
+                data.forEach(item => {
+                    suggestions.append(`<a href="#" class="list-group-item list-group-item-action" data-id="${item.idUsuario}">${item.nombre}</a>`);
+                });
+            } else {
+                suggestions.append('<span class="list-group-item list-group-item-action">Sin resultados</span>');
+            }
+        },
+        error: function (err) {
+            suggestions.html('<span class="list-group-item list-group-item-action">Error al buscar...</span>');
+            console.error("Error inesperado en buscar grupo económico: " + err);
+        }
     });
 });
 
@@ -37,21 +61,46 @@ $(document).on('click',function (e) {
 // GRUPO ECONÓMICO
 
 $(document).on('input', '#txtGE', function () {
+
+    let suggestions = $('#suggestions-GE');
     let nombre = $(this).val();
     $('#IdGE').val("0");
 
     if (nombre.length < 2) {
-        $('#suggestions-GE').empty();
+        suggestions.empty();
         return;
     }
 
-    $.get('/Home/BuscarGE', { nombre: nombre }, function (data) {
-        let suggestions = $('#suggestions-GE');
-        suggestions.empty();
+    //$.get('/Home/BuscarGE', { nombre: nombre }, function (data) {
+    //    let suggestions = $('#suggestions-GE');
+    //    suggestions.empty();
 
-        data.forEach(item => {
-            suggestions.append(`<a href="#" class="list-group-item list-group-item-action" data-id="${item.idGe}">${item.nombre}</a>`);
-        });
+    //    data.forEach(item => {
+    //        suggestions.append(`<a href="#" class="list-group-item list-group-item-action" data-id="${item.idGe}">${item.nombre}</a>`);
+    //    });
+    //});
+
+    suggestions.html('<span class="list-group-item list-group-item-action">Cargando...</span>');
+
+    $.ajax({
+        url: "/Home/BuscarGE",
+        type: "GET",
+        data: { nombre: nombre },
+        success: function (data) {
+            suggestions.empty();
+
+            if (data.length > 0) {
+                data.forEach(item => {
+                    suggestions.append(`<a href="#" class="list-group-item list-group-item-action" data-id="${item.idGe}">${item.nombre}</a>`);
+                });
+            } else {
+                suggestions.append('<span class="list-group-item list-group-item-action">Sin resultados</span>');
+            }
+        },
+        error: function (err) {
+            suggestions.html('<span class="list-group-item list-group-item-action">Error al buscar...</span>');
+            console.error("Error inesperado en buscar grupo económico: " + err);
+        }
     });
 });
     
@@ -95,22 +144,46 @@ $(document).on('click', function (e) {
 // ITEMS
 
 $(document).on('input', '#txtItem', function () {
+    let suggestions = $('#suggestions-item');
     let nombre = $(this).val();
     $('#IdItemCenter').val("0");
     $("#txtNuevoItem").prop('disabled', false);
 
     if (nombre.length < 3) {
-        $('#suggestions-item').empty();
+        suggestions.empty();
         return;
     }
 
-    $.get('/Home/BuscarItems', { nombre: nombre }, function (data) {
-        let suggestions = $('#suggestions-item');
-        suggestions.empty();
+    //$.get('/Home/BuscarItems', { nombre: nombre }, function (data) {
+    //    let suggestions = $('#suggestions-item');
+    //    suggestions.empty();
 
-        data.forEach(item => {
-            suggestions.append(`<a href="#" class="list-group-item list-group-item-action" data-id="${item.idItemCenter}">${item.descripcion}</a>`);
-        });
+    //    data.forEach(item => {
+    //        suggestions.append(`<a href="#" class="list-group-item list-group-item-action" data-id="${item.idItemCenter}">${item.descripcion}</a>`);
+    //    });
+    //});
+
+    suggestions.html('<span class="list-group-item list-group-item-action">Cargando...</span>');
+
+    $.ajax({
+        url: "/Home/BuscarItems",
+        type: "GET",
+        data: { nombre: nombre },
+        success: function (data) {
+            suggestions.empty();
+
+            if (data.length > 0) {
+                data.forEach(item => {
+                    suggestions.append(`<a href="#" class="list-group-item list-group-item-action" data-id="${item.idItemCenter}">${item.descripcion}</a>`);
+                });
+            } else {
+                suggestions.append('<span class="list-group-item list-group-item-action">Sin resultados</span>');
+            }
+        },
+        error: function (err) {
+            suggestions.html('<span class="list-group-item list-group-item-action">Error al buscar...</span>');
+            console.error("Error inesperado en buscar grupo económico: " + err);
+        }
     });
 });
 

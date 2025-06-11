@@ -28,7 +28,7 @@ namespace CONTROL_TICKET_TAREA.Repository.Impl
 
         public async Task<List<CboItem>> BuscarItems(string nombre)
             => await _context.ItemCenters
-                .Where(ic => ic.Descripcion!.ToLower().Contains(nombre) && ic.IndInventario == 1 && ic.IdItemCenter != 0 && ic.IdEmpresa != 0)
+                .Where(ic => ic.Descripcion!.Trim().Contains(nombre) && ic.IndInventario == 1 && ic.IdItemCenter != 0 && ic.IdEmpresa != 0)
                 .OrderBy(ic => ic.Descripcion)
                 .Select(ic => new CboItem
                 {

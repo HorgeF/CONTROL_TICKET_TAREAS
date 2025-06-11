@@ -28,7 +28,7 @@ namespace CONTROL_TICKET_TAREA.Mappers
                 Dni = request.Dni?.Trim(),
                 IdEstado = request.IdEstado,
                 IdNivel = request.IdNivel,
-                Correo = request.Correo,
+                Correo = request.Correo?.Trim().ToUpper(),
                 Whatsapp = request.Whatsapp,
                 Flag = request.Flag,
                 UsuReg = request.UsuReg,
