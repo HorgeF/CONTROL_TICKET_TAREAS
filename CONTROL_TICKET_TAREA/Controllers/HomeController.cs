@@ -1,12 +1,12 @@
-using CONTROL_TICKET_TAREA.Dtos;
 using CONTROL_TICKET_TAREA.Models;
-using CONTROL_TICKET_TAREA.Repository;
 using CONTROL_TICKET_TAREA.Mappers;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Diagnostics;
 using Microsoft.Extensions.Caching.Memory;
 using CONTROL_TICKET_TAREA.Dtos.Filtros;
+using CONTROL_TICKET_TAREA.Repository.Interfaces;
+using CONTROL_TICKET_TAREA.Dtos.Peticiones;
 
 namespace CONTROL_TICKET_TAREA.Controllers
 {
@@ -70,9 +70,12 @@ namespace CONTROL_TICKET_TAREA.Controllers
                 var selectEmpresas = await _empresaRepository.ListarEmpresas(ticketObtenido!.IdGE);
                 ViewBag.Empresas = new SelectList(selectEmpresas, "IdEmpresa", "RazonSocial");
                 ticketTarea = ticketObtenido.ToRequest();
+            } else
+            {
+                ticketTarea.IdEstado = 1268; // Estado "PENDIENTE" predeterminado
             }
 
-            return PartialView("Create", ticketTarea);
+                return PartialView("Guardar", ticketTarea);
         }
 
         [HttpPost]
@@ -98,7 +101,7 @@ namespace CONTROL_TICKET_TAREA.Controllers
                     var selectEmpresas = await _empresaRepository.ListarEmpresas(peticion.IdGe);
                     ViewBag.Empresas = new SelectList(selectEmpresas, "IdEmpresa", "RazonSocial");
                 }
-                return PartialView("Create", peticion);
+                return PartialView("Guardar", peticion);
             }
 
             if (peticion.IdTarea == 0)
@@ -114,15 +117,13 @@ namespace CONTROL_TICKET_TAREA.Controllers
         {
             var ticketTarea = await _controlTicketTareaRepository.ObtenerTicketTarea(idTarea);
 
-            Debug.WriteLine(ticketTarea.ToRequest().ToTicketRequest());
-
             var ticketRespuesta = await _controlTicketTareaRepository.RegistrarTicket(ticketTarea!.ToRequest().ToTicketRequest());
 
             ticketTarea!.CodTicket = ticketRespuesta?.CORREL_SUP_EXTERNO;
 
             await _controlTicketTareaRepository.Actualizar(ticketTarea!.ToRequest().ToEntity());
 
-            return Json(new { CodTicketTarea = ticketTarea?.CodTicket, IdTicket = ticketRespuesta?.ID });
+            return Json(new { ticketTarea?.CodTicket });
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

@@ -1,6 +1,6 @@
 ﻿using CONTROL_TICKET_TAREA.Dtos.Combos;
 
-namespace CONTROL_TICKET_TAREA.Repository
+namespace CONTROL_TICKET_TAREA.Repository.Interfaces
 {
     public interface IEmpresaRepository
     {

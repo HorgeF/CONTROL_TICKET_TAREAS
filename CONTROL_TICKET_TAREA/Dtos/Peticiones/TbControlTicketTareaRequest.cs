@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace CONTROL_TICKET_TAREA.Dtos
+namespace CONTROL_TICKET_TAREA.Dtos.Peticiones
 {
     public class TbControlTicketTareaRequest
     {

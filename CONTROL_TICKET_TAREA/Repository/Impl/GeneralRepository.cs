@@ -1,8 +1,9 @@
 ﻿using CONTROL_TICKET_TAREA.Data;
 using CONTROL_TICKET_TAREA.Dtos.Combos;
+using CONTROL_TICKET_TAREA.Repository.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
-namespace CONTROL_TICKET_TAREA.Repository
+namespace CONTROL_TICKET_TAREA.Repository.Impl
 {
     public class GeneralRepository(AppDbContext context) : IGeneralRepository
     {

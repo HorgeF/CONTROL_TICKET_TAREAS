@@ -1,4 +1,5 @@
-﻿using CONTROL_TICKET_TAREA.Dtos;
+﻿using CONTROL_TICKET_TAREA.Dtos.Peticiones;
+using CONTROL_TICKET_TAREA.Dtos.Respuestas;
 using CONTROL_TICKET_TAREA.Models;
 
 namespace CONTROL_TICKET_TAREA.Mappers

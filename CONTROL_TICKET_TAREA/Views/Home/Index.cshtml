@@ -1,4 +1,5 @@
-﻿@model List<CONTROL_TICKET_TAREA.Dtos.TbControlTicketTareaResponse>
+﻿@using CONTROL_TICKET_TAREA.Dtos.Respuestas
+@model List<TbControlTicketTareaResponse>
 
 @{
     ViewData["Title"] = "TAREAS";
@@ -6,19 +7,13 @@
     var nivelesSeleccionadas = ViewBag.FiltroNivel as List<int> ?? new List<int>();
 }
 
-<div class="d-flex flex-column gap-1 p-3">
-    <div class="d-flex justify-content-end">
-        <button class="btn btn-success" id="btnNuevaTarea">
-            <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
-            + Nueva Tarea
-        </button>
-    </div>
+<div class="d-flex flex-column gap-2 p-3">
+    <h1 class="h5">LISTADO DE TAREAS</h1>
     <form id="filtroForm" asp-action="Index" method="get">
-        <fieldset class="mb-3">
-            <legend class="fw-bold"><u>Búsqueda</u></legend>
+        <div class="mb-2 h-sub">
             <div class="d-flex gap-4">
-                <fieldset>
-                    <legend class="h5">Prioridades</legend>
+                <div class="d-flex gap-2">
+                    <span class="m-auto">Prioridades: </span>
                     <div class="d-flex flex-wrap gap-2">
                     @if(ViewBag.Prioridades is SelectList prioridades)
                     {
@@ -46,9 +41,9 @@
                         }        
                     }
                     </div>
-                </fieldset>
-                <fieldset>
-                    <legend class="h5">Niveles</legend>
+                </div>
+                <div class="d-flex gap-2">
+                    <span class="m-auto">Niveles: </span>
                     <div class="d-flex flex-wrap gap-2">
                     @if(ViewBag.Niveles is SelectList niveles)
                     {
@@ -63,19 +58,22 @@
 
                             <input type="checkbox" name="nivel" value="@item.Value" class="d-none" id="@id" @(estaSeleccionado ? "checked" : "") />
                             <button type="button"
-                                    class="btn @claseColor"
+                                    class="btn h-sub @claseColor"
                                     data-target="#@id">
                                 @item.Text
                             </button>
                         }          
                     }
                     </div>
-                </fieldset>
-                <fieldset>
-                    <legend class="5"></legend>
-                </fieldset>
+                </div>
+                <div class="ms-auto">
+                    <button type="button" class="btn btn-success" id="btnNuevaTarea">
+                        <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+                        + Nueva Tarea
+                    </button>
+                </div>
             </div>
-        </fieldset>
+        </div>
     </form>
     <!--
     <div class="d-none gap-2 mb-2" id="accionesSeleccionados">
@@ -83,24 +81,23 @@
         <button type="button" class="btn btn-danger" id="btnEliminarSeleccionados">Eliminar seleccionados</button>
     </div>
     -->
-    <table id="tabla-tareas" class="table table-hover"> 
+    <table id="tabla-tareas" class="table table-hover w-100">
         <thead>
-            <tr class="text-center">
-                <!-- <th><input type="checkbox" id="checkAll" /></th> -->
-                <th scope="col" style="width: 4%;">GE</th>
-                <th scope="col" style="width: 4%;">EMPRESA</th>
-                <th scope="col" style="width: 8%;">FECHA REG.</th>
-                <th scope="col" style="width: 8%;">RECEPTOR</th>
-                <th scope="col" style="width: 6%;">MEDIO</th>
-                <th scope="col" style="width: 8%;">CONTACTO</th>
-                <th scope="col" style="width: 4%;">PRIORIDAD</th>
-                <th scope="col" style="width: 6%;">NIVEL</th>
-                <th scope="col" style="width: 5%;">ITEMS</th>
-                <th scope="col" style="width: 6%;">SERIE</th>
-                <th scope="col" style="width: 6%;">TIPO</th>
-                <th scope="col" style="width: 26%;">DESCRIPCIÓN</th>
-                <th scope="col" style="width: 6%;">TICKET</th>
-                <th scope="col" style="width: 7%;">ESTADO</th>
+            <tr>
+                <th scope="col" style="width: 3%">GE</th>
+                <th scope="col" style="width: 3%">EMPRESA</th>
+                <th scope="col" class="d-none d-md-table-cell">FECHA REG.</th>
+                <th scope="col">RECEPTOR</th>
+                <th scope="col" class="d-none d-md-table-cell">MEDIO</th>
+                <th scope="col" class="d-none d-lg-table-cell">CONTACTO</th>
+                <th scope="col" class="d-none d-md-table-cell">PRIORIDAD</th>
+                <th scope="col" class="d-none d-md-table-cell">NIVEL</th>
+                <th scope="col">ITEMS</th>
+                <th scope="col" class="d-none d-lg-table-cell">SERIE</th>
+                <th scope="col" class="d-none d-lg-table-cell">TIPO</th>
+                <th scope="col" style="width: 40%">DESCRIPCIÓN</th>
+                <th scope="col" class="d-none d-md-table-cell">TICKET</th>
+                <th scope="col">ESTADO</th>
             </tr>
         </thead>
         <tbody>
@@ -108,20 +105,15 @@
             {
                 foreach (var item in Model)
                 {
-                    <tr data-id="@item.IdTarea" draggable="true" style="cursor:pointer" class="text-center fila-editable align-middle">
-                    <!--
-                        <td>
-                            <input type="checkbox" name="selectedIds" value="@item.IdTarea" class="row-checkbox" />
-                        </td>
-                        -->
+                    <tr data-id="@item.IdTarea" draggable="true" style="cursor:pointer" class="fila-editable">
                         <input class="input-idTarea" value="@item.IdTarea" type="hidden"/>
                         <td>@item.GE</td>
                         <td>@item.Empresa</td>
-                        <td>@item.FecReg</td>
+                        <td class="d-none d-md-table-cell">@item.FecReg</td>
                         <td>@item.Receptor</td>
-                        <td>@item.Medio</td>
-                        <td>@item.Contacto</td>
-                        <td class="fw-bold @(
+                        <td class="d-none d-md-table-cell">@item.Medio</td>
+                        <td class="d-none d-lg-table-cell">@item.Contacto</td>
+                        <td class="d-none d-md-table-cell fw-bold @(
                             item.IdPrioridad switch
                             {
                                 1064 => "bg-success",
@@ -132,17 +124,22 @@
                             @item.Prioridad
                         </td>
                         @{
-                            var claseNivel = $"btn-nivel nivel-{item.IdNivel} fw-bold";
+                            var claseNivel = $"btn-nivel nivel-{item.IdNivel} fw-bold d-none d-md-table-cell";
                         }
                         <td class="@claseNivel">@item.Nivel</td>
                         <td>@item.CantidadItems</td>
-                        <td>@item.NSerie</td>
-                        <td>@item.Tipo</td>
+                        <td class="d-none d-lg-table-cell">@item.NSerie</td>
+                        <td class="d-none d-lg-table-cell">@item.Tipo</td>
                         <td>@item.Descripcion</td>
-                        <td>@if (string.IsNullOrWhiteSpace(item.CodTicket))
+                        <td class="d-none d-md-table-cell">
+                            @if (string.IsNullOrWhiteSpace(item.CodTicket))
                             {
-                                <button class="btn btn-dark btn-registrar-ticket">Registrar Ticket</button>
-                            } else
+                                <button id="btn-registrar-ticket-@item.IdTarea" class="d-flex align-items-center gap-1 btn btn-dark btn-registrar-ticket btn-sm">
+                                    <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+                                    Crear
+                                </button>
+                            }
+                            else
                             {
                                 @item.CodTicket
                             }
@@ -154,14 +151,14 @@
             else
             {
                 <tr>
-                    <td colspan="12" class="text-center text-muted">No se encontraron resultados.</td>
+                    <td colspan="14" class="text-center text-muted">No se encontraron resultados.</td>
                 </tr>
             }
         </tbody>
     </table>
 </div>
 
-<div id="crearTareaModalContainer"></div>
+<div id="guardarTareaModalContainer"></div>
 
 @section Scripts{
     <script src="~/js/modal-tarea.js"></script>

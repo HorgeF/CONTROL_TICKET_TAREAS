@@ -1,4 +1,4 @@
-﻿using CONTROL_TICKET_TAREA.Repository;
+﻿using CONTROL_TICKET_TAREA.Repository.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CONTROL_TICKET_TAREA.Controllers

@@ -1,5 +1,6 @@
 using CONTROL_TICKET_TAREA.Data;
-using CONTROL_TICKET_TAREA.Repository;
+using CONTROL_TICKET_TAREA.Repository.Impl;
+using CONTROL_TICKET_TAREA.Repository.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);

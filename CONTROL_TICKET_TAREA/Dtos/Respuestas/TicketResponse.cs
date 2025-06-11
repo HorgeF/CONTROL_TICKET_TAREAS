@@ -1,4 +1,4 @@
-﻿namespace CONTROL_TICKET_TAREA.Dtos
+﻿namespace CONTROL_TICKET_TAREA.Dtos.Respuestas
 {
     public class TicketResponse
     {

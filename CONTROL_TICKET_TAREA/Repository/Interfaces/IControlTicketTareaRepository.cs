@@ -1,8 +1,9 @@
-﻿using CONTROL_TICKET_TAREA.Dtos;
-using CONTROL_TICKET_TAREA.Dtos.Filtros;
+﻿using CONTROL_TICKET_TAREA.Dtos.Filtros;
+using CONTROL_TICKET_TAREA.Dtos.Peticiones;
+using CONTROL_TICKET_TAREA.Dtos.Respuestas;
 using CONTROL_TICKET_TAREA.Models;
 
-namespace CONTROL_TICKET_TAREA.Repository
+namespace CONTROL_TICKET_TAREA.Repository.Interfaces
 {
     public interface IControlTicketTareaRepository
     {

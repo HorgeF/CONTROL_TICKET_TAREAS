@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
 
-namespace CONTROL_TICKET_TAREA.Dtos
+namespace CONTROL_TICKET_TAREA.Dtos.Respuestas
 {
     public class TbControlTicketTareaResponse
     {

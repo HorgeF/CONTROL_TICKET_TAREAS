@@ -31,8 +31,8 @@
 
     // Cargar el modal con AJAX
     $(document).on('click','#btnNuevaTarea',function () {
-        var $btn = $(this);
-        var $spinner = $btn.find('.spinner-border');
+        const $btn = $(this);
+        const $spinner = $btn.find('.spinner-border');
 
         $.ajax({
             url: "/Home/FormTicketTarea/0",
@@ -42,8 +42,8 @@
                 $spinner.removeClass('d-none');
             },
             success: function (html) {
-                $('#crearTareaModalContainer').html(html);
-                const modalElement = document.getElementById('crearTareaModal');
+                $('#guardarTareaModalContainer').html(html);
+                const modalElement = document.getElementById('guardarTareaModal');
                 const modal = new bootstrap.Modal(modalElement);
                 modal.show();
 
@@ -61,15 +61,28 @@
         });
     });
 
+    let enviandoFormulario = false;
+
     // Enviar formulario por AJAX
-    $(document).on('submit', '#formCrearTarea', function (e) {
+    $(document).on('submit', '#formGuardarTarea', function (e) {
         e.preventDefault();
 
+        if (enviandoFormulario) return;
+
+        enviandoFormulario = true;
+
+        const $btnGuardar = $("#btnGuardar");
+        const $spinner = $btnGuardar.find('.spinner-border');
         const form = $(this);
+
         $.ajax({
             url: form.attr('action'),
             type: 'POST',
             data: form.serialize(),
+            beforeSend: function () {
+                $btnGuardar.prop('disabled', true);
+                $spinner.removeClass('d-none');
+            },
             success: function (response, textStatus, jqXHR) {
                 const contentType = jqXHR.getResponseHeader("Content-Type");
 
@@ -79,13 +92,13 @@
                     console.log("Fallo");
 
                     // Evitar que se cree fondo tras fondo
-                        $('#crearTareaModal').remove();
-                        $('.modal-backdrop').remove();
+                    $('#guardarTareaModal').remove();
+                    $('.modal-backdrop').remove();
 
                     // Reemplazar el modal con el nuevo contenido con errores
-                    $('#crearTareaModalContainer').html(response);
+                    $('#guardarTareaModalContainer').html(response);
 
-                    const modalElement = document.getElementById('crearTareaModal');
+                    const modalElement = document.getElementById('guardarTareaModal');
                     if (!modalElement) {
                         console.error("Modal no encontrado en el DOM");
                         return;
@@ -94,29 +107,62 @@
                     const modal = new bootstrap.Modal(modalElement);
                     modal.show();
                 }
+
+                enviandoFormulario = false;
+                $btnGuardar.prop('disabled', false);
+                $spinner.addClass('d-none');
             },
             error: function (err) {
+                enviandoFormulario = false;
+                $btnGuardar.prop('disabled', false);
+                $spinner.addClass('d-none');
                 console.error("Error inesperado: " + err);
             }
         });
     });
 
+    let tareaCargando = false;
+
     $(document).on('dblclick', '.fila-editable', function () {
+        if (tareaCargando) return;
+
+        tareaCargando = true;
+
+        const $fila = $(this);
         const id = $(this).data('id');
+
+        // Agregar efecto visual de carga
+        $('.fila-editable').removeClass('loading-border').addClass('disabled-row pe-none');
+        $fila.removeClass('disabled-row').addClass('loading-border');
+
         $.get(`/Home/FormTicketTarea/${id}`, function (modalHtml) {
-            $('#crearTareaModalContainer').html(modalHtml);
-            const modalEl = document.getElementById('crearTareaModal');
+            $('#guardarTareaModalContainer').html(modalHtml);
+            const modalEl = document.getElementById('guardarTareaModal');
             if (modalEl) {
                 const modal = new bootstrap.Modal(modalEl);
                 modal.show();
             }
+
+            tareaCargando = false;
+            $('.fila-editable').removeClass('loading-border disabled-row pe-none');
+        }).fail(function () {
+            tareaCargando = false;
+            $('.fila-editable').removeClass('loading-border disabled-row pe-none');
+            alert("Ocurrio un problema al cargar el formulario para editar.");
         });
     });
 
     $(document).on('hidden.bs.modal', function () {
+        const $btn = $("#btnNuevaTarea");
+        const $spinner = $btn.find('.spinner-border');
+
+        $btn.prop('disabled', false);
+        $spinner.addClass('d-none');
+
         // Asegura que el scroll se restaure
         $('body').css('overflow', 'auto');
         $('body').css('padding-right', '0');
+
     });
 
     $(document).on('change', '#cboItem', function () {

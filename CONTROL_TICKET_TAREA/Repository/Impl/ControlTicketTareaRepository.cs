@@ -1,10 +1,12 @@
 ﻿using CONTROL_TICKET_TAREA.Data;
-using CONTROL_TICKET_TAREA.Dtos;
 using CONTROL_TICKET_TAREA.Dtos.Filtros;
+using CONTROL_TICKET_TAREA.Dtos.Peticiones;
+using CONTROL_TICKET_TAREA.Dtos.Respuestas;
 using CONTROL_TICKET_TAREA.Models;
+using CONTROL_TICKET_TAREA.Repository.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
-namespace CONTROL_TICKET_TAREA.Repository
+namespace CONTROL_TICKET_TAREA.Repository.Impl
 {
     public class ControlTicketTareaRepository(AppDbContext context) : IControlTicketTareaRepository
     {

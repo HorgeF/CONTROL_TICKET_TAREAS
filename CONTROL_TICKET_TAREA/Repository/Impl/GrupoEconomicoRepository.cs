@@ -1,8 +1,9 @@
 ﻿using CONTROL_TICKET_TAREA.Data;
 using Microsoft.EntityFrameworkCore;
 using CONTROL_TICKET_TAREA.Dtos.Combos;
+using CONTROL_TICKET_TAREA.Repository.Interfaces;
 
-namespace CONTROL_TICKET_TAREA.Repository
+namespace CONTROL_TICKET_TAREA.Repository.Impl
 {
     public class GrupoEconomicoRepository(AppDbContext context) : IGrupoEconomicoRepository
     {

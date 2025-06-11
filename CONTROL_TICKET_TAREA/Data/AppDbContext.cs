@@ -1,4 +1,4 @@
-﻿using CONTROL_TICKET_TAREA.Dtos;
+﻿using CONTROL_TICKET_TAREA.Dtos.Respuestas;
 using CONTROL_TICKET_TAREA.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
