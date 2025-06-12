@@ -97,12 +97,12 @@ tr.selected {
 
 
 #tabla-tareas {
-    font-size: 10px;
+    font-size: 9px;
 }
 
 @media (min-width: 1366px) {
     #tabla-tareas {
-        font-size: 12px;
+        font-size: 11px;
     }
 }
 
@@ -126,7 +126,7 @@ tr.selected {
 /* Responsive - pantallas pequeñas */
 @media (max-width: 1366px) {
     #guardarTareaModal .modal-content {
-        font-size: 10px;
+        font-size: 9px;
     }
 
     #guardarTareaModal .modal-content .modal-header{
@@ -135,7 +135,7 @@ tr.selected {
 }
 
 .h-sub{
-    font-size: 10px;
+    font-size: 9px;
 }
 
 .h-sub button{
@@ -144,7 +144,7 @@ tr.selected {
 
 @media (min-width: 1366px) {
     .h-sub {
-        font-size: 12px;
+        font-size: 11px;
     }
 }
 
