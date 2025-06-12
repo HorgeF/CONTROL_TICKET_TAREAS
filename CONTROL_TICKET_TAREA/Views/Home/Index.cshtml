@@ -11,63 +11,66 @@
     <h1 class="h5">LISTADO DE TAREAS</h1>
     <form id="filtroForm" asp-action="Index" method="get">
         <div class="h-sub fw-bold text-white p-2" style="background-color:#268DCF">
-            <div class="d-flex gap-4">
-                <div class="d-flex gap-2">
-                    <span class="m-auto">Prioridades: </span>
-                    <div class="d-flex flex-wrap gap-2">
-                    @if(ViewBag.Prioridades is SelectList prioridades)
-                    {
-                        @foreach (var item in prioridades)
+            <div class="d-flex">
+                <div class="d-flex flex-column gap-2 align-items-start">
+                    <div class="d-flex gap-2">
+                        <span class="m-auto">Prioridades: </span>
+                        <div class="d-flex flex-wrap gap-2">
+                        @if(ViewBag.Prioridades is SelectList prioridades)
                         {
-                            var id = $"prioridad{item.Value}";
-                            var estaSeleccionado = prioridadesSeleccionadas.Contains(int.Parse(item.Value));
-
-                            var claseColorActivo = item.Value switch
+                            @foreach (var item in prioridades)
                             {
-                                "1066" => "btn-danger",   // Alta
-                                "1065" => "btn-warning",  // Media
-                                "1064" => "btn-success",  // Baja
-                                _ => ""
-                            };
+                                var id = $"prioridad{item.Value}";
+                                var estaSeleccionado = prioridadesSeleccionadas.Contains(int.Parse(item.Value));
 
-                            var clasesBtn = estaSeleccionado ? $"{claseColorActivo} active" : "btn-default nivel-inactivo";
+                                var claseColorActivo = item.Value switch
+                                {
+                                    "1066" => "btn-danger",   // Alta
+                                    "1065" => "btn-warning",  // Media
+                                    "1064" => "btn-success",  // Baja
+                                    _ => ""
+                                };
 
-                            <input type="checkbox" name="prioridad" value="@item.Value" class="d-none" id="@id" @(estaSeleccionado ? "checked" : "") />
-                            <button type="button"
-                                    class="btn fw-bold @clasesBtn"
-                                    data-target="#@id">
-                                @item.Text
-                            </button>
-                        }        
-                    }
+                                var clasesBtn = estaSeleccionado ? $"{claseColorActivo} active" : "btn-default nivel-inactivo";
+
+                                <input type="checkbox" name="prioridad" value="@item.Value" class="d-none" id="@id" @(estaSeleccionado ? "checked" : "") />
+                                <button type="button"
+                                        class="btn fw-bold @clasesBtn"
+                                        data-target="#@id">
+                                    @item.Text
+                                </button>
+                            }        
+                        }
+                        </div>
                     </div>
-                </div>
-                <div class="d-flex gap-2">
-                    <span class="m-auto">Niveles: </span>
-                    <div class="d-flex flex-wrap gap-2">
-                    @if(ViewBag.Niveles is SelectList niveles)
-                    {
-                        @foreach (var item in niveles)
+                    <div class="d-flex gap-2">
+                        <span class="m-auto">Niveles: </span>
+                        <div class="d-flex flex-wrap gap-2">
+                        @if(ViewBag.Niveles is SelectList niveles)
                         {
-                            var id = $"nivel{item.Value}";
-                            var estaSeleccionado = nivelesSeleccionadas.Contains(int.Parse(item.Value));
+                            @foreach (var item in niveles)
+                            {
+                                var id = $"nivel{item.Value}";
+                                var estaSeleccionado = nivelesSeleccionadas.Contains(int.Parse(item.Value));
 
-                            var claseColor = estaSeleccionado
-                                ? $"btn-default nivel-{item.Value}"
-                                : "btn-default nivel-inactivo";
+                                var claseColor = estaSeleccionado
+                                    ? $"btn-default nivel-{item.Value}"
+                                    : "btn-default nivel-inactivo";
 
-                            <input type="checkbox" name="nivel" value="@item.Value" class="d-none" id="@id" @(estaSeleccionado ? "checked" : "") />
-                            <button type="button"
-                                    class="btn fw-bold @claseColor"
-                                    data-target="#@id">
-                                @item.Text
-                            </button>
-                        }          
-                    }
+                                <input type="checkbox" name="nivel" value="@item.Value" class="d-none" id="@id" @(estaSeleccionado ? "checked" : "") />
+                                <button type="button"
+                                        class="btn fw-bold @claseColor"
+                                        data-target="#@id">
+                                    @item.Text
+                                </button>
+                            }          
+                        }
+                        </div>
                     </div>
                 </div>
-                <div class="ms-auto">
-                    <button type="button" class="btn btn-success fw-bold" id="btnNuevaTarea">
+                <div class="d-flex flex-column align-items-center gap-2 fw-bold ms-auto">
+                    <p class="m-auto">N° Resultados encontrados: @Model.Count</p>
+                    <button type="button" class="btn btn-success" id="btnNuevaTarea">
                         <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
                         + Nueva Tarea
                     </button>
@@ -84,6 +87,7 @@
     <table id="tabla-tareas" class="table table-striped table-hover w-100">
         <thead class="table-light">
             <tr>
+                <th scope="col" style="width: 2.5%">N°</th>
                 <th scope="col" style="width: 3%">GE</th>
                 <th scope="col" style="width: 3%">EMPRESA</th>
                 <th scope="col" class="d-none d-md-table-cell">FECHA REG.</th>
@@ -103,10 +107,12 @@
         <tbody>
             @if (Model.Count != 0)
             {
+                int index = 1;
                 foreach (var item in Model)
                 {
+                    <input class="input-idTarea" value="@item.IdTarea" type="hidden"/>
                     <tr data-id="@item.IdTarea" draggable="true" style="cursor:pointer" class="fila-editable">
-                        <input class="input-idTarea" value="@item.IdTarea" type="hidden"/>
+                        <td>@index</td>
                         <td>@item.GE</td>
                         <td>@item.Empresa</td>
                         <td class="d-none d-md-table-cell">@item.FecReg</td>
@@ -146,6 +152,7 @@
                         </td>
                         <td>@item.Estado</td>
                     </tr>
+                    index++;
                 }
             }
             else
@@ -166,6 +173,7 @@
     <script src="~/js/selectedRows.js"></script>
     <script src="~/js/registrarTicket.js"></script>
     <script src="~/js/busquedaFormGuardar.js"></script>
+    <script src="~/js/OrdenadoAscDesc.js"></script>
     <script>
         // Cambio de estilos al seleccionar los botones que filtraras la lista
         document.querySelectorAll('button[data-target]').forEach(btn => {
