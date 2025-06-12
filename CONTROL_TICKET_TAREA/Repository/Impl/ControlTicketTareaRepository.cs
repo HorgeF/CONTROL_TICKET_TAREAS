@@ -5,6 +5,7 @@ using CONTROL_TICKET_TAREA.Dtos.Respuestas;
 using CONTROL_TICKET_TAREA.Models;
 using CONTROL_TICKET_TAREA.Repository.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using System.Diagnostics;
 
 namespace CONTROL_TICKET_TAREA.Repository.Impl
 {
@@ -12,19 +13,67 @@ namespace CONTROL_TICKET_TAREA.Repository.Impl
     {
         private readonly AppDbContext _context = context;
 
-        public async Task<List<TbControlTicketTareaResponse>> SPListarTicketTarea(FiltroControlTicketTarea filtro)
+        public async Task<List<TbControlTicketTareaResponse>> SPListarTicketTarea(FiltroControlTicketTarea filtro, int? prioridadInd, int? nivelInd)
         {
-            var prioridadesCsv = filtro.Prioridad != null && filtro.Prioridad.Any()
-                ? string.Join(",", filtro.Prioridad)
-                : "%";
+            string prioridadesCsv = "";
+            string nivelesCsv = "";
+            int IdReceptor = filtro.IdReceptor == 0 ? -1 : filtro.IdReceptor;
 
-            var nivelesCsv = filtro.Nivel != null && filtro.Nivel.Any()
-                ? string.Join(",", filtro.Nivel)
-                : "%";
+            if(prioridadInd == null && nivelInd == null)
+            {
+                prioridadesCsv = filtro.Prioridad != null && filtro.Prioridad.Any()
+                    ? string.Join(",", filtro.Prioridad)
+                    : "%";
+
+                nivelesCsv = filtro.Nivel != null && filtro.Nivel.Any()
+                    ? string.Join(",", filtro.Nivel)
+                    : "%";
+
+                return await _context.TbControlTicketTareaResponses
+                .FromSqlInterpolated($"EXEC SP_LISTAR_TICKET_TAREA @ID_PRIORIDAD={prioridadesCsv},@ID_NIVEL={nivelesCsv},@ID_RESPONSABLE={IdReceptor}")
+                .ToListAsync();
+            }
 
             return await _context.TbControlTicketTareaResponses
-                .FromSqlInterpolated($"EXEC SP_LISTAR_TICKET_TAREA @ID_PRIORIDAD={prioridadesCsv},@ID_NIVEL={nivelesCsv}")
+                .FromSqlInterpolated($"EXEC SP_LISTAR_TICKET_TAREA @ID_PRIORIDAD={prioridadInd},@ID_NIVEL={nivelInd},@ID_RESPONSABLE={IdReceptor}")
                 .ToListAsync();
+        }
+
+        public async Task<List<GrupoCantidadResponse>> ListarGrupoConCantidadAsync(string idSecundaria, Func<TbControlTicketTarea, int?> groupBy)
+        {
+            var grupos = await _context.Generals
+                .Where(g => g.IdSecundaria == idSecundaria)
+                .Select(g => new { g.IdGeneral, g.Descripcion })
+                .ToListAsync();
+
+            var conteos = _context.TbControlTicketTareas
+                .GroupBy(groupBy)
+                .Select(g => new
+                {
+                    Id = g.Key,
+                    Cantidad = g.Count()
+                })
+                .ToList();
+
+            var resultado = grupos
+                .GroupJoin(conteos,
+                    g => g.IdGeneral,
+                    c => c.Id,
+                    (g, c) => new GrupoCantidadResponse
+                    {
+                        Id = g.IdGeneral,
+                        Nombre = g.Descripcion!,
+                        Cantidad = c.FirstOrDefault()?.Cantidad ?? 0
+                    })
+                .OrderByDescending(x => x.Id)
+                .ToList();
+
+            foreach (var item in resultado)
+            {
+                Debug.WriteLine($"Id: {item.Id}, Nombre: {item.Nombre}, Cantidad: {item.Cantidad}");
+            }
+
+            return resultado;
         }
 
         public async Task<TicketResponse?> RegistrarTicket(TicketRequest ticket)

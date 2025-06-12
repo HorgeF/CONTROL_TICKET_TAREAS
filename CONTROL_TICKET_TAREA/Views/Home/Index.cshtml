@@ -5,6 +5,8 @@
     ViewData["Title"] = "TAREAS";
     var prioridadesSeleccionadas = ViewBag.FiltroPrioridad as List<int> ?? new List<int>();
     var nivelesSeleccionadas = ViewBag.FiltroNivel as List<int> ?? new List<int>();
+    var prioridadIndSeleccionado = ViewBag.PrioridadInd as int?;
+    var nivelIndSeleccionado = ViewBag.NivelInd as int?;
 }
 
 <div class="d-flex flex-column mt-2 p-3">
@@ -24,7 +26,7 @@
                                 var estaSeleccionado = prioridadesSeleccionadas.Contains(int.Parse(item.Value));
 
                                 var claseColorActivo = item.Value switch
-                                {
+                                {   
                                     "1066" => "btn-danger",   // Alta
                                     "1065" => "btn-warning",  // Media
                                     "1064" => "btn-success",  // Baja
@@ -68,12 +70,78 @@
                         </div>
                     </div>
                 </div>
-                <div class="d-flex flex-column align-items-center gap-2 fw-bold ms-auto">
-                    <p class="m-auto">N° Resultados encontrados: @Model.Count</p>
-                    <button type="button" class="btn btn-success" id="btnNuevaTarea">
-                        <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
-                        + Nueva Tarea
-                    </button>
+                <!--<div class="col-md-4">
+                    <label for="txtFiltroResponsable" class="form-label">Responsable</label>
+                    <input type="text" class="form-control text-uppercase" name="Receptor" id="txtFiltroResponsable" autocomplete="off" placeholder="Buscar responsable..." />
+                    <input type="hidden" id="IdReceptor" name="IdReceptor" />
+                    <div id="suggestions-receptor" class="list-group position-absolute z-3"></div>
+                </div>-->
+                <div class="d-flex gap-3 ms-auto">
+                    <div class="d-flex m-auto gap-3">
+                        <div class="d-flex gap-2">
+                            <div class="d-flex flex-wrap gap-2">
+                            @if(ViewBag.GrafPrioridades is List<GrupoCantidadResponse> grafPrioridades)
+                            {
+                                @foreach (var item in grafPrioridades)
+                                {
+                                    var estaSeleccionado = prioridadIndSeleccionado == item.Id;
+
+                                    var claseColorActivo = item.Id switch
+                                    {
+                                        1066 => "btn-danger",   // Alta
+                                        1065 => "btn-warning",  // Media
+                                        1064 => "btn-success",  // Baja
+                                        _ => ""
+                                    };
+
+                                    var clasesBtn = estaSeleccionado ? $"{claseColorActivo} active" : "btn-default nivel-inactivo";
+
+                                    <input type="checkbox" name="prioridadInd" value="@item.Id" class="d-none" id="prioridadGrafico-@item.Id" @(estaSeleccionado ? "checked" : "") />
+                                    <button type="button"
+                                            class="btn fw-bold grafico @clasesBtn"
+                                            data-target="prioridadGrafico-@item.Id">
+                                        <div class="d-flex flex-column gap-1">
+                                            <p class="m-auto">@item.Cantidad</p>
+                                            <p class="m-auto">@item.Nombre</p>
+                                        </div>
+                                    </button>
+                                }        
+                            }
+                            </div>
+                        </div>
+                        <div class="d-flex gap-2">
+                            <div class="d-flex flex-wrap gap-2">
+                            @if(ViewBag.GrafNiveles is List<GrupoCantidadResponse> grafNiveles)
+                            {
+                                @foreach (var item in grafNiveles)
+                                {
+                                    var estaSeleccionado = nivelIndSeleccionado == item.Id;
+
+                                    var claseColor = estaSeleccionado
+                                        ? $"btn-default nivel-{item.Id}"
+                                        : "btn-default nivel-inactivo";
+
+                                    <input type="checkbox" name="nivelInd" value="@item.Id" class="d-none" id="nivelGrafico-@item.Id" @(estaSeleccionado ? "checked" : "") />
+                                    <button type="button"
+                                            class="btn fw-bold grafico @claseColor"
+                                            data-target="nivelGrafico-@item.Id">
+                                        <div class="d-flex flex-column gap-1">
+                                            <p class="m-auto">@item.Cantidad</p>
+                                            <p class="m-auto">@item.Nombre</p>
+                                        </div>
+                                    </button>
+                                }          
+                            }
+                            </div>
+                        </div>
+                    </div>
+                    <div class="d-flex flex-column align-items-center gap-2">
+                        <p class="m-auto">N° Resultados encontrados: @Model.Count</p>
+                        <button type="button" class="btn btn-success" id="btnNuevaTarea">
+                            <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+                            + Nueva Tarea
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -88,18 +156,18 @@
         <thead class="table-light">
             <tr>
                 <th scope="col" style="width: 2.5%">N°</th>
-                <th scope="col" style="width: 3%">GE</th>
-                <th scope="col" style="width: 3%">EMPRESA</th>
+                <th scope="col" style="width: 9%">GE</th>
+                <th scope="col" style="width: 9%">EMPRESA</th>
                 <th scope="col" class="d-none d-md-table-cell">FECHA REG.</th>
                 <th scope="col">RECEPTOR</th>
                 <th scope="col" class="d-none d-md-table-cell">MEDIO</th>
                 <th scope="col" class="d-none d-lg-table-cell">CONTACTO</th>
-                <th scope="col" class="d-none d-md-table-cell">PRIORIDAD</th>
-                <th scope="col" class="d-none d-md-table-cell">NIVEL</th>
-                <th scope="col">ITEMS</th>
+                <th scope="col" class="d-none d-md-table-cell">PRI</th>
+                <th scope="col" class="d-none d-md-table-cell">NIV</th>
+                <th scope="col" style="width: 1%;">ITEMS</th>
                 <th scope="col" class="d-none d-lg-table-cell">SERIE</th>
                 <th scope="col" class="d-none d-lg-table-cell">TIPO</th>
-                <th scope="col" style="width: 40%">DESCRIPCIÓN</th>
+                <th scope="col" style="width: 25%">DESCRIPCIÓN</th>
                 <th scope="col" class="d-none d-md-table-cell">TICKET</th>
                 <th scope="col">ESTADO</th>
             </tr>
@@ -115,7 +183,7 @@
                         <td>@index</td>
                         <td>@item.GE</td>
                         <td>@item.Empresa</td>
-                        <td class="d-none d-md-table-cell">@item.FecReg</td>
+                        <td class="d-none d-md-table-cell">@($"{item.FecReg:dd-MM-yyyy}")</td>
                         <td>@item.Receptor</td>
                         <td class="d-none d-md-table-cell">@item.Medio</td>
                         <td class="d-none d-lg-table-cell">@item.Contacto</td>
@@ -174,19 +242,5 @@
     <script src="~/js/registrarTicket.js"></script>
     <script src="~/js/busquedaFormGuardar.js"></script>
     <script src="~/js/OrdenadoAscDesc.js"></script>
-    <script>
-        // Cambio de estilos al seleccionar los botones que filtraras la lista
-        document.querySelectorAll('button[data-target]').forEach(btn => {
-            btn.addEventListener('click', function () {
-                const checkbox = document.querySelector(this.dataset.target);
-                checkbox.checked = !checkbox.checked;
-
-                this.classList.toggle('active');
-                this.classList.toggle('btn-primary');
-                this.classList.toggle('btn-outline-primary');
-
-                document.getElementById('filtroForm').submit();
-            });
-        });
-    </script>
+    <script src="~/js/FiltradoForm.js"></script>
 }

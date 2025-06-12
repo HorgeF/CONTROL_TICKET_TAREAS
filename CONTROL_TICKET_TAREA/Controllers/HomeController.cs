@@ -1,3 +1,4 @@
+using CONTROL_TICKET_TAREA.Constants;
 using CONTROL_TICKET_TAREA.Dtos.Filtros;
 using CONTROL_TICKET_TAREA.Dtos.Peticiones;
 using CONTROL_TICKET_TAREA.Helpers;
@@ -29,16 +30,35 @@ namespace CONTROL_TICKET_TAREA.Controllers
 
         private readonly ICacheHelper _cache = cache;
 
-        public async Task<IActionResult> Index(FiltroControlTicketTarea filtro)
+        public async Task<IActionResult> Index(FiltroControlTicketTarea filtro, int? prioridadInd, int? nivelInd)
         {
-            var prioridades = await _generalRepository.ListarPrioridades();
-            var niveles = await _generalRepository.ListarNiveles();
-            var ticketTareas = await _controlTicketTareaRepository.SPListarTicketTarea(filtro);
+            var ticketTareas = await _controlTicketTareaRepository.SPListarTicketTarea(filtro, prioridadInd, nivelInd);
 
-            ViewBag.Prioridades = new SelectList(prioridades.OrderByDescending(p => p.IdGeneral), "IdGeneral", "Nombre");
+            var prioridades = await _cache.ObtenerListaAsync(
+                "IndexPrioridades", 
+                () => _generalRepository.ListarGeneralesPorSeccionAsync(IdSecundaria.Prioridad, ordenarPorNombre: false, descendente: true),
+                TimeSpan.FromDays(7));
+
+            var niveles = await _cache.ObtenerListaAsync(
+                "IndexNiveles", 
+                () => _generalRepository.ListarGeneralesPorSeccionAsync(IdSecundaria.Nivel, descendente: true), 
+                TimeSpan.FromDays(7));
+
+            ViewBag.Prioridades = new SelectList(prioridades, "IdGeneral", "Nombre");
             ViewBag.Niveles = new SelectList(niveles, "IdGeneral", "Nombre");
-            ViewBag.FiltroPrioridad = filtro.Prioridad;
-            ViewBag.FiltroNivel = filtro.Nivel;
+
+            if(prioridadInd.HasValue || nivelInd.HasValue)
+            {
+                ViewBag.PrioridadInd = prioridadInd;
+                ViewBag.NivelInd = nivelInd;
+            } else
+            {
+                ViewBag.FiltroPrioridad = filtro.Prioridad;
+                ViewBag.FiltroNivel = filtro.Nivel;
+            }
+
+                ViewBag.GrafPrioridades = await _controlTicketTareaRepository.ListarGrupoConCantidadAsync(IdSecundaria.Prioridad, g => g.IdPrioridad);
+            ViewBag.GrafNiveles = await _controlTicketTareaRepository.ListarGrupoConCantidadAsync(IdSecundaria.Nivel, g => g.IdNivel);
 
             return View(ticketTareas);
         }
@@ -102,15 +122,11 @@ namespace CONTROL_TICKET_TAREA.Controllers
         [HttpPost]
         public async Task<IActionResult> Guardar(TbControlTicketTareaRequest peticion)
         {
-            Debug.WriteLine("ID CENTER ITEM: " + peticion.IdItemCenter);
-
             if (peticion.IdItemCenter != 0)
             {
                 ModelState.Remove(nameof(peticion.IdItemCenterDesc));
                 peticion.IdItemCenterDesc = await _itemCenterRepository.ObtenerNombrePorIdItemCenter(peticion.IdItemCenter);
             }
-
-            Debug.WriteLine("ITEM DESCRIPCION: " + peticion.IdItemCenterDesc);
 
             if (string.IsNullOrWhiteSpace(peticion.Correo) && string.IsNullOrWhiteSpace(peticion.Whatsapp))
             {
@@ -162,11 +178,30 @@ namespace CONTROL_TICKET_TAREA.Controllers
             var expiracionLarga = TimeSpan.FromDays(7);
             var expiracionCorta = TimeSpan.FromDays(3);
 
-            var selectPrioridad = await _cache.ObtenerListaAsync("Prioridades", _generalRepository.ListarPrioridades, expiracionLarga);
-            var selectNiveles = await _cache.ObtenerListaAsync("Niveles", _generalRepository.ListarNiveles, expiracionLarga);
-            var selectEstados = await _cache.ObtenerListaAsync("Estados", _generalRepository.ListarEstados, expiracionLarga);
-            var selectTipos = await _cache.ObtenerListaAsync("Tipos", _generalRepository.ListarTipos, expiracionCorta);
-            var selectMedios = await _cache.ObtenerListaAsync("Medios", _generalRepository.ListarMedios, expiracionCorta);
+            var selectPrioridad = await _cache.ObtenerListaAsync(
+                "Prioridades", 
+                () => _generalRepository.ListarGeneralesPorSeccionAsync(IdSecundaria.Prioridad, ordenarPorNombre: false, descendente: true), 
+                expiracionLarga);
+
+            var selectNiveles = await _cache.ObtenerListaAsync(
+                "Niveles", 
+                () => _generalRepository.ListarGeneralesPorSeccionAsync(IdSecundaria.Nivel, descendente: true), 
+                expiracionLarga);
+
+            var selectEstados = await _cache.ObtenerListaAsync(
+                "Estados",
+                () => _generalRepository.ListarGeneralesPorSeccionAsync(IdSecundaria.Estado), 
+                expiracionLarga);
+
+            var selectTipos = await _cache.ObtenerListaAsync(
+                "Tipos", 
+                () => _generalRepository.ListarGeneralesPorSeccionAsync(IdSecundaria.Tipo), 
+                expiracionCorta);
+
+            var selectMedios = await _cache.ObtenerListaAsync(
+                "Medios", 
+                () => _generalRepository.ListarGeneralesPorSeccionAsync(IdSecundaria.Medio), 
+                expiracionCorta);
 
             ViewBag.Prioridades = new SelectList(selectPrioridad, "IdGeneral", "Nombre");
             ViewBag.Estados = new SelectList(selectEstados, "IdGeneral", "Nombre");
