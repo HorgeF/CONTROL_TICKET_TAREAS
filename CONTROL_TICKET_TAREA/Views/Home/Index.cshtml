@@ -14,88 +14,94 @@
     <form id="filtroForm" asp-action="Index" method="get">
         <div class="h-sub fw-bold text-white p-2" style="background-color:#268DCF">
             <div class="d-flex gap-2">
-                <div class="d-flex flex-column align-items-start gap-2">
-                    <p class="my-auto">Prioridades: </p>
-                    <p class="my-auto">Niveles: </p>
-                </div>
-                <div class="d-flex flex-column gap-2">
+                <section class="d-flex gap-2">
                     <div class="d-flex gap-2">
-                        <div class="d-flex flex-wrap gap-2">
-                        @if(ViewBag.Prioridades is SelectList prioridades)
-                        {
-                            @foreach (var item in prioridades)
-                            {
-                                var id = $"prioridad{item.Value}";
-                                var estaSeleccionado = prioridadesSeleccionadas.Contains(int.Parse(item.Value));
+                        <div class="d-flex flex-column align-items-start gap-2">
+                            <p class="my-auto">Prioridades: </p>
+                            <p class="my-auto">Niveles: </p>
+                        </div>
+                        <div class="d-flex flex-column gap-2">
+                            <div class="d-flex gap-2">
+                                <div class="d-flex flex-wrap gap-2">
+                                @if(ViewBag.Prioridades is SelectList prioridades)
+                                {
+                                    @foreach (var item in prioridades)
+                                    {
+                                        var id = $"prioridad{item.Value}";
+                                        var estaSeleccionado = prioridadesSeleccionadas.Contains(int.Parse(item.Value));
 
-                                var claseColorActivo = item.Value switch
-                                {   
-                                    "1066" => "btn-danger",   // Alta
-                                    "1065" => "btn-warning",  // Media
-                                    "1064" => "btn-success",  // Baja
-                                    _ => ""
-                                };
+                                        var claseColorActivo = item.Value switch
+                                        {   
+                                            "1066" => "btn-danger",   // Alta
+                                            "1065" => "btn-warning",  // Media
+                                            "1064" => "btn-success",  // Baja
+                                            _ => ""
+                                        };
 
-                                var clasesBtn = estaSeleccionado ? $"{claseColorActivo} active" : "btn-default nivel-inactivo";
+                                        var clasesBtn = estaSeleccionado ? $"{claseColorActivo} active" : "btn-default nivel-inactivo";
 
-                                <input type="checkbox" name="prioridad" value="@item.Value" class="d-none" id="@id" @(estaSeleccionado ? "checked" : "") />
-                                <button type="button"
-                                        class="btn fw-bold @clasesBtn"
-                                        data-target="#@id">
-                                    @item.Text
-                                </button>
-                            }        
-                        }
+                                        <input type="checkbox" name="prioridad" value="@item.Value" class="d-none" id="@id" @(estaSeleccionado ? "checked" : "") />
+                                        <button type="button"
+                                                class="btn fw-bold @clasesBtn"
+                                                data-target="#@id">
+                                            @item.Text
+                                        </button>
+                                    }        
+                                }
+                                </div>
+                            </div>
+                            <div class="d-flex gap-2">
+                                <div class="d-flex flex-wrap gap-2">
+                                @if(ViewBag.Niveles is SelectList niveles)
+                                {
+                                    @foreach (var item in niveles)
+                                    {
+                                        var id = $"nivel{item.Value}";
+                                        var estaSeleccionado = nivelesSeleccionadas.Contains(int.Parse(item.Value));
+
+                                        var claseColor = estaSeleccionado
+                                            ? $"btn-default nivel-{item.Value}"
+                                            : "btn-default nivel-inactivo";
+
+                                        <input type="checkbox" name="nivel" value="@item.Value" class="d-none" id="@id" @(estaSeleccionado ? "checked" : "") />
+                                        <button type="button"
+                                                class="btn fw-bold @claseColor"
+                                                data-target="#@id">
+                                            @item.Text
+                                        </button>
+                                    }          
+                                }
+                                </div>
+                            </div>
+                        </div>         
+                    </div>
+                    <div class="d-flex gap-2">
+                        <div class="d-flex flex-column align-items-start gap-2">
+                            <label for="txtFiltroReceptor" class="form-label my-auto">Responsable:</label>
+                            <label for="cboFiltroEstado" class="form-label my-auto">Estado:</label>
+                        </div>
+                        <div class="d-flex flex-column gap-2">
+                            <div class="position-relative">
+                                <input type="text"
+                                       class="form-control text-uppercase h-sub"
+                                       id="txtFiltroReceptor"
+                                       name="Receptor"
+                                       value="@ViewBag.NombreReceptor"
+                                       autocomplete="off"
+                                       placeholder="Buscar responsable..." />
+
+                                <input type="hidden" id="IdFiltroReceptor" name="IdReceptor" value="@ViewBag.IdReceptorSeleccionado" />
+
+                                <div id="suggestions-filtroReceptor" class="list-group position-absolute z-3 w-100"></div>
+                            </div>
+
+                            <select class="form-select h-sub" id="cboFiltroEstado" asp-items="@ViewBag.Estados" name="IdEstado">
+                                <option value="0">-SELECCIONAR-</option>
+                            </select>
                         </div>
                     </div>
-                    <div class="d-flex gap-2">
-                        <div class="d-flex flex-wrap gap-2">
-                        @if(ViewBag.Niveles is SelectList niveles)
-                        {
-                            @foreach (var item in niveles)
-                            {
-                                var id = $"nivel{item.Value}";
-                                var estaSeleccionado = nivelesSeleccionadas.Contains(int.Parse(item.Value));
-
-                                var claseColor = estaSeleccionado
-                                    ? $"btn-default nivel-{item.Value}"
-                                    : "btn-default nivel-inactivo";
-
-                                <input type="checkbox" name="nivel" value="@item.Value" class="d-none" id="@id" @(estaSeleccionado ? "checked" : "") />
-                                <button type="button"
-                                        class="btn fw-bold @claseColor"
-                                        data-target="#@id">
-                                    @item.Text
-                                </button>
-                            }          
-                        }
-                        </div>
-                    </div>
-                </div>
-                <div class="d-flex flex-column align-items-start gap-2">
-                    <label for="txtFiltroReceptor" class="form-label my-auto">Responsable:</label>
-                    <label for="cboFiltroEstado" class="form-label my-auto">Estado:</label>
-                </div>
-                <div class="d-flex flex-column gap-2">
-                    <div class="position-relative">
-                        <input type="text"
-                               class="form-control text-uppercase h-sub"
-                               id="txtFiltroReceptor"
-                               name="Receptor"
-                               value="@ViewBag.NombreReceptor"
-                               autocomplete="off"
-                               placeholder="Buscar responsable..." />
-
-                        <input type="hidden" id="IdFiltroReceptor" name="IdReceptor" value="@ViewBag.IdReceptorSeleccionado" />
-
-                        <div id="suggestions-filtroReceptor" class="list-group position-absolute z-3 w-100"></div>
-                    </div>
-
-                    <select class="form-select h-sub" id="cboFiltroEstado" asp-items="@ViewBag.Estados" name="IdEstado" onchange="this.form.submit()">
-                        <option value="0">-SELECCIONAR-</option>
-                    </select>
-                </div>
-                <div class="d-flex gap-2 ms-auto">
+                </section>
+                <section class="d-flex gap-2 ms-auto">
                     <div class="d-flex m-auto gap-3">
                         <div class="d-flex gap-2">
                             <div class="d-flex flex-wrap gap-2">
@@ -161,7 +167,7 @@
                             + Nueva Tarea
                         </button>
                     </div>
-                </div>
+                </section>
             </div>
         </div>
     </form>
@@ -181,13 +187,13 @@
                 <th scope="col">RECEPTOR</th>
                 <th scope="col" class="d-none d-md-table-cell">MEDIO</th>
                 <th scope="col" class="d-none d-lg-table-cell">CONTACTO</th>
-                <th scope="col" class="d-none d-md-table-cell">PRI</th>
-                <th scope="col" class="d-none d-md-table-cell">NIV</th>
-                <th scope="col" style="width: 1%;">ITEMS</th>
+                <th scope="col">PRI</th>
+                <th scope="col">NIV</th>
+                <th scope="col" class="d-none d-lg-table-cell" style="width: 1%;">ITEMS</th>
                 <th scope="col" class="d-none d-lg-table-cell">SERIE</th>
                 <th scope="col" class="d-none d-lg-table-cell">TIPO</th>
-                <th scope="col" style="width: 30%">DESCRIPCIÓN</th>
-                <th scope="col" class="d-none d-md-table-cell">TICKET</th>
+                <th scope="col" class="d-none d-lg-table-cell" style="width: 30%">DESCRIPCIÓN</th>
+                <th scope="col">TICKET</th>
                 <th scope="col">ESTADO</th>
             </tr>
         </thead>
@@ -206,7 +212,7 @@
                         <td>@item.Receptor</td>
                         <td class="d-none d-md-table-cell">@item.Medio</td>
                         <td class="d-none d-lg-table-cell">@item.Contacto</td>
-                        <td class="d-none d-md-table-cell fw-bold @(
+                        <td class="fw-bold @(
                             item.IdPrioridad switch
                             {
                                 1064 => "bg-success text-white",
@@ -217,14 +223,14 @@
                             @item.Prioridad
                         </td>
                         @{
-                            var claseNivel = $"row-nivel nivel-{item.IdNivel} fw-bold d-none d-md-table-cell";
+                            var claseNivel = $"row-nivel nivel-{item.IdNivel} fw-bold";
                         }
                         <td class="@claseNivel">@item.Nivel</td>
-                        <td>@item.CantidadItems</td>
+                        <td class="d-none d-lg-table-cell">@item.CantidadItems</td>
                         <td class="d-none d-lg-table-cell">@item.NSerie</td>
                         <td class="d-none d-lg-table-cell">@item.Tipo</td>
-                        <td>@item.Descripcion</td>
-                        <td class="d-none d-md-table-cell">
+                        <td class="d-none d-lg-table-cell">@item.Descripcion</td>
+                        <td>
                             @if (string.IsNullOrWhiteSpace(item.CodTicket))
                             {
                                 <button id="btn-registrar-ticket-@item.IdTarea" style="background-color: #268DCF;" class="d-flex align-items-center gap-1 btn btn-registrar-ticket btn-sm">
