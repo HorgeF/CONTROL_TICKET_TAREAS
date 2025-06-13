@@ -711,8 +711,10 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.IdTarea).HasColumnName("ID_TAREA");
             entity.Property(e => e.IdGE).HasColumnName("ID_GE");
             entity.Property(e => e.GE).HasColumnName("GE");
+            entity.Property(e => e.SiglaGE).HasColumnName("SIGLA_GE");
             entity.Property(e => e.IdEmpresa).HasColumnName("ID_EMPRESA");
             entity.Property(e => e.Empresa).HasColumnName("EMPRESA");
+            entity.Property(e => e.SiglaEmpresa).HasColumnName("SIGLA_EMPRESA");
             entity.Property(e => e.IdReceptor).HasColumnName("ID_RECEPTOR");
             entity.Property(e => e.Receptor).HasColumnName("RECEPTOR");
             entity.Property(e => e.IdMedio).HasColumnName("ID_MEDIO");

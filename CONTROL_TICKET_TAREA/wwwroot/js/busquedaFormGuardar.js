@@ -10,15 +10,6 @@ $(document).on('input', '#txtResponsable', function () {
         return;
     }
 
-    //$.get('/Home/BuscarResponsables', { nombre: nombre }, function (data) {
-    //    let suggestions = $('#suggestions-receptor');
-    //    suggestions.empty();
-
-    //    data.forEach(item => {
-    //        suggestions.append(`<a href="#" class="list-group-item list-group-item-action" data-id="${item.idUsuario}">${item.nombre}</a>`);
-    //    });
-    //});
-
     suggestions.html('<span class="list-group-item list-group-item-action">Cargando...</span>');
 
     $.ajax({
@@ -70,15 +61,6 @@ $(document).on('input', '#txtGE', function () {
         suggestions.empty();
         return;
     }
-
-    //$.get('/Home/BuscarGE', { nombre: nombre }, function (data) {
-    //    let suggestions = $('#suggestions-GE');
-    //    suggestions.empty();
-
-    //    data.forEach(item => {
-    //        suggestions.append(`<a href="#" class="list-group-item list-group-item-action" data-id="${item.idGe}">${item.nombre}</a>`);
-    //    });
-    //});
 
     suggestions.html('<span class="list-group-item list-group-item-action">Cargando...</span>');
 
@@ -153,15 +135,6 @@ $(document).on('input', '#txtItem', function () {
         suggestions.empty();
         return;
     }
-
-    //$.get('/Home/BuscarItems', { nombre: nombre }, function (data) {
-    //    let suggestions = $('#suggestions-item');
-    //    suggestions.empty();
-
-    //    data.forEach(item => {
-    //        suggestions.append(`<a href="#" class="list-group-item list-group-item-action" data-id="${item.idItemCenter}">${item.descripcion}</a>`);
-    //    });
-    //});
 
     suggestions.html('<span class="list-group-item list-group-item-action">Cargando...</span>');
 

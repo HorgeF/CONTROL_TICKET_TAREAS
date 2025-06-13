@@ -30,34 +30,41 @@ namespace CONTROL_TICKET_TAREA.Controllers
 
         private readonly ICacheHelper _cache = cache;
 
-        public async Task<IActionResult> Index(FiltroControlTicketTarea filtro, int? prioridadInd, int? nivelInd)
+        public async Task<IActionResult> Index(FiltroControlTicketTarea filtro)
         {
-            var ticketTareas = await _controlTicketTareaRepository.SPListarTicketTarea(filtro, prioridadInd, nivelInd);
+            var ticketTareas = await _controlTicketTareaRepository.SPListarTicketTarea(filtro);
 
             var prioridades = await _cache.ObtenerListaAsync(
-                "IndexPrioridades", 
+                "ComunPrioridades", 
                 () => _generalRepository.ListarGeneralesPorSeccionAsync(IdSecundaria.Prioridad, ordenarPorNombre: false, descendente: true),
-                TimeSpan.FromDays(7));
+                TimeSpan.FromDays(1));
 
             var niveles = await _cache.ObtenerListaAsync(
-                "IndexNiveles", 
+                "ComunNiveles", 
                 () => _generalRepository.ListarGeneralesPorSeccionAsync(IdSecundaria.Nivel, descendente: true), 
-                TimeSpan.FromDays(7));
+                TimeSpan.FromDays(1));
 
-            ViewBag.Prioridades = new SelectList(prioridades, "IdGeneral", "Nombre");
-            ViewBag.Niveles = new SelectList(niveles, "IdGeneral", "Nombre");
+            var estados = await _cache.ObtenerListaAsync(
+                "IndexEstados",
+                () => _generalRepository.ListarGeneralesPorSeccionAsync(IdSecundaria.Estado),
+                TimeSpan.FromHours(12));
 
-            if(prioridadInd.HasValue || nivelInd.HasValue)
+            if (filtro.PrioridadInd.HasValue || filtro.NivelInd.HasValue)
             {
-                ViewBag.PrioridadInd = prioridadInd;
-                ViewBag.NivelInd = nivelInd;
+                ViewBag.PrioridadInd = filtro.PrioridadInd;
+                ViewBag.NivelInd = filtro.NivelInd;
             } else
             {
                 ViewBag.FiltroPrioridad = filtro.Prioridad;
                 ViewBag.FiltroNivel = filtro.Nivel;
+                ViewBag.NombreReceptor = filtro.Receptor;
+                ViewBag.IdReceptorSeleccionado = filtro.IdReceptor;
             }
 
-                ViewBag.GrafPrioridades = await _controlTicketTareaRepository.ListarGrupoConCantidadAsync(IdSecundaria.Prioridad, g => g.IdPrioridad);
+            ViewBag.Estados = new SelectList(estados, "IdGeneral", "Nombre",filtro.IdEstado);
+            ViewBag.Prioridades = new SelectList(prioridades, "IdGeneral", "Nombre");
+            ViewBag.Niveles = new SelectList(niveles, "IdGeneral", "Nombre");
+            ViewBag.GrafPrioridades = await _controlTicketTareaRepository.ListarGrupoConCantidadAsync(IdSecundaria.Prioridad, g => g.IdPrioridad);
             ViewBag.GrafNiveles = await _controlTicketTareaRepository.ListarGrupoConCantidadAsync(IdSecundaria.Nivel, g => g.IdNivel);
 
             return View(ticketTareas);
@@ -175,8 +182,8 @@ namespace CONTROL_TICKET_TAREA.Controllers
 
         private async Task CargarCombos()
         {
-            var expiracionLarga = TimeSpan.FromDays(7);
-            var expiracionCorta = TimeSpan.FromDays(3);
+            var expiracionLarga = TimeSpan.FromDays(1);
+            var expiracionCorta = TimeSpan.FromHours(12);
 
             var selectPrioridad = await _cache.ObtenerListaAsync(
                 "Prioridades", 

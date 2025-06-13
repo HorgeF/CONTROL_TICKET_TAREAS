@@ -132,6 +132,10 @@ tr.selected {
     #guardarTareaModal .modal-content .modal-header{
         font-size: 11px;
     }
+
+    #guardarTareaModal .modal-content .modal-header .modal-title {
+        font-size: 16px;
+    }
 }
 
 .h-sub{
@@ -174,3 +178,7 @@ tr.selected {
     }
 }
 
+#suggestions-filtroReceptor a.active {
+    background-color: #007bff;
+    color: white;
+}

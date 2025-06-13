@@ -5,8 +5,10 @@
         public int IdTarea { get; set; }
         public int IdGE { get; set; }
         public string GE { get; set; } = string.Empty;
+        public string? SiglaGE { get; set; } = string.Empty;
         public int IdEmpresa { get; set; }
         public string? Empresa { get; set; } = string.Empty;
+        public string? SiglaEmpresa { get; set; } = string.Empty;
         public int IdReceptor { get; set; }
         public string? Receptor { get; set; } = string.Empty;
         public int IdMedio { get; set; }

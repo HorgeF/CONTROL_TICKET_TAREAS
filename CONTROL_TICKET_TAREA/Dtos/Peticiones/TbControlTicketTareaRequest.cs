@@ -6,24 +6,24 @@ namespace CONTROL_TICKET_TAREA.Dtos.Peticiones
     {
         public int IdTarea { get; set; }
 
-        [Range(1, int.MaxValue, ErrorMessage = "Debe seleccionar un grupo económico.")]
+        [Range(1, int.MaxValue, ErrorMessage = "Seleccionar un grupo económico.")]
         public int IdGe { get; set; }
 
         public string? Ge { get; set; }
 
-        [Required(ErrorMessage = "Debe seleccionar una empresa / entidad.")]
-        [Range(1, int.MaxValue, ErrorMessage = "Debe seleccionar una empresa / entidad.")]
+        [Required(ErrorMessage = "Seleccionar una empresa / entidad.")]
+        [Range(1, int.MaxValue, ErrorMessage = "Seleccionar una empresa / entidad.")]
         public int IdEmpresa { get; set; }
 
-        [Range(1, int.MaxValue, ErrorMessage = "Debe seleccionar un receptor.")]
+        [Range(1, int.MaxValue, ErrorMessage = "Seleccionar un receptor.")]
         public int IdReceptor { get; set; }
 
         public string? Receptor { get; set; }
 
-        [Range(1, int.MaxValue, ErrorMessage = "Debe seleccionar un medio.")]
+        [Range(1, int.MaxValue, ErrorMessage = "Seleccionar un medio.")]
         public int IdMedio { get; set; }
 
-        [Range(1, int.MaxValue, ErrorMessage = "Debe seleccionar una prioridad")]
+        [Range(1, int.MaxValue, ErrorMessage = "Seleccionar una prioridad")]
         public int IdPrioridad { get; set; }
 
         public int IdItemCenter { get; set; }
@@ -40,7 +40,7 @@ namespace CONTROL_TICKET_TAREA.Dtos.Peticiones
         //[Required(ErrorMessage = "Ingrese un n° serie")]
         public string? NSerie { get; set; }
 
-        [Range(1, int.MaxValue, ErrorMessage = "Debe seleccionar un tipo")]
+        [Range(1, int.MaxValue, ErrorMessage = "Seleccionar un tipo")]
         public int IdTipo { get; set; }
 
         [Required(ErrorMessage = "Ingrese una descripción")]
@@ -56,10 +56,10 @@ namespace CONTROL_TICKET_TAREA.Dtos.Peticiones
         [RegularExpression(@"^\d{8}$", ErrorMessage = "El DNI debe contener exactamente 8 números.")]
         public string? Dni { get; set; }
 
-        [Range(1, int.MaxValue, ErrorMessage = "Debe seleccionar un estado")]
+        [Range(1, int.MaxValue, ErrorMessage = "Seleccionar un estado")]
         public int IdEstado { get; set; }
 
-        [Range(1, int.MaxValue, ErrorMessage = "Debe seleccionar un nivel")]
+        [Range(1, int.MaxValue, ErrorMessage = "Seleccionar un nivel")]
         public int? IdNivel { get; set; }
 
         [RegularExpression(@"^[\w\.-]+@[\w\.-]+\.\w{2,4}$", ErrorMessage = "El formato del correo no es válido.")]

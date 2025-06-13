@@ -7,7 +7,7 @@ namespace CONTROL_TICKET_TAREA.Repository.Interfaces
 {
     public interface IControlTicketTareaRepository
     {
-        Task<List<TbControlTicketTareaResponse>> SPListarTicketTarea(FiltroControlTicketTarea filtro, int? prioridadInd, int? nivelInd);
+        Task<List<TbControlTicketTareaResponse>> SPListarTicketTarea(FiltroControlTicketTarea filtro);
         Task<List<GrupoCantidadResponse>> ListarGrupoConCantidadAsync(string idSecundaria, Func<TbControlTicketTarea, int?> groupBy);
         Task<TicketResponse?> RegistrarTicket(TicketRequest ticket);
         Task<TbControlTicketTareaResponse?> ObtenerTicketTarea(int idTarea);

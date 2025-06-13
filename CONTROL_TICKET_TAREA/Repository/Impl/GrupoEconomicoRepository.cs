@@ -22,7 +22,7 @@ namespace CONTROL_TICKET_TAREA.Repository.Impl
 
         public async Task<List<CboGrupoEconomico>> BuscarGE(string nombre)
             => await _context.Gep1Grupoes
-                .Where(ge => ge.Nombre!.Trim().Contains(nombre) && !string.IsNullOrWhiteSpace(ge.Nombre))
+                .Where(ge => ge.Nombre!.Trim().Contains(nombre) && !string.IsNullOrWhiteSpace(ge.Nombre) && ge.Flag == 1)
                 .Select(ge => new CboGrupoEconomico
                 {
                     IdGe = ge.IdGe,

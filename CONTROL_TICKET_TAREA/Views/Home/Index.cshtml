@@ -72,13 +72,30 @@
                         </div>
                     </div>
                 </div>
-                <!--<div class="col-md-4">
-                    <label for="txtFiltroResponsable" class="form-label">Responsable</label>
-                    <input type="text" class="form-control text-uppercase" name="Receptor" id="txtFiltroResponsable" autocomplete="off" placeholder="Buscar responsable..." />
-                    <input type="hidden" id="IdReceptor" name="IdReceptor" />
-                    <div id="suggestions-receptor" class="list-group position-absolute z-3"></div>
-                </div>-->
-                <div class="d-flex gap-3 ms-auto">
+                <div class="d-flex flex-column align-items-start gap-2">
+                    <label for="txtFiltroReceptor" class="form-label my-auto">Responsable:</label>
+                    <label for="cboFiltroEstado" class="form-label my-auto">Estado:</label>
+                </div>
+                <div class="d-flex flex-column gap-2">
+                    <div class="position-relative">
+                        <input type="text"
+                               class="form-control text-uppercase h-sub"
+                               id="txtFiltroReceptor"
+                               name="Receptor"
+                               value="@ViewBag.NombreReceptor"
+                               autocomplete="off"
+                               placeholder="Buscar responsable..." />
+
+                        <input type="hidden" id="IdFiltroReceptor" name="IdReceptor" value="@ViewBag.IdReceptorSeleccionado" />
+
+                        <div id="suggestions-filtroReceptor" class="list-group position-absolute z-3 w-100"></div>
+                    </div>
+
+                    <select class="form-select h-sub" id="cboFiltroEstado" asp-items="@ViewBag.Estados" name="IdEstado" onchange="this.form.submit()">
+                        <option value="0">-SELECCIONAR-</option>
+                    </select>
+                </div>
+                <div class="d-flex gap-2 ms-auto">
                     <div class="d-flex m-auto gap-3">
                         <div class="d-flex gap-2">
                             <div class="d-flex flex-wrap gap-2">
@@ -139,7 +156,7 @@
                     </div>
                     <div class="d-flex flex-column align-items-end gap-2">
                         <p class="m-auto">N° Resultados encontrados: @Model.Count</p>
-                        <button type="button" class="btn btn-success" id="btnNuevaTarea">
+                        <button type="button" class="btn btn-success d-flex align-items-center gap-1" id="btnNuevaTarea">
                             <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
                             + Nueva Tarea
                         </button>
@@ -158,8 +175,8 @@
         <thead class="table-light">
             <tr>
                 <th scope="col" style="width: 2.5%">N°</th>
-                <th scope="col" style="width: 9%">GE</th>
-                <th scope="col" style="width: 9%">EMPRESA</th>
+                <th scope="col" style="width: 2%">GE</th>
+                <th scope="col" style="width: 2%">EMPRESA</th>
                 <th scope="col" class="d-none d-md-table-cell">FECHA REG.</th>
                 <th scope="col">RECEPTOR</th>
                 <th scope="col" class="d-none d-md-table-cell">MEDIO</th>
@@ -169,7 +186,7 @@
                 <th scope="col" style="width: 1%;">ITEMS</th>
                 <th scope="col" class="d-none d-lg-table-cell">SERIE</th>
                 <th scope="col" class="d-none d-lg-table-cell">TIPO</th>
-                <th scope="col" style="width: 25%">DESCRIPCIÓN</th>
+                <th scope="col" style="width: 30%">DESCRIPCIÓN</th>
                 <th scope="col" class="d-none d-md-table-cell">TICKET</th>
                 <th scope="col">ESTADO</th>
             </tr>
@@ -183,8 +200,8 @@
                     <input class="input-idTarea" value="@item.IdTarea" type="hidden"/>
                     <tr data-id="@item.IdTarea" draggable="true" style="cursor:pointer" class="fila-editable">
                         <td>@index</td>
-                        <td>@item.GE</td>
-                        <td>@item.Empresa</td>
+                        <td>@item.SiglaGE</td>
+                        <td>@item.SiglaEmpresa</td>
                         <td class="d-none d-md-table-cell">@($"{item.FecReg:dd-MM-yyyy}")</td>
                         <td>@item.Receptor</td>
                         <td class="d-none d-md-table-cell">@item.Medio</td>
@@ -212,7 +229,7 @@
                             {
                                 <button id="btn-registrar-ticket-@item.IdTarea" style="background-color: #268DCF;" class="d-flex align-items-center gap-1 btn btn-registrar-ticket btn-sm">
                                     <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
-                                    <span class="fw-bold text-white">Crear</span>
+                                    <span class="fw-bold text-white h-sub">Crear</span>
                                 </button>
                             }
                             else
@@ -228,7 +245,7 @@
             else
             {
                 <tr>
-                    <td colspan="14" class="text-center text-muted">No se encontraron resultados.</td>
+                    <td colspan="15" class="text-center text-muted">No se encontraron resultados.</td>
                 </tr>
             }
         </tbody>

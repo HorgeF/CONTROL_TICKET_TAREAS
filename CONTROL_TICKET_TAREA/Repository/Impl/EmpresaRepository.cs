@@ -11,7 +11,7 @@ namespace CONTROL_TICKET_TAREA.Repository.Impl
 
         public async Task<List<CboEmpresa>> ListarEmpresas(int IdGe)
             => await _context.Gep2Empresas
-                .Where(ge => ge.IdGe == IdGe)
+                .Where(ge => ge.IdGe == IdGe && ge.Flag == 1)
                 .Select(ge => new CboEmpresa
                 {
                     IdEmpresa = ge.IdEmpresa,

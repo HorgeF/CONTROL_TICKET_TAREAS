@@ -64,14 +64,7 @@
                         <span asp-validation-for="@Model.Correo" class="text-danger pb-2"></span>
                     </div>
 
-@*                     <div class="col-md-12">
-                        <label for="cboItem" class="form-label">Items</label>
-                        <select asp-for="@Model.IdItemCenter" class="form-select" id="cboItem" asp-items="@ViewBag.Items">
-                            <option selected value="0">-SELECCIONAR-</option>
-                        </select>
-                    </div> *@
-
-                    <div class="col-md-12">
+                    <div class="col-md-5">
                         <label for="txtItem" class="form-label">Item</label>
                         <input asp-for="@Model.ItemCenter" type="text" class="form-control text-uppercase" id="txtItem" autocomplete="off" placeholder="Buscar item..." />
                         <input asp-for="@Model.IdItemCenter" type="hidden" id="IdItemCenter" name="IdItemCenter" />
@@ -79,25 +72,25 @@
                         <span asp-validation-for="@Model.IdItemCenter" class="text-danger pb-2"></span>
                     </div>
 
-                    <div class="col-md-7">
+                    <div class="col-md-4">
                         <label for="txtNuevoItem" class="form-label">Nuevo Item</label>
                         <input id="txtNuevoItem" disabled="@(Model.IdItemCenter != 0)" value="@(Model.IdItemCenter != 0 ? "" : Model.IdItemCenterDesc)" asp-for="@Model.IdItemCenterDesc" type="text" class="form-control text-uppercase">
                         <span asp-validation-for="@Model.IdItemCenterDesc" class="text-danger pb-2"></span>
                     </div>
 
-                    <div class="col-md-3">
+                    <div class="col-md-2">
                         <label for="txtNSerie" class="form-label text-uppercase">N° Serie</label>
                         <input asp-for="@Model.NSerie" type="text" class="form-control text-uppercase" id="txtNSerie">
                         <span asp-validation-for="@Model.NSerie" class="text-danger pb-2"></span>
                     </div>
 
-                    <div class="col-md-2">
-                        <label for="txtCantItems" class="form-label">Cantidad Items</label>
+                    <div class="col-md-1">
+                        <label for="txtCantItems" class="form-label">Cant. Items</label>
                         <input asp-for="@Model.CantidadItems" type="number" class="form-control" id="txtCantItems" placeholder="0">
                         <span asp-validation-for="@Model.CantidadItems" class="text-danger pb-2"></span>
                     </div>
 
-                    <div class="col-md-3">
+                    <div class="col-md-2">
                         <label for="cboMedio" class="form-label">Medio</label>
                         <select asp-for="@Model.IdMedio" class="form-select" id="cboMedio" asp-items="@ViewBag.Medios">
                             <option selected value="0">-SELECCIONAR-</option>
@@ -105,7 +98,7 @@
                         <span asp-validation-for="@Model.IdMedio" class="text-danger pb-2"></span>
                     </div>
 
-                    <div class="col-md-3">
+                    <div class="col-md-2">
                         <label for="cboTipo" class="form-label">Tipo</label>
                         <select asp-for="@Model.IdTipo" class="form-select" id="cboTipo" asp-items="@ViewBag.Tipos">
                             <option selected value="0">-SELECCIONAR-</option>
@@ -113,7 +106,7 @@
                         <span asp-validation-for="@Model.IdTipo" class="text-danger pb-2"></span>
                     </div>
 
-                    <div class="col-md-3">
+                    <div class="col-md-2">
                         <label for="cboPrioridad" class="form-label">Prioridad</label>
                         <select asp-for="@Model.IdPrioridad" class="form-select" id="cboPrioridad" asp-items="@ViewBag.Prioridades">
                             <option selected value="0">-SELECCIONAR-</option>
@@ -121,7 +114,7 @@
                         <span asp-validation-for="@Model.IdPrioridad" class="text-danger pb-2"></span>
                     </div>
 
-                    <div class="col-md-3">
+                    <div class="col-md-2">
                         <label for="cboNivel" class="form-label">Nivel</label>
                         <select asp-for="@Model.IdNivel" class="form-select" id="cboNivel" asp-items="@ViewBag.Niveles">
                             <option selected value="0">-SELECCIONAR-</option>
@@ -129,13 +122,13 @@
                         <span asp-validation-for="@Model.IdNivel" class="text-danger pb-2"></span>
                     </div>
 
-                    <div class="col-md-6">
+                    <div class="col-md-2">
                         <label for="txtCodTicket" class="form-label">Cod. Ticket</label>
                         <input asp-for="@Model.CodTicket" type="text" class="form-control text-uppercase" id="txtCodTicket" placeholder="COD. TICKET">
                         <span asp-validation-for="@Model.CodTicket" class="text-danger pb-2"></span>
                     </div>
 
-                    <div class="col-md-6">
+                    <div class="col-md-2">
                         <label for="cboEstado" class="form-label">Estado</label>
                         <select asp-for="@Model.IdEstado" class="form-select" id="cboEstado" asp-items="@ViewBag.Estados">
                             <option selected value="0">-SELECCIONAR-</option>
@@ -144,17 +137,20 @@
                     </div>
 
                     <div class="col-12">
-                        <label for="txtTarea" class="form-label">Descripción Tarea</label>
-                        <textarea asp-for="@Model.Descripcion" class="form-control text-uppercase" id="txtTarea" rows="3"></textarea>
-                        <span asp-validation-for="@Model.Descripcion" class="text-danger pb-2"></span>
-                    </div>
-
-                    <div class="col-12 d-flex justify-content-end gap-2">
-                        <button id="btnGuardar" type="submit" class="btn @colorClass text-white px-4">
-                            <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
-                            @(Model.IdTarea == 0 ? "Crear" : "Editar")
-                        </button>
-                        <button type="button" class="btn btn-secondary px-4" data-bs-dismiss="modal">Close</button>
+                        <div class="d-flex flex-column gap-2">
+                            <label for="txtTarea" class="form-label">Descripción Tarea</label>
+                            <div class="d-flex gap-2">
+                                <textarea asp-for="@Model.Descripcion" class="form-control text-uppercase" id="txtTarea" rows="3"></textarea>
+                                <div class="d-flex flex-column justify-content-end gap-2">
+                                    <button id="btnGuardar" type="submit" class="btn @colorClass text-white px-4 align-self-center d-flex align-items-center gap-1">
+                                        <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+                                        @(Model.IdTarea == 0 ? "Crear" : "Editar")
+                                    </button>
+                                    <button type="button" class="btn btn-secondary px-4 align-self-center" data-bs-dismiss="modal">Close</button>
+                                </div>
+                            </div>
+                            <span asp-validation-for="@Model.Descripcion" class="text-danger pb-2"></span>
+                        </div>
                     </div>
                 </form>
             </div>

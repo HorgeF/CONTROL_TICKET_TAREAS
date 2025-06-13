@@ -13,13 +13,14 @@ namespace CONTROL_TICKET_TAREA.Repository.Impl
     {
         private readonly AppDbContext _context = context;
 
-        public async Task<List<TbControlTicketTareaResponse>> SPListarTicketTarea(FiltroControlTicketTarea filtro, int? prioridadInd, int? nivelInd)
+        public async Task<List<TbControlTicketTareaResponse>> SPListarTicketTarea(FiltroControlTicketTarea filtro)
         {
             string prioridadesCsv = "";
             string nivelesCsv = "";
             int IdReceptor = filtro.IdReceptor == 0 ? -1 : filtro.IdReceptor;
+            int IdEstado = filtro.IdEstado == 0 ? -1 : filtro.IdEstado;
 
-            if(prioridadInd == null && nivelInd == null)
+            if(filtro.PrioridadInd == null && filtro.NivelInd == null)
             {
                 prioridadesCsv = filtro.Prioridad != null && filtro.Prioridad.Any()
                     ? string.Join(",", filtro.Prioridad)
@@ -30,12 +31,12 @@ namespace CONTROL_TICKET_TAREA.Repository.Impl
                     : "%";
 
                 return await _context.TbControlTicketTareaResponses
-                .FromSqlInterpolated($"EXEC SP_LISTAR_TICKET_TAREA @ID_PRIORIDAD={prioridadesCsv},@ID_NIVEL={nivelesCsv},@ID_RESPONSABLE={IdReceptor}")
+                .FromSqlInterpolated($"EXEC SP_LISTAR_TICKET_TAREA @ID_PRIORIDAD={prioridadesCsv},@ID_NIVEL={nivelesCsv},@ID_RESPONSABLE={IdReceptor},@ID_ESTADO={IdEstado}")
                 .ToListAsync();
             }
 
             return await _context.TbControlTicketTareaResponses
-                .FromSqlInterpolated($"EXEC SP_LISTAR_TICKET_TAREA @ID_PRIORIDAD={prioridadInd},@ID_NIVEL={nivelInd},@ID_RESPONSABLE={IdReceptor}")
+                .FromSqlInterpolated($"EXEC SP_LISTAR_TICKET_TAREA @ID_PRIORIDAD={filtro.PrioridadInd},@ID_NIVEL={filtro.NivelInd},@ID_RESPONSABLE={IdReceptor},@ID_ESTADO={IdEstado}")
                 .ToListAsync();
         }
 

@@ -22,7 +22,11 @@ namespace CONTROL_TICKET_TAREA.Repository.Impl
 
         public async Task<List<CboUsuario>> BuscarResponsables(string nombre)
             => await _context.Usuarios
-                .Where(u => (u.Nombres!.Trim() + " " + u.ApellidoP!.Trim()).Contains(nombre) && !string.IsNullOrWhiteSpace(u.Nombres))
+                .Where(u => 
+                    (u.Nombres!.Trim() + " " + u.ApellidoP!.Trim()).Contains(nombre) && 
+                    !string.IsNullOrWhiteSpace(u.Nombres) && 
+                    u.IdTipoEmpleado > 0 && 
+                    u.Flag == 1)
                 .Select(u => new CboUsuario
                 {
                     IdUsuario = u.IdUsuario,
