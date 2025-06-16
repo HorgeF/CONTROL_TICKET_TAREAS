@@ -65,7 +65,6 @@ namespace CONTROL_TICKET_TAREA.Dtos.Peticiones
         [RegularExpression(@"^[\w\.-]+@[\w\.-]+\.\w{2,4}$", ErrorMessage = "El formato del correo no es válido.")]
         public string? Correo { get; set; } = string.Empty;
 
-        [RegularExpression(@"^\d{9,10}$", ErrorMessage = "El Teléfono debe tener entre 9 y 10 números.")]
         public string? Whatsapp { get; set; } = string.Empty;
 
         public int? Flag { get; set; } = 1;

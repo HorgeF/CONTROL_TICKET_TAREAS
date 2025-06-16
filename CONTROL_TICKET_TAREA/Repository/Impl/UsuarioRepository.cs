@@ -27,13 +27,13 @@ namespace CONTROL_TICKET_TAREA.Repository.Impl
                     !string.IsNullOrWhiteSpace(u.Nombres) && 
                     u.IdTipoEmpleado > 0 && 
                     u.Flag == 1)
+                .Take(10)
                 .Select(u => new CboUsuario
                 {
                     IdUsuario = u.IdUsuario,
                     Nombre = u.Nombres + " " + u.ApellidoP
                 })
                 .OrderBy(u => u.Nombre)
-                .Take(10)
                 .ToListAsync();
     }
 }

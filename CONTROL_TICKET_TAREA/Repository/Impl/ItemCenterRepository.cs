@@ -30,6 +30,7 @@ namespace CONTROL_TICKET_TAREA.Repository.Impl
             => await _context.ItemCenters
                 .Where(ic => ic.Descripcion!.Trim().Contains(nombre) && ic.IndInventario == 1 && ic.IdItemCenter != 0 && ic.IdEmpresa != 0 && ic.Flag == 1)
                 .OrderBy(ic => ic.Descripcion)
+                .Take(10)
                 .Select(ic => new CboItem
                 {
                     IdItemCenter = ic.IdItemCenter,

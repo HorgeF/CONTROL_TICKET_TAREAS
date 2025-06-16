@@ -57,7 +57,7 @@
                 $spinner.addClass('d-none');
                 console.error("Error inesperado: " + err);
                 alert('Error al cargar el formulario'); 
-            }
+            },
         });
     });
 
@@ -107,27 +107,19 @@
                     const modal = new bootstrap.Modal(modalElement);
                     modal.show();
                 }
-
-                enviandoFormulario = false;
-                $btnGuardar.prop('disabled', false);
-                $spinner.addClass('d-none');
             },
             error: function (err) {
+                console.error("Error inesperado: " + err.responseJSON.mensaje);
+            },
+            complete: function () {
                 enviandoFormulario = false;
                 $btnGuardar.prop('disabled', false);
                 $spinner.addClass('d-none');
-                console.error("Error inesperado: " + err);
             }
         });
     });
 
-    let tareaCargando = false;
-
     $(document).on('dblclick', '.fila-editable', function () {
-        if (tareaCargando) return;
-
-        tareaCargando = true;
-
         const $fila = $(this);
         const id = $(this).data('id');
 
@@ -141,15 +133,15 @@
             if (modalEl) {
                 const modal = new bootstrap.Modal(modalEl);
                 modal.show();
-            }
 
-            tareaCargando = false;
-            $('.fila-editable').removeClass('loading-border disabled-row pe-none');
+                $(modalEl).on('hidden.bs.modal', function () {
+                    $('.fila-editable').removeClass('loading-border disabled-row pe-none');
+                });
+            }
         }).fail(function () {
-            tareaCargando = false;
             $('.fila-editable').removeClass('loading-border disabled-row pe-none');
             alert("Ocurrio un problema al cargar el formulario para editar.");
-        });
+        })
     });
 
     $(document).on('hidden.bs.modal', function () {
@@ -162,5 +154,4 @@
         // Asegura que el scroll se restaure
         $('body').css('overflow', 'auto');
         $('body').css('padding-right', '0');
-
     });

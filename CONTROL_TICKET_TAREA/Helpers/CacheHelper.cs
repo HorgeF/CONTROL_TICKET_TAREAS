@@ -14,5 +14,19 @@ namespace CONTROL_TICKET_TAREA.Helpers
                 return await obtenerDatos();
             }) ?? [];
         }
+
+        public bool IntentarGuardar(string clave, TimeSpan expiracion)
+        {
+            if (_cache.TryGetValue(clave, out _))
+                return false;
+
+            _cache.Set(clave, true, expiracion);
+            return true;
+        }
+
+        public void EliminarCache(string clave)
+        {
+            _cache.Remove(clave);
+        }
     }
 }

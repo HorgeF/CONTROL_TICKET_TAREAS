@@ -123,11 +123,13 @@ namespace CONTROL_TICKET_TAREA.Controllers
                 ticketTarea.IdEstado = 1268; // Estado "PENDIENTE" predeterminado
             }
 
-                return PartialView("Guardar", ticketTarea);
+            ViewBag.PeticionId = Guid.NewGuid();
+
+            return PartialView("Guardar", ticketTarea);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Guardar(TbControlTicketTareaRequest peticion)
+        public async Task<IActionResult> Guardar(TbControlTicketTareaRequest peticion, Guid peticionId)
         {
             if (peticion.IdItemCenter != 0)
             {
@@ -152,6 +154,9 @@ namespace CONTROL_TICKET_TAREA.Controllers
                 return PartialView("Guardar", peticion);
             }
 
+            if (!_cache.IntentarGuardar(peticionId.ToString(), TimeSpan.FromSeconds(40)))
+                return Conflict(new { exito = false, mensaje = "Ya se esta procesando la solicitud, espere unos segundos para volver a enviar" });
+
             if (peticion.IdTarea == 0)
                 await _controlTicketTareaRepository.Insertar(peticion.ToEntity());
             else
@@ -163,15 +168,36 @@ namespace CONTROL_TICKET_TAREA.Controllers
         [HttpPost]
         public async Task<IActionResult> RegistrarTicket(int idTarea)
         {
+            string cacheKey = $"ticket-tarea-{idTarea}";
+
             var ticketTarea = await _controlTicketTareaRepository.ObtenerTicketTarea(idTarea);
 
-            var ticketRespuesta = await _controlTicketTareaRepository.RegistrarTicket(ticketTarea!.ToRequest().ToTicketRequest());
+            if (ticketTarea == null)
+                return NotFound(new { exito = false, mensaje = "Tarea no encontrada" });
 
-            ticketTarea!.CodTicket = ticketRespuesta?.CORREL_SUP_EXTERNO;
+            if (!string.IsNullOrWhiteSpace(ticketTarea.CodTicket))
+                return Conflict(new { exito = false, mensaje = "Esta tarea ya tiene un ticket creado", ticketTarea.CodTicket });
 
-            await _controlTicketTareaRepository.Actualizar(ticketTarea!.ToRequest().ToEntity());
+            if(!_cache.IntentarGuardar(cacheKey, TimeSpan.FromSeconds(40)))
+                return Conflict(new { exito = false, mensaje = "Ya se esta procesando la solicitud, espere unos segundos para volver a enviar" });
 
-            return Json(new { ticketTarea?.CodTicket });
+            var ticketRespuesta = await _controlTicketTareaRepository.RegistrarTicket(ticketTarea.ToRequest().ToTicketRequest());
+
+            ticketTarea.CodTicket = ticketRespuesta?.CORREL_SUP_EXTERNO;
+
+            await _controlTicketTareaRepository.Actualizar(ticketTarea.ToRequest().ToEntity());
+
+            return Json(new { ticketTarea.CodTicket });
+        }
+
+        [HttpPatch("/api/ticket-tarea/actualizar-estado")]
+        public async Task<IActionResult> ActualizarEstado([FromBody] TbControlTicketTareaEstadoRequest peticion)
+        {
+            bool estaActualizado = await _controlTicketTareaRepository.ActualizarEstado(peticion.CodTicket, peticion.IdEstado);
+            if (!estaActualizado)
+                return BadRequest(new { mensaje = "No se logro actualizar el ticket" });
+
+            return Ok(new { mensaje = "Estado de la tarea ticket actualizado" });
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

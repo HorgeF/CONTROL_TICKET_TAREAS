@@ -15,6 +15,7 @@
             <div class="modal-body">
                 <form id="formGuardarTarea" asp-action="Guardar" method="POST" class="row g-3">
                     <input id="txtIdTarea" type="hidden" asp-for="@Model.IdTarea" />
+                    <input type="hidden" name="peticionId" value="@ViewBag.PeticionId" />
 
                     <div class="col-md-4">
                         <label for="txtGE" class="form-label">Grupo Económico</label>
@@ -140,7 +141,7 @@
                         <div class="d-flex flex-column gap-2">
                             <label for="txtTarea" class="form-label">Descripción Tarea</label>
                             <div class="d-flex gap-2">
-                                <textarea asp-for="@Model.Descripcion" class="form-control text-uppercase" id="txtTarea" rows="3"></textarea>
+                                <textarea asp-for="@Model.Descripcion" class="form-control text-uppercase" id="txtTarea" rows="8"></textarea>
                                 <div class="d-flex flex-column justify-content-end gap-2">
                                     <button id="btnGuardar" type="submit" class="btn @colorClass text-white px-4 align-self-center d-flex align-items-center gap-1">
                                         <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>

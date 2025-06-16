@@ -1,6 +1,6 @@
 ﻿let crearTicketCargando = false;
 
-$(".btn-registrar-ticket").on("click", function (e) {
+$(document).on("click", ".btn-registrar-ticket", function (e) {
     e.preventDefault();
 
     if (crearTicketCargando) return;
@@ -22,7 +22,6 @@ $(".btn-registrar-ticket").on("click", function (e) {
             $spinner.removeClass('d-none');
         },
         success: function (respuesta) {
-            crearTicketCargando = false;
 
             // Restaurar spinner
             $spinner.addClass('d-none');
@@ -37,14 +36,21 @@ $(".btn-registrar-ticket").on("click", function (e) {
                 // Si no se recibió codTicket, reactivar todos los botones
                 $(".btn-registrar-ticket").prop('disabled', false);
                 alert("No se recibió un código de ticket.");
-            }   
+            }
+            
+            crearTicketCargando = false;
         },
         error: function (err) {
             crearTicketCargando = false;
             $(".btn-registrar-ticket").prop('disabled', false);
             $spinner.addClass('d-none');
-            console.error("Error inesperado: " + err);
-            alert("Ocurrió un error al registrar el ticket.");
+
+            if (err.status === 409 && err.responseJSON?.codTicket) {
+                $btnRegistrarTicketPorId.closest("td").html(err.responseJSON.codTicket);
+            } else {
+                console.error("Error inesperado: " + err);
+                alert("Ocurrió un error al registrar el ticket: " + err.responseJSON.mensaje);
+            }
         }
     });
 });

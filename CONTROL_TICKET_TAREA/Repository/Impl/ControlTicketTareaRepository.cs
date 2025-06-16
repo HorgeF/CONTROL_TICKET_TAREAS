@@ -9,9 +9,10 @@ using System.Diagnostics;
 
 namespace CONTROL_TICKET_TAREA.Repository.Impl
 {
-    public class ControlTicketTareaRepository(AppDbContext context) : IControlTicketTareaRepository
+    public class ControlTicketTareaRepository(AppDbContext context, ILogger<ControlTicketTareaRepository> logger) : IControlTicketTareaRepository
     {
         private readonly AppDbContext _context = context;
+        private readonly ILogger<ControlTicketTareaRepository> _logger = logger;
 
         public async Task<List<TbControlTicketTareaResponse>> SPListarTicketTarea(FiltroControlTicketTarea filtro)
         {
@@ -148,9 +149,28 @@ namespace CONTROL_TICKET_TAREA.Repository.Impl
 
         public async Task Actualizar(TbControlTicketTarea entidad)
         {
-            entidad.FecAct = DateTime.Today;
+            entidad.FecAct = DateTime.Now;
             _context.TbControlTicketTareas.Update(entidad);
             await _context.SaveChangesAsync();
+        }
+
+        public async Task<bool> ActualizarEstado(string codTicket, int idNuevoEstado)
+        {
+            var entidad = await _context.TbControlTicketTareas
+                .FirstOrDefaultAsync(t => t.CodTicket == codTicket);
+
+            if(entidad == null)
+            {
+                _logger.LogWarning("No se encontro la tarea con el cod ticket: '{@codTicket}' - {Time}", codTicket,DateTime.Now);
+                return false;
+            }
+
+            entidad.IdEstado = idNuevoEstado;
+            entidad.FecAct = DateTime.Now;
+
+            await _context.SaveChangesAsync();
+            _logger.LogInformation("Se logro actualizar el estado de la tarea con el codTicket: '{@codTicket}' - {Time}", codTicket, DateTime.Now);
+            return true;
         }
     }
 }
