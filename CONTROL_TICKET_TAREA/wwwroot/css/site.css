@@ -17,10 +17,6 @@ html {
   min-height: 100%;
 }
 
-body {
-  margin-bottom: 60px;
-}
-
 .btn-default {
     color: #000;
     transition: all 0.2s linear;
@@ -181,4 +177,22 @@ tr.selected {
 #suggestions-filtroReceptor a.active {
     background-color: #007bff;
     color: white;
+}
+
+@media(max-width: 1110px){
+    .header-content{
+        flex-direction: column;
+    }
+    .header-content-section{
+        justify-content: space-between;
+    }
+}
+
+@media(max-width:580px){
+    .header-content-section{
+        flex-direction: column;
+    }
+    .header-content-subsection{
+        flex-direction: column;
+    }
 }
