@@ -42,10 +42,16 @@ namespace CONTROL_TICKET_TAREA.Repository.Impl
                 .ToListAsync();
         }
 
-        //public async Task<List<TareaReporte>> ListarTareasReporte(FiltroTareaReporte filtro)
-        //{
+        public async Task<List<TbControlTicketTareaResponse>> ListarReporteTareas(List<int> idsResponsables)
+        {
+            string responsablesCsv = idsResponsables != null && idsResponsables.Count != 0
+                ? string.Join(",", idsResponsables)
+                : "%";
 
-        //}
+            return await _context.TbControlTicketTareaResponses
+                .FromSqlInterpolated($"EXEC SP_REPORTAR_TICKET_TAREA @ID_RESPONSABLE={responsablesCsv}")
+                .ToListAsync();
+        }
 
         public async Task<List<GrupoCantidadResponse>> ListarGrupoConCantidadAsync(string idSecundaria, Func<TbControlTicketTarea, int?> groupBy)
         {

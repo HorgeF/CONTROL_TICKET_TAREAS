@@ -163,7 +163,7 @@
                     <div class="d-flex justify-content-between flex-column gap-2">
                         <p class="text-end">N° Resultados encontrados: @Model.Count</p>
                         <div class="d-flex gap-1">
-                            <button type="button" disabled data-bs-toggle="modal" data-bs-target="#reporteTareaModal" class="btn btn-secondary d-flex justify-content-center align-items-center gap-1" id="btnReportar">
+                            <button type="button" class="btn btn-secondary d-flex justify-content-center align-items-center gap-1" id="btnReportar">
                                 <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
                                 Reporte
                             </button>   
@@ -251,7 +251,7 @@
             else
             {
                 <tr>
-                    <td colspan="15" class="text-center text-muted">No se encontraron resultados.</td>
+                    <td colspan="16" class="text-center text-muted">No se encontraron resultados.</td>
                 </tr>
             }
         </tbody>
@@ -260,12 +260,13 @@
 
 <div id="guardarTareaModalContainer"></div>
     
-@await Html.PartialAsync("ReporteTareas");
+<div id="reporteTareaModalContainer"></div>
 
 @section Scripts{
     <script src="~/js/modal-tarea.js"></script>
     <!-- <script src="~/js/dragDrop.js"></script>-->
     <!--<script src="~/js/selectedRows.js"></script>-->
+    <script src="~/js/reporteTareas.js"></script>
     <script src="~/js/registrarTicket.js"></script>
     <script src="~/js/busquedaFormGuardar.js"></script>
     <script src="~/js/OrdenadoAscDesc.js"></script>

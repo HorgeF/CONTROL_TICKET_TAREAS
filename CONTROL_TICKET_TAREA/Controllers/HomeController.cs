@@ -1,4 +1,5 @@
 using CONTROL_TICKET_TAREA.Constants;
+using CONTROL_TICKET_TAREA.Dtos.Combos;
 using CONTROL_TICKET_TAREA.Dtos.Filtros;
 using CONTROL_TICKET_TAREA.Dtos.Peticiones;
 using CONTROL_TICKET_TAREA.Helpers;
@@ -84,11 +85,37 @@ namespace CONTROL_TICKET_TAREA.Controllers
             return Json(resultado);
         }
 
-        //[HttpGet]
-        //public async Task<IActionResult> GenerarReporte()
-        //{
-        //    return PartialView("ReporteTareas");
-        //}
+        [HttpGet]
+        public async Task<IActionResult> GenerarReporte(List<int> idsResponsables)
+        {
+            var reporteTareas = await _controlTicketTareaRepository.ListarReporteTareas(idsResponsables);
+
+            if(idsResponsables.Count != 0)
+            {
+                ViewBag.Responsables = reporteTareas
+                    .Select(rt => new CboUsuario
+                    {
+                        IdUsuario = rt.IdReceptor,
+                        Nombre = rt.Receptor!
+                    })
+                    .GroupBy(u => u.IdUsuario)
+                    .Select(g => g.First())
+                    .ToList();
+            }
+
+            if (reporteTareas.Count != 0)
+            {
+                ViewBag.FecInicio = reporteTareas.Min(t => t.FechaTicketTarea);
+                ViewBag.FecFinal = reporteTareas.Max(t => t.FechaTicketTarea);
+            }
+            else
+            {
+                ViewBag.FecInicio = null;
+                ViewBag.FecFinal = null;
+            }
+
+            return PartialView("ReporteTareas", reporteTareas);
+        }
 
         [HttpGet]
         public async Task<IActionResult> BuscarResponsables(string nombre)

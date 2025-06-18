@@ -1,6 +1,4 @@
-﻿using Microsoft.Identity.Client;
-
-namespace CONTROL_TICKET_TAREA.Dtos.Filtros
+﻿namespace CONTROL_TICKET_TAREA.Dtos.Filtros
 {
     public class FiltroControlTicketTarea
     {

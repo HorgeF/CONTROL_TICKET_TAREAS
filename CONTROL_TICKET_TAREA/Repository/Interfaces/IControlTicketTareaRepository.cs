@@ -9,6 +9,7 @@ namespace CONTROL_TICKET_TAREA.Repository.Interfaces
     {
         Task<List<TbControlTicketTareaResponse>> SPListarTicketTarea(FiltroControlTicketTarea filtro);
         Task<List<GrupoCantidadResponse>> ListarGrupoConCantidadAsync(string idSecundaria, Func<TbControlTicketTarea, int?> groupBy);
+        Task<List<TbControlTicketTareaResponse>> ListarReporteTareas(List<int> IdsResponsables);
         Task<TicketResponse?> RegistrarTicket(TicketRequest ticket);
         Task<TbControlTicketTareaResponse?> ObtenerTicketTarea(int idTarea);
         Task Insertar(TbControlTicketTarea entidad);
