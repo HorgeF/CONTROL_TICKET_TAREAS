@@ -160,12 +160,18 @@
                             </div>
                         </div>
                     </div>
-                    <div class="d-flex justify-content-end flex-column gap-2">
+                    <div class="d-flex justify-content-between flex-column gap-2">
                         <p class="text-end">N° Resultados encontrados: @Model.Count</p>
-                        <button type="button" class="btn btn-success d-flex justify-content-center align-items-center gap-1" id="btnNuevaTarea">
-                            <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
-                            + Nueva Tarea
-                        </button>
+                        <div class="d-flex gap-1">
+                            <button type="button" disabled data-bs-toggle="modal" data-bs-target="#reporteTareaModal" class="btn btn-secondary d-flex justify-content-center align-items-center gap-1" id="btnReportar">
+                                <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+                                Reporte
+                            </button>   
+                            <button type="button" class="btn btn-success d-flex justify-content-center align-items-center gap-1" id="btnNuevaTarea">
+                                <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+                                + Nueva Tarea
+                            </button>
+                        </div>
                     </div>
                 </section>
             </div>
@@ -176,7 +182,7 @@
             <tr>
                 <th scope="col" style="width: 2.5%">N°</th>
                 <th scope="col" style="width: 2%">GE</th>
-                <th scope="col" style="width: 2%">EMPRESA</th>
+                <th scope="col" style="width: 2%">EMP</th>
                 <th scope="col" class="d-none d-md-table-cell">FECHA REG.</th>
                 <th scope="col">RECEPTOR</th>
                 <th scope="col" class="d-none d-md-table-cell">MEDIO</th>
@@ -186,7 +192,8 @@
                 <th scope="col" class="d-none d-lg-table-cell" style="width: 1%;">ITEMS</th>
                 <th scope="col" class="d-none d-lg-table-cell">SERIE</th>
                 <th scope="col" class="d-none d-lg-table-cell">TIPO</th>
-                <th scope="col" class="d-none d-lg-table-cell" style="width: 30%">DESCRIPCIÓN</th>
+                <th scope="col" class="d-none d-lg-table-cell">ITEM</th>
+                <th scope="col" class="d-none d-lg-table-cell" style="width: 20%">DESCRIPCIÓN</th>
                 <th scope="col">TICKET</th>
                 <th scope="col">ESTADO</th>
             </tr>
@@ -194,12 +201,11 @@
         <tbody>
             @if (Model.Count != 0)
             {
-                int index = 1;
                 foreach (var item in Model)
                 {
                     <input class="input-idTarea" value="@item.IdTarea" type="hidden"/>
                     <tr data-id="@item.IdTarea" draggable="false" style="cursor:pointer" class="fila-editable">
-                        <td>@index</td>
+                        <td>@item.IdTarea</td>
                         <td>@item.SiglaGE</td>
                         <td>@item.SiglaEmpresa</td>
                         <td class="d-none d-md-table-cell">@($"{item.FecReg:dd-MM-yyyy}")</td>
@@ -223,6 +229,7 @@
                         <td class="d-none d-lg-table-cell">@item.CantidadItems</td>
                         <td class="d-none d-lg-table-cell">@item.NSerie</td>
                         <td class="d-none d-lg-table-cell">@item.Tipo</td>
+                        <td class="d-none d-lg-table-cell">@item.IdItemCenterDesc</td>
                         <td class="d-none d-lg-table-cell">@item.Descripcion</td>
                         <td>
                             @if (string.IsNullOrWhiteSpace(item.CodTicket))
@@ -239,7 +246,6 @@
                         </td>
                         <td>@item.Estado</td>
                     </tr>
-                    index++;
                 }
             }
             else
@@ -253,6 +259,8 @@
 </div>
 
 <div id="guardarTareaModalContainer"></div>
+    
+@await Html.PartialAsync("ReporteTareas");
 
 @section Scripts{
     <script src="~/js/modal-tarea.js"></script>

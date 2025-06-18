@@ -20,6 +20,16 @@ builder.Services.AddScoped<IItemCenterRepository, ItemCenterRepository>();
 
 builder.Services.AddScoped<ICacheHelper, CacheHelper>();
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("PermitirFrontend", policy =>
+    {
+        policy.WithOrigins("http://localhost:5500") // o "*", pero solo en desarrollo
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -32,6 +42,8 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
+
+app.UseCors("PermitirFrontend");
 
 app.UseRouting();
 

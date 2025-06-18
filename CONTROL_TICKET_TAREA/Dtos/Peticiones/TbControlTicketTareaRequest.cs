@@ -33,8 +33,8 @@ namespace CONTROL_TICKET_TAREA.Dtos.Peticiones
         [Required(ErrorMessage = "Ingrese un item")]
         public string? IdItemCenterDesc { get; set; }
 
-        [Required(ErrorMessage = "Ingrese una cantidad mayor a 0")]
-        [Range(1, int.MaxValue, ErrorMessage = "Ingrese una cantidad mayor a 0")]
+        [Required(ErrorMessage = "No se permite números negativos")]
+        [Range(0, int.MaxValue, ErrorMessage = "No se permite números negativos")]
         public int CantidadItems { get; set; }
 
         //[Required(ErrorMessage = "Ingrese un n° serie")]
@@ -70,5 +70,7 @@ namespace CONTROL_TICKET_TAREA.Dtos.Peticiones
         public int? Flag { get; set; } = 1;
 
         public int? UsuReg { get; set; } = 959;
+
+        public Guid PeticionId { get; set; }
     }
 }

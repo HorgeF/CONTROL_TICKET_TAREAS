@@ -5,7 +5,6 @@ using CONTROL_TICKET_TAREA.Dtos.Respuestas;
 using CONTROL_TICKET_TAREA.Models;
 using CONTROL_TICKET_TAREA.Repository.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using System.Diagnostics;
 
 namespace CONTROL_TICKET_TAREA.Repository.Impl
 {
@@ -13,6 +12,8 @@ namespace CONTROL_TICKET_TAREA.Repository.Impl
     {
         private readonly AppDbContext _context = context;
         private readonly ILogger<ControlTicketTareaRepository> _logger = logger;
+
+        private const int ESTADO_CERRADO = 1269;
 
         public async Task<List<TbControlTicketTareaResponse>> SPListarTicketTarea(FiltroControlTicketTarea filtro)
         {
@@ -40,6 +41,11 @@ namespace CONTROL_TICKET_TAREA.Repository.Impl
                 .FromSqlInterpolated($"EXEC SP_LISTAR_TICKET_TAREA @ID_PRIORIDAD={filtro.PrioridadInd},@ID_NIVEL={filtro.NivelInd},@ID_RESPONSABLE={IdReceptor},@ID_ESTADO={IdEstado}")
                 .ToListAsync();
         }
+
+        //public async Task<List<TareaReporte>> ListarTareasReporte(FiltroTareaReporte filtro)
+        //{
+
+        //}
 
         public async Task<List<GrupoCantidadResponse>> ListarGrupoConCantidadAsync(string idSecundaria, Func<TbControlTicketTarea, int?> groupBy)
         {
@@ -69,11 +75,6 @@ namespace CONTROL_TICKET_TAREA.Repository.Impl
                     })
                 .OrderByDescending(x => x.Id)
                 .ToList();
-
-            foreach (var item in resultado)
-            {
-                Debug.WriteLine($"Id: {item.Id}, Nombre: {item.Nombre}, Cantidad: {item.Cantidad}");
-            }
 
             return resultado;
         }
@@ -143,13 +144,20 @@ namespace CONTROL_TICKET_TAREA.Repository.Impl
 
         public async Task Insertar(TbControlTicketTarea entidad)
         {
+            // Fecha de actualización será usado como fecha de cierre
+            if (entidad.IdEstado == ESTADO_CERRADO)
+                entidad.FecAct = DateTime.Now;
+
             await _context.TbControlTicketTareas.AddAsync(entidad);
             await _context.SaveChangesAsync();
         }
 
         public async Task Actualizar(TbControlTicketTarea entidad)
         {
-            entidad.FecAct = DateTime.Now;
+            // Fecha de actualización será usado como fecha de cierre
+            if(entidad.IdEstado == ESTADO_CERRADO)
+                entidad.FecAct = DateTime.Now;
+
             _context.TbControlTicketTareas.Update(entidad);
             await _context.SaveChangesAsync();
         }
@@ -166,7 +174,10 @@ namespace CONTROL_TICKET_TAREA.Repository.Impl
             }
 
             entidad.IdEstado = idNuevoEstado;
-            entidad.FecAct = DateTime.Now;
+
+            // Fecha de actualización será usado como fecha de cierre
+            if (idNuevoEstado == ESTADO_CERRADO)
+                entidad.FecAct = DateTime.Now;
 
             await _context.SaveChangesAsync();
             _logger.LogInformation("Se logro actualizar el estado de la tarea con el codTicket: '{@codTicket}' - {Time}", codTicket, DateTime.Now);

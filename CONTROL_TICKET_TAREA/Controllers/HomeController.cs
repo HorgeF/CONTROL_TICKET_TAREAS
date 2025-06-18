@@ -84,6 +84,12 @@ namespace CONTROL_TICKET_TAREA.Controllers
             return Json(resultado);
         }
 
+        //[HttpGet]
+        //public async Task<IActionResult> GenerarReporte()
+        //{
+        //    return PartialView("ReporteTareas");
+        //}
+
         [HttpGet]
         public async Task<IActionResult> BuscarResponsables(string nombre)
         {
@@ -123,13 +129,13 @@ namespace CONTROL_TICKET_TAREA.Controllers
                 ticketTarea.IdEstado = 1268; // Estado "PENDIENTE" predeterminado
             }
 
-            ViewBag.PeticionId = Guid.NewGuid();
+            ticketTarea.PeticionId = Guid.NewGuid();
 
             return PartialView("Guardar", ticketTarea);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Guardar(TbControlTicketTareaRequest peticion, Guid peticionId)
+        public async Task<IActionResult> Guardar(TbControlTicketTareaRequest peticion)
         {
             if (peticion.IdItemCenter != 0)
             {
@@ -154,7 +160,7 @@ namespace CONTROL_TICKET_TAREA.Controllers
                 return PartialView("Guardar", peticion);
             }
 
-            if (!_cache.IntentarGuardar(peticionId.ToString(), TimeSpan.FromSeconds(40)))
+            if (!_cache.IntentarGuardar(peticion.PeticionId.ToString(), TimeSpan.FromSeconds(40)))
                 return Conflict(new { exito = false, mensaje = "Ya se esta procesando la solicitud, espere unos segundos para volver a enviar" });
 
             if (peticion.IdTarea == 0)

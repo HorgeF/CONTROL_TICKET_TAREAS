@@ -151,6 +151,8 @@
         $btn.prop('disabled', false);
         $spinner.addClass('d-none');
 
+        $('.fila-editable').removeClass('loading-border disabled-row pe-none');
+
         // Asegura que el scroll se restaure
         $('body').css('overflow', 'auto');
         $('body').css('padding-right', '0');

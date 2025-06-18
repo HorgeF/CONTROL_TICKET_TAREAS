@@ -15,7 +15,7 @@
             <div class="modal-body">
                 <form id="formGuardarTarea" asp-action="Guardar" method="POST" class="row g-3">
                     <input id="txtIdTarea" type="hidden" asp-for="@Model.IdTarea" />
-                    <input type="hidden" name="peticionId" value="@ViewBag.PeticionId" />
+                    <input asp-for="@Model.PeticionId" type="hidden" name="peticionId" />
 
                     <div class="col-md-4">
                         <label for="txtGE" class="form-label">Grupo Económico</label>
