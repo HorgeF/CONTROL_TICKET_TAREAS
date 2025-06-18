@@ -13,8 +13,8 @@ namespace CONTROL_TICKET_TAREA.Mappers
                 IdTarea = request.IdTarea,
                 IdGe = request.IdGe,
                 IdEmpresa = request.IdEmpresa,
-                FechaTicketTarea = DateTime.Now,
                 IdReceptor = request.IdReceptor,
+                FechaTicketTarea = request.FechaTicketTarea,
                 IdMedio = request.IdMedio,
                 IdPrioridad = request.IdPrioridad,
                 IdItemCenter = request.IdItemCenter,
@@ -32,7 +32,8 @@ namespace CONTROL_TICKET_TAREA.Mappers
                 Whatsapp = request.Whatsapp,
                 Flag = request.Flag,
                 UsuReg = request.UsuReg,
-                FecReg = DateTime.Now,
+                FecReg = request.FecReg,
+                FecAct = request.FecAct
             };
         }
 
@@ -70,6 +71,7 @@ namespace CONTROL_TICKET_TAREA.Mappers
                 IdGe = response.IdGE,
                 Ge = response.GE,
                 IdEmpresa = response.IdEmpresa,
+                FechaTicketTarea = response.FechaTicketTarea,
                 IdReceptor = response.IdReceptor,
                 Receptor = response.Receptor,
                 IdMedio = response.IdMedio,
@@ -87,34 +89,9 @@ namespace CONTROL_TICKET_TAREA.Mappers
                 IdNivel = response.IdNivel,
                 Dni = response.Dni,
                 Correo = response.Correo,
-                Whatsapp = response.Whatsapp
-            };
-        }
-
-        public static TbControlTicketTareaRequest ToRequest(this TbControlTicketTarea entity)
-        {
-            return new TbControlTicketTareaRequest
-            {
-                IdTarea = entity.IdTarea,
-                IdGe = entity.IdGe,
-                IdEmpresa = entity.IdEmpresa,
-                IdReceptor = entity.IdReceptor,
-                IdMedio = entity.IdMedio,
-                IdPrioridad = entity.IdPrioridad,
-                IdItemCenter = entity.IdItemCenter,
-                IdItemCenterDesc = entity.IdItemCenterDesc,
-                CantidadItems = entity.CantidadItems,
-                NSerie = entity.NSerie,
-                IdTipo = entity.IdTipo,
-                Descripcion = entity.Descripcion,
-                CodTicket = entity.CodTicket,
-                Contacto = entity.Contacto,
-                IdEstado = entity.IdEstado,
-                IdNivel = entity.IdNivel,
-                Correo = entity.Correo,
-                Whatsapp = entity.Whatsapp,
-                Flag = entity.Flag,
-                UsuReg = entity.UsuReg
+                Whatsapp = response.Whatsapp,
+                FecReg = response.FecReg,
+                FecAct = response.FecAct
             };
         }
     }

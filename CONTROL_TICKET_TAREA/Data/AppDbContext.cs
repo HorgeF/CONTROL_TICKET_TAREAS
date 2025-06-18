@@ -741,9 +741,11 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.IdEstado).HasColumnName("ID_ESTADO");
             entity.Property(e => e.Estado).HasColumnName("ESTADO");
             entity.Property(e => e.Contacto).HasColumnName("CONTACTO");
+            entity.Property(e => e.FechaTicketTarea).HasColumnName("FECHA_TICKET_TAREA");
             entity.Property(e => e.Dni).HasColumnName("DNI");
 
             entity.Property(e => e.FecReg).HasColumnName("FEC_REG");
+            entity.Property(e => e.FecAct).HasColumnName("FEC_ACT");
         });
 
         modelBuilder.Entity<TicketResponse>(entity =>

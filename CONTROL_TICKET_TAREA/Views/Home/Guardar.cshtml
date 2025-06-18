@@ -16,6 +16,9 @@
                 <form id="formGuardarTarea" asp-action="Guardar" method="POST" class="row g-3">
                     <input id="txtIdTarea" type="hidden" asp-for="@Model.IdTarea" />
                     <input asp-for="@Model.PeticionId" type="hidden" name="peticionId" />
+                    <input type="hidden" asp-for="@Model.FechaTicketTarea">
+                    <input type="hidden" asp-for="@Model.FecReg">
+                    <input type="hidden" asp-for="@Model.FecAct">
 
                     <div class="col-md-4">
                         <label for="txtGE" class="form-label">Grupo Económico</label>

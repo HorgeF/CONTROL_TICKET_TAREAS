@@ -164,9 +164,15 @@ namespace CONTROL_TICKET_TAREA.Controllers
                 return Conflict(new { exito = false, mensaje = "Ya se esta procesando la solicitud, espere unos segundos para volver a enviar" });
 
             if (peticion.IdTarea == 0)
+            {
+                peticion.FechaTicketTarea = DateTime.Now;
+                peticion.FecReg = DateTime.Now;
                 await _controlTicketTareaRepository.Insertar(peticion.ToEntity());
+            }
             else
+            {
                 await _controlTicketTareaRepository.Actualizar(peticion.ToEntity());
+            }
 
             return Json(peticion);
         }

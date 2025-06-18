@@ -15,6 +15,8 @@ namespace CONTROL_TICKET_TAREA.Dtos.Peticiones
         [Range(1, int.MaxValue, ErrorMessage = "Seleccionar una empresa / entidad.")]
         public int IdEmpresa { get; set; }
 
+        public DateTime FechaTicketTarea { get; set; }
+
         [Range(1, int.MaxValue, ErrorMessage = "Seleccionar un receptor.")]
         public int IdReceptor { get; set; }
 
@@ -70,6 +72,10 @@ namespace CONTROL_TICKET_TAREA.Dtos.Peticiones
         public int? Flag { get; set; } = 1;
 
         public int? UsuReg { get; set; } = 959;
+
+        public DateTime? FecReg { get; set; }
+
+        public DateTime? FecAct { get; set; }
 
         public Guid PeticionId { get; set; }
     }

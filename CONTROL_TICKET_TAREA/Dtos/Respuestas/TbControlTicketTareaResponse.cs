@@ -8,6 +8,7 @@
         public string? SiglaGE { get; set; } = string.Empty;
         public int IdEmpresa { get; set; }
         public string? Empresa { get; set; } = string.Empty;
+        public DateTime FechaTicketTarea { get; set; }
         public string? SiglaEmpresa { get; set; } = string.Empty;
         public int IdReceptor { get; set; }
         public string? Receptor { get; set; } = string.Empty;
@@ -32,5 +33,6 @@
         public string? Whatsapp { get; set; } = string.Empty;
         public string? Dni { get; set; } = string.Empty;
         public DateTime? FecReg { get; set; }
+        public DateTime? FecAct { get; set; }
     }
 }
