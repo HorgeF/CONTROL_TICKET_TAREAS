@@ -92,12 +92,12 @@ tr.selected {
 }
 
 
-#tabla-tareas {
+.tabla-ordenable {
     font-size: 9px;
 }
 
 @media (min-width: 1366px) {
-    #tabla-tareas {
+    .tabla-ordenable {
         font-size: 11px;
     }
 }
@@ -131,6 +131,16 @@ tr.selected {
 
     #guardarTareaModal .modal-content .modal-header .modal-title {
         font-size: 16px;
+    }
+}
+
+#reporteTareaModal .modal-content .modal-header .modal-title{
+    font-size: 13px;
+}
+
+@media (min-width: 1366px){
+    #reporteTareaModal .modal-content .modal-header .modal-title {
+        font-size: 14px;
     }
 }
 

@@ -1,5 +1,4 @@
 using CONTROL_TICKET_TAREA.Constants;
-using CONTROL_TICKET_TAREA.Dtos.Combos;
 using CONTROL_TICKET_TAREA.Dtos.Filtros;
 using CONTROL_TICKET_TAREA.Dtos.Peticiones;
 using CONTROL_TICKET_TAREA.Helpers;
@@ -97,11 +96,6 @@ namespace CONTROL_TICKET_TAREA.Controllers
         [HttpGet]
         public async Task<IActionResult> GenerarReporteSemanal(FiltroControlTicketTarea filtro)
         {
-            foreach(int i in filtro.IdsReceptores)
-            {
-                Debug.WriteLine(i);
-            }
-
             var reporteTareas = await _controlTicketTareaRepository.ListarReporteTareasSemanal(filtro);
 
             if (reporteTareas.Count != 0)
@@ -114,6 +108,8 @@ namespace CONTROL_TICKET_TAREA.Controllers
                 ViewBag.FecInicio = null;
                 ViewBag.FecFinal = null;
             }
+
+            ViewBag.filtroTecnicos = filtro.IdsReceptores;
 
             return PartialView("ReporteTareas", reporteTareas);
         }

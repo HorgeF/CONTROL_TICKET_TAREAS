@@ -81,19 +81,6 @@
                             <label for="cboFiltroEstado" class="form-label my-auto">Estado:</label>
                         </div>
                         <div class="d-flex flex-column gap-2">
-                            <!-- <div class="position-relative">
-                                <input type="text"
-                                       class="form-control text-uppercase h-sub"
-                                       id="txtFiltroReceptor"
-                                       name="Receptor"
-                                       value="@ViewBag.NombreReceptor"
-                                       autocomplete="off"
-                                       placeholder="Buscar responsable..." />
-
-                                <input type="hidden" id="IdFiltroReceptor" name="IdReceptor" value="@ViewBag.IdReceptorSeleccionado" />
-
-                                <div id="suggestions-filtroReceptor" class="list-group position-absolute z-3 w-100"></div>
-                            </div> -->
 
                             @Html.ListBox("IdsReceptores", (SelectList)ViewBag.Receptores, new { id = "cboReceptor" })
 
@@ -179,13 +166,13 @@
             </div>
         </div>
     </form>
-    <table id="tabla-tareas" class="table table-striped table-hover w-100">
+    <table id="tabla-tareas" class="table table-striped tabla-ordenable table-hover w-100">
         <thead class="table-light">
             <tr>
                 <th scope="col" style="width: 2.5%">N°</th>
                 <th scope="col" style="width: 2%">GE</th>
                 <th scope="col" style="width: 2%">EMP</th>
-                <th scope="col" class="d-none d-md-table-cell">FECHA REG.</th>
+                <th scope="col" class="d-none d-md-table-cell">FEC. REG.</th>
                 <th scope="col">RECEPTOR</th>
                 <th scope="col" class="d-none d-md-table-cell">MEDIO</th>
                 <th scope="col" class="d-none d-lg-table-cell">CONTACTO</th>
@@ -268,9 +255,10 @@
     <script src="~/js/modal-tarea.js"></script>
     <!-- <script src="~/js/dragDrop.js"></script>-->
     <!--<script src="~/js/selectedRows.js"></script>-->
+    <script src="~/js/utils/habilitarOrdenTabla.js"></script>
+    <script src="~/js/OrdenadoAscDesc.js"></script>
     <script src="~/js/reporteTareas.js"></script>
     <script src="~/js/registrarTicket.js"></script>
     <script src="~/js/busquedaFormGuardar.js"></script>
-    <script src="~/js/OrdenadoAscDesc.js"></script>
     <script src="~/js/FiltradoForm.js"></script>
 }

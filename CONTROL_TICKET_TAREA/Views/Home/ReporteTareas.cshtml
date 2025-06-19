@@ -1,22 +1,52 @@
 ﻿@using CONTROL_TICKET_TAREA.Dtos.Respuestas
 @using CONTROL_TICKET_TAREA.Dtos.Combos
+@using System.Globalization
+
 @model List<TbControlTicketTareaResponse>
+
+@{
+    var cultura = new CultureInfo("es-PE");
+
+    string mensaje = "No hay fechas disponibles";
+    string fecInicio = "";
+    string fecFinal = "";
+
+    if(ViewBag.FecInicio != null && ViewBag.FecFinal != null)
+    {
+        fecInicio = ((DateTime)ViewBag.FecInicio).ToString("dddd dd/MM/yyyy", cultura);
+        fecFinal = ((DateTime)ViewBag.FecFinal).ToString("dddd dd/MM/yyyy", cultura);
+        mensaje = "";
+    }
+
+    var fecCreacion = ((DateTime.Now)).ToString("dddd dd/MM/yyyy", cultura);
+
+    var tecnicos = Model.Select(t => t.Receptor).Distinct().ToList();
+    var filtroTecnicos = ViewBag.filtroTecnicos as List<int> ?? new List<int>();
+    var tecnicosForm = filtroTecnicos.Count == 0 ? "TODOS" : string.Join(", ", tecnicos) + ".";
+}
 
 <div class="modal fade" id="reporteTareaModal" tabindex="-1" aria-labelledby="reporteTareaModalLabel">
     <div class="modal-dialog modal-fullscreen">
         <div class="modal-content d-flex flex-column h-100">
-            <header class="modal-header d-flex justify-content-between">
-                <p class="h5" id="reporteTareaModalLabel">@($"{ViewBag.FecInicio:dd-MM-yyyy} - {ViewBag.FecFinal:dd-MM-yyyy}")</p>
-                <p class="fw-bold h-sub my-auto">N° Resultados encontrados: @Model.Count</p>
+            <header class="modal-header align-items-stretch row row-cols-auto">
+                <div class="col d-flex flex-column gap-2">
+                    <span id="reporteTareaModalLabel" class="modal-title fw-bold my-auto">REPORTE TAREAS</span>
+                    <span class="h-sub my-auto">@(string.IsNullOrWhiteSpace(mensaje) ? $"{fecInicio.ToUpper()} - {fecFinal.ToUpper()}" : mensaje)</span>
+                    <span class="h-sub my-auto">TÉCNICOS: @($"{tecnicosForm}")</span>
+                </div>
+                <div class="col d-flex flex-column">
+                    <span class="h-sub my-auto">Fec. Creación: @($"{fecCreacion.ToUpper()}")</span>
+                    <span class="h-sub my-auto">N° Resultados encontrados: @Model.Count</span>
+                </div>
             </header>
             <div role="contentinfo" class="p-1 flex-grow-1 overflow-auto">
-                <table id="tabla-tareas" class="table table-striped table-hover w-100">
+                <table id="tabla-tareas-reporte" class="table table-striped tabla-ordenable table-hover w-100">
                     <thead class="table-light">
                         <tr>
                             <th scope="col" style="width: 2.5%">N°</th>
                             <th scope="col" style="width: 2%">GE</th>
-                            <th scope="col" style="width: 2%">EMPRESA</th>
-                            <th scope="col" class="d-none d-md-table-cell">FECHA REG.</th>
+                            <th scope="col" style="width: 2%">EMP</th>
+                            <th scope="col" class="d-none d-md-table-cell">FEC. REG.</th>
                             <th scope="col">RECEPTOR</th>
                             <th scope="col" class="d-none d-md-table-cell">MEDIO</th>
                             <th scope="col" class="d-none d-lg-table-cell">CONTACTO</th>
@@ -26,7 +56,7 @@
                             <th scope="col" class="d-none d-lg-table-cell">SERIE</th>
                             <th scope="col" class="d-none d-lg-table-cell">TIPO</th>
                             <th scope="col" class="d-none d-md-table-cell">ITEM</th>
-                            <th scope="col" class="d-none d-md-table-cell" style="width: 30%">DESCRIPCIÓN</th>
+                            <th scope="col" class="d-none d-md-table-cell" style="width: 20%">DESCRIPCIÓN</th>
                             <th scope="col">TICKET</th>
                             <th scope="col">ESTADO</th>
                         </tr>

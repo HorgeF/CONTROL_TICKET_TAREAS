@@ -35,6 +35,11 @@
     });
 });
 
+$(document).on('shown.bs.modal', '#reporteTareaModal', function () {
+    const $tabla = $('#tabla-tareas-reporte');
+    TablaUtils.habilitarOrdenTabla($tabla);
+});
+
 $(document).on('hidden.bs.modal', function () {
     const $btnReportar = $("#btnReportar")
     const $spinner = $btnReportar.find('.spinner-border');
