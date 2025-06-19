@@ -11,9 +11,8 @@ $('button[data-target]').on('click', function () {
     const esGrafico = esPrioridadGrafico || esNivelGrafico;
     const esComun = !esGrafico;
 
-    const $txtFiltroReceptor = $('#txtFiltroReceptor');
-    const $idFiltroReceptor = $('#IdFiltroReceptor');
     const $cboFiltradoEstado = $('#cboFiltroEstado');
+    const $cboReceptor = $('#cboReceptor');
 
     if (esGrafico) {
         const isChecked = $checkbox.prop('checked');
@@ -27,9 +26,8 @@ $('button[data-target]').on('click', function () {
             $('input[name="prioridadInd"], input[name="nivelInd"]').prop('checked', false);
             $('button[data-target^="prioridadGrafico"], button[data-target^="nivelGrafico"]').removeClass('active btn-primary btn-outline-primary');
 
-            $txtFiltroReceptor.val('');
-            $idFiltroReceptor.val('');
             $cboFiltradoEstado.val('0');
+            $cboReceptor.val('');
 
             // Marca este nuevo gráfico
             $checkbox.prop('checked', true);
@@ -116,45 +114,70 @@ $("#cboFiltroEstado").on('change', function () {
     $('#filtroForm')[0].submit();
 });
 
-let selectedIndex = -1;
+$("#cboReceptor").on("change", function () {
+    $('input[name="prioridadInd"], input[name="nivelInd"]').prop('checked', false);
+    $('button[data-target^="prioridadGrafico"], button[data-target^="nivelGrafico"]').removeClass('active btn-primary btn-outline-primary');
 
-$('#txtFiltroReceptor').on('keydown', function (e) {
-    const $items = $('#suggestions-filtroReceptor a');
-    if (!$items.length) return;
+    $('#filtroForm')[0].submit();
+})
 
-    if (e.key === "Escape") {
-        $('#suggestions-filtroReceptor').empty();
-    }
+//$('#selectReceptor').SumoSelect({
+//    placeholder: 'Buscar responsable...',
+//    search: true,
+//    searchText: 'Escribe para buscar...',
+//    noMatch: 'No se encontraron coincidencias',
+//    selectAll: false
+//});
 
-    if (e.key === "ArrowDown") {
-        e.preventDefault();
-        selectedIndex = (selectedIndex + 1) % $items.length;
-        updateSelection($items);
-    }
-
-    if (e.key === "ArrowUp") {
-        e.preventDefault();
-        selectedIndex = (selectedIndex - 1 + $items.length) % $items.length;
-        updateSelection($items);
-    }
-
-    if (e.key === "Enter") {
-        e.preventDefault();
-
-        $('input[name="prioridadInd"], input[name="nivelInd"]').prop('checked', false);
-        $('button[data-target^="prioridadGrafico"], button[data-target^="nivelGrafico"]').removeClass('active btn-primary btn-outline-primary');
-
-        if (selectedIndex >= 0) {
-            $items.eq(selectedIndex).trigger('click');
-        }
-
-        $('#filtroForm')[0].submit();
-    }
+$('#cboReceptor').SumoSelect({
+    selectAll: true,
+    search: true,
+    placeholder: "Buscar receptores...",
+    searchText: 'Buscar receptores...',
+    noMatch: 'No se encontraron coincidencias'
 });
 
-function updateSelection($items) {
-    $items.removeClass('active');
-    $items.eq(selectedIndex).addClass('active');
-}
+
+
+//let selectedIndex = -1;
+
+//$('#txtFiltroReceptor').on('keydown', function (e) {
+//    const $items = $('#suggestions-filtroReceptor a');
+//    if (!$items.length) return;
+
+//    if (e.key === "Escape") {
+//        $('#suggestions-filtroReceptor').empty();
+//    }
+
+//    if (e.key === "ArrowDown") {
+//        e.preventDefault();
+//        selectedIndex = (selectedIndex + 1) % $items.length;
+//        updateSelection($items);
+//    }
+
+//    if (e.key === "ArrowUp") {
+//        e.preventDefault();
+//        selectedIndex = (selectedIndex - 1 + $items.length) % $items.length;
+//        updateSelection($items);
+//    }
+
+//    if (e.key === "Enter") {
+//        e.preventDefault();
+
+//        $('input[name="prioridadInd"], input[name="nivelInd"]').prop('checked', false);
+//        $('button[data-target^="prioridadGrafico"], button[data-target^="nivelGrafico"]').removeClass('active btn-primary btn-outline-primary');
+
+//        if (selectedIndex >= 0) {
+//            $items.eq(selectedIndex).trigger('click');
+//        }
+
+//        $('#filtroForm')[0].submit();
+//    }
+//});
+
+//function updateSelection($items) {
+//    $items.removeClass('active');
+//    $items.eq(selectedIndex).addClass('active');
+//}
 
 

@@ -12,11 +12,11 @@
 <div class="d-flex flex-column mt-2 p-1">
     <h1 class="h5">LISTADO DE TAREAS</h1>
     <form id="filtroForm" asp-action="Index" method="get">
-        <div class="h-sub fw-bold text-white p-2" style="background-color:#268DCF">
+        <div class="h-sub fw-bold p-2" style="background-color:#268DCF">
             <div class="d-flex justify-content-between gap-2 header-content">
                 <section class="d-flex gap-2 header-content-section">
                     <div class="d-flex gap-2">
-                        <div class="d-flex flex-column align-items-start gap-2">
+                        <div class="d-flex flex-column align-items-start text-white gap-2">
                             <p class="my-auto">Prioridades: </p>
                             <p class="my-auto">Niveles: </p>
                         </div>
@@ -76,12 +76,12 @@
                         </div>         
                     </div>
                     <div class="d-flex gap-2">
-                        <div class="d-flex flex-column align-items-start gap-2">
+                        <div class="d-flex flex-column align-items-start text-white gap-2">
                             <label for="txtFiltroReceptor" class="form-label my-auto">Responsable:</label>
                             <label for="cboFiltroEstado" class="form-label my-auto">Estado:</label>
                         </div>
                         <div class="d-flex flex-column gap-2">
-                            <div class="position-relative">
+                            <!-- <div class="position-relative">
                                 <input type="text"
                                        class="form-control text-uppercase h-sub"
                                        id="txtFiltroReceptor"
@@ -93,7 +93,9 @@
                                 <input type="hidden" id="IdFiltroReceptor" name="IdReceptor" value="@ViewBag.IdReceptorSeleccionado" />
 
                                 <div id="suggestions-filtroReceptor" class="list-group position-absolute z-3 w-100"></div>
-                            </div>
+                            </div> -->
+
+                            @Html.ListBox("IdsReceptores", (SelectList)ViewBag.Receptores, new { id = "cboReceptor" })
 
                             <select class="form-select h-sub" id="cboFiltroEstado" asp-items="@ViewBag.Estados" name="IdEstado">
                                 <option value="0">-SELECCIONAR-</option>
@@ -161,7 +163,7 @@
                         </div>
                     </div>
                     <div class="d-flex justify-content-between flex-column gap-2">
-                        <p class="text-end">N° Resultados encontrados: @Model.Count</p>
+                        <p class="text-end text-white">N° Resultados encontrados: @Model.Count</p>
                         <div class="d-flex gap-1">
                             <button type="button" class="btn btn-secondary d-flex justify-content-center align-items-center gap-1" id="btnReportar">
                                 <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>

@@ -45,10 +45,16 @@ namespace CONTROL_TICKET_TAREA.Controllers
                 () => _generalRepository.ListarGeneralesPorSeccionAsync(IdSecundaria.Nivel, descendente: true), 
                 TimeSpan.FromDays(1));
 
+            var receptores = await _cache.ObtenerListaAsync(
+                "IndexUsuarios",
+                _usuarioRepository.ListarUsuarios,
+                TimeSpan.FromHours(1));
+
             var estados = await _cache.ObtenerListaAsync(
                 "IndexEstados",
                 () => _generalRepository.ListarGeneralesPorSeccionAsync(IdSecundaria.Estado),
                 TimeSpan.FromHours(12));
+
 
             if (filtro.PrioridadInd.HasValue || filtro.NivelInd.HasValue)
             {
@@ -58,10 +64,13 @@ namespace CONTROL_TICKET_TAREA.Controllers
             {
                 ViewBag.FiltroPrioridad = filtro.Prioridad;
                 ViewBag.FiltroNivel = filtro.Nivel;
-                ViewBag.NombreReceptor = filtro.Receptor;
-                ViewBag.IdReceptorSeleccionado = filtro.IdReceptor;
+                ViewBag.FiltroReceptor = filtro.IdsReceptores;
+                ViewBag.FiltroEstado = filtro.IdEstado;
+                //ViewBag.NombreReceptor = filtro.Receptor;
+                //ViewBag.IdReceptorSeleccionado = filtro.IdReceptor;
             }
 
+            ViewBag.Receptores = new SelectList(receptores, "IdUsuario", "Nombre", filtro.IdsReceptores);
             ViewBag.Estados = new SelectList(estados, "IdGeneral", "Nombre",filtro.IdEstado);
             ViewBag.Prioridades = new SelectList(prioridades, "IdGeneral", "Nombre");
             ViewBag.Niveles = new SelectList(niveles, "IdGeneral", "Nombre");
@@ -86,22 +95,14 @@ namespace CONTROL_TICKET_TAREA.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GenerarReporte(List<int> idsResponsables)
+        public async Task<IActionResult> GenerarReporteSemanal(FiltroControlTicketTarea filtro)
         {
-            var reporteTareas = await _controlTicketTareaRepository.ListarReporteTareas(idsResponsables);
-
-            if(idsResponsables.Count != 0)
+            foreach(int i in filtro.IdsReceptores)
             {
-                ViewBag.Responsables = reporteTareas
-                    .Select(rt => new CboUsuario
-                    {
-                        IdUsuario = rt.IdReceptor,
-                        Nombre = rt.Receptor!
-                    })
-                    .GroupBy(u => u.IdUsuario)
-                    .Select(g => g.First())
-                    .ToList();
+                Debug.WriteLine(i);
             }
+
+            var reporteTareas = await _controlTicketTareaRepository.ListarReporteTareasSemanal(filtro);
 
             if (reporteTareas.Count != 0)
             {

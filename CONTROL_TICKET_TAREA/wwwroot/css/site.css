@@ -196,3 +196,47 @@ tr.selected {
         flex-direction: column;
     }
 }
+
+@media print {
+    body * {
+        visibility: hidden !important;
+    }
+
+    #reporteTareaModal,
+    #reporteTareaModal * {
+        visibility: visible !important;
+    }
+
+    #reporteTareaModal {
+        position: absolute !important;
+        top: 0;
+        left: 0;
+        width: 100% !important;
+        background: white !important;
+        z-index: 9999 !important;
+        box-shadow: none !important;
+    }
+
+    .modal-backdrop {
+        display: none !important;
+    }
+}
+
+/* Correciones de estilo de SumoSelect */
+.SumoSelect .select-all {
+    box-sizing: content-box !important;
+}
+
+.SumoSelect > .CaptionCont > span.placeholder {
+    color: #6a6767 !important;
+    font-style: normal !important;
+}
+
+.placeholder {
+    display: inline-block !important;
+    min-height: 1em !important;
+    vertical-align: middle !important;
+    cursor: wait !important;
+    background-color: #fff;
+    opacity: .5 !important;
+}

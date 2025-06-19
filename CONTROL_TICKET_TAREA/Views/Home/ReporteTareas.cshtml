@@ -2,31 +2,12 @@
 @using CONTROL_TICKET_TAREA.Dtos.Combos
 @model List<TbControlTicketTareaResponse>
 
-    @{
-        var receptores = ViewBag.Responsables as List<CboUsuario> ?? new List<CboUsuario>();
-    }
-
 <div class="modal fade" id="reporteTareaModal" tabindex="-1" aria-labelledby="reporteTareaModalLabel">
     <div class="modal-dialog modal-fullscreen">
         <div class="modal-content d-flex flex-column h-100">
-            <header class="modal-header" text-white>
+            <header class="modal-header d-flex justify-content-between">
                 <p class="h5" id="reporteTareaModalLabel">@($"{ViewBag.FecInicio:dd-MM-yyyy} - {ViewBag.FecFinal:dd-MM-yyyy}")</p>
-                <form id="formUsuarios" asp-action="GenerarReporte" method="GET" class="d-flex gap-2 align-items-center">
-                    <span id="spinnerLoading" class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
-                    <select id="usuarios" name="idsResponsables" style="padding: 1rem;" multiple placeholder="Buscar receptores...">
-                        @if (receptores.Count != 0)
-                        {
-                            foreach (var receptor in receptores)
-                            {
-                                <option value="@receptor.IdUsuario" selected>@receptor.Nombre</option>
-                            }
-                        }
-                    </select>
-                    <!-- <button id="btnBuscar" class="btn btn-dark">
-                        <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
-                        <small>Buscar</small>
-                    </button>-->
-                </form>
+                <p class="fw-bold h-sub my-auto">N° Resultados encontrados: @Model.Count</p>
             </header>
             <div role="contentinfo" class="p-1 flex-grow-1 overflow-auto">
                 <table id="tabla-tareas" class="table table-striped table-hover w-100">
@@ -41,11 +22,11 @@
                             <th scope="col" class="d-none d-lg-table-cell">CONTACTO</th>
                             <th scope="col">PRI</th>
                             <th scope="col">NIV</th>
-                            <th scope="col" class="d-none d-lg-table-cell" style="width: 1%;">ITEMS</th>
+                            <th scope="col" class="d-none d-md-table-cell" style="width: 1%;">ITEMS</th>
                             <th scope="col" class="d-none d-lg-table-cell">SERIE</th>
                             <th scope="col" class="d-none d-lg-table-cell">TIPO</th>
-                            <th scope="col" class="d-none d-lg-table-cell">ITEM</th>
-                            <th scope="col" class="d-none d-lg-table-cell" style="width: 30%">DESCRIPCIÓN</th>
+                            <th scope="col" class="d-none d-md-table-cell">ITEM</th>
+                            <th scope="col" class="d-none d-md-table-cell" style="width: 30%">DESCRIPCIÓN</th>
                             <th scope="col">TICKET</th>
                             <th scope="col">ESTADO</th>
                         </tr>
@@ -77,11 +58,11 @@
                                         var claseNivel = $"row-nivel nivel-{tarea.IdNivel} fw-bold";
                                     }
                                     <td class="@claseNivel">@tarea.Nivel</td>
-                                    <td class="d-none d-lg-table-cell">@tarea.CantidadItems</td>
+                                    <td class="d-none d-md-table-cell">@tarea.CantidadItems</td>
                                     <td class="d-none d-lg-table-cell">@tarea.NSerie</td>
                                     <td class="d-none d-lg-table-cell">@tarea.Tipo</td>
-                                    <td class="d-none d-lg-table-cell">@tarea.IdItemCenterDesc</td>
-                                    <td class="d-none d-lg-table-cell">@tarea.Descripcion</td>
+                                    <td class="d-none d-md-table-cell">@tarea.IdItemCenterDesc</td>
+                                    <td class="d-none d-md-table-cell">@tarea.Descripcion</td>
                                     <td>
                                         @if (string.IsNullOrWhiteSpace(tarea.CodTicket))
                                         {
