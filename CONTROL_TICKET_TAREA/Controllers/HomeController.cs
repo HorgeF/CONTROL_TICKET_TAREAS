@@ -18,6 +18,7 @@ namespace CONTROL_TICKET_TAREA.Controllers
         IUsuarioRepository usuarioRepository,
         IGeneralRepository generalRepository,
         IItemCenterRepository itemCenterRepository,
+        ICenterTicketRepository centerTicketRepository,
         ICacheHelper cache) : Controller
     {
 
@@ -27,6 +28,7 @@ namespace CONTROL_TICKET_TAREA.Controllers
         private readonly IUsuarioRepository _usuarioRepository = usuarioRepository;
         private readonly IGeneralRepository _generalRepository = generalRepository;
         private readonly IItemCenterRepository _itemCenterRepository = itemCenterRepository;
+        private readonly ICenterTicketRepository _centerTicketRepository = centerTicketRepository;
 
         private readonly ICacheHelper _cache = cache;
 
@@ -159,6 +161,28 @@ namespace CONTROL_TICKET_TAREA.Controllers
         [HttpPost]
         public async Task<IActionResult> Guardar(TbControlTicketTareaRequest peticion)
         {
+            if (peticion.IdTarea != 0)
+            {
+                bool existeTicketTarea = await _controlTicketTareaRepository.ExisteTarea(peticion.IdTarea);
+                if (!existeTicketTarea)
+                    return NotFound(new { exito = false, mensaje = "Tarea no encontrada" });
+
+                int estadoTicketTarea = await _controlTicketTareaRepository.ObtenerEstado(peticion.IdTarea);
+                if (estadoTicketTarea == 1269 || estadoTicketTarea == 1270)
+                    return BadRequest(new { exito = false, mensaje = "El estado de esta tarea no puede modificada" });
+            }
+
+            if (!string.IsNullOrWhiteSpace(peticion.CodTicket))
+            {
+                bool existeTicket = await _centerTicketRepository.ExisteTicket(peticion.CodTicket);
+                if (!existeTicket)
+                    ModelState.AddModelError("CodTicket", "Ticket no válido");
+
+                bool esCodTicketTomado = await _controlTicketTareaRepository.EsCodTicketTomado(peticion.CodTicket, peticion.IdTarea);
+                if (esCodTicketTomado)
+                    ModelState.AddModelError("CodTicket", "Ticket ya usado");
+            }
+
             if (peticion.IdItemCenter != 0)
             {
                 ModelState.Remove(nameof(peticion.IdItemCenterDesc));

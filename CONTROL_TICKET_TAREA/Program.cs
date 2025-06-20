@@ -16,6 +16,7 @@ builder.Services.AddScoped<IGrupoEconomicoRepository,  GrupoEconomicoRepository>
 builder.Services.AddScoped<IEmpresaRepository, EmpresaRepository>();
 builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 builder.Services.AddScoped<IGeneralRepository, GeneralRepository>();
+builder.Services.AddScoped<ICenterTicketRepository, CenterTicketRepository>();
 builder.Services.AddScoped<IItemCenterRepository, ItemCenterRepository>();
 
 builder.Services.AddScoped<ICacheHelper, CacheHelper>();

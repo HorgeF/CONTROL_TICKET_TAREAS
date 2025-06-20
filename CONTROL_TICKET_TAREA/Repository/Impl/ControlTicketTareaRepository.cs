@@ -34,12 +34,12 @@ namespace CONTROL_TICKET_TAREA.Repository.Impl
                     : "%";
 
                 return await _context.TbControlTicketTareaResponses
-                .FromSqlInterpolated($"EXEC SP_LISTAR_TICKET_TAREA_V2 @ID_PRIORIDAD={prioridadesCsv},@ID_NIVEL={nivelesCsv},@ID_RESPONSABLE={receptoresCsv},@ID_ESTADO={IdEstado}")
+                .FromSqlInterpolated($"EXEC SP_LISTAR_TICKET_TAREA @ID_PRIORIDAD={prioridadesCsv},@ID_NIVEL={nivelesCsv},@ID_RESPONSABLE={receptoresCsv},@ID_ESTADO={IdEstado}")
                 .ToListAsync();
             }
 
             return await _context.TbControlTicketTareaResponses
-                .FromSqlInterpolated($"EXEC SP_LISTAR_TICKET_TAREA_V2 @ID_PRIORIDAD={filtro.PrioridadInd},@ID_NIVEL={filtro.NivelInd},@ID_RESPONSABLE={receptoresCsv},@ID_ESTADO={IdEstado}")
+                .FromSqlInterpolated($"EXEC SP_LISTAR_TICKET_TAREA @ID_PRIORIDAD={filtro.PrioridadInd},@ID_NIVEL={filtro.NivelInd},@ID_RESPONSABLE={receptoresCsv},@ID_ESTADO={IdEstado}")
                 .ToListAsync();
         }
 
@@ -103,6 +103,15 @@ namespace CONTROL_TICKET_TAREA.Repository.Impl
             return resultado;
         }
 
+        public async Task<bool> EsCodTicketTomado(string codTicket, int idTarea = 0)
+        {
+            var query = _context.TbControlTicketTareas.AsQueryable();
+            if (idTarea == 0)
+                return await query.AnyAsync(t => t.CodTicket == codTicket);
+            else
+                return await query.AnyAsync(t => t.CodTicket == codTicket &&  t.IdTarea != idTarea);
+        }
+
         public async Task<TicketResponse?> RegistrarTicket(TicketRequest ticket)
         {
             // Asegura que los campos opcionales no sean null (si el SP no los admite)
@@ -154,7 +163,6 @@ namespace CONTROL_TICKET_TAREA.Repository.Impl
             return result.FirstOrDefault();
         }
 
-
         public async Task<TbControlTicketTareaResponse?> ObtenerTicketTarea(int idTarea)
         {
             var result = await _context.TbControlTicketTareaResponses
@@ -170,7 +178,7 @@ namespace CONTROL_TICKET_TAREA.Repository.Impl
         {
             // Fecha de actualización será usado como fecha de cierre
             if (entidad.IdEstado == ESTADO_CERRADO)
-                entidad.FecAct = DateTime.Now;
+                entidad.FecCierre = DateTime.Now;
 
             await _context.TbControlTicketTareas.AddAsync(entidad);
             await _context.SaveChangesAsync();
@@ -179,8 +187,8 @@ namespace CONTROL_TICKET_TAREA.Repository.Impl
         public async Task Actualizar(TbControlTicketTarea entidad)
         {
             // Fecha de actualización será usado como fecha de cierre
-            if(entidad.FecAct == null && entidad.IdEstado == ESTADO_CERRADO)
-                entidad.FecAct = DateTime.Now;
+            if(entidad.FecCierre == null && entidad.IdEstado == ESTADO_CERRADO)
+                entidad.FecCierre = DateTime.Now;
 
             _context.TbControlTicketTareas.Update(entidad);
             await _context.SaveChangesAsync();
@@ -201,11 +209,20 @@ namespace CONTROL_TICKET_TAREA.Repository.Impl
 
             // Fecha de actualización será usado como fecha de cierre
             if (idNuevoEstado == ESTADO_CERRADO)
-                entidad.FecAct = DateTime.Now;
+                entidad.FecCierre = DateTime.Now;
 
             await _context.SaveChangesAsync();
             _logger.LogInformation("Se logro actualizar el estado de la tarea con el codTicket: '{@codTicket}' - {Time}", codTicket, DateTime.Now);
             return true;
         }
+
+        public async Task<int> ObtenerEstado(int idTarea)
+            => await _context.TbControlTicketTareas
+                .Where(t => t.IdTarea == idTarea)
+                .Select(t => t.IdEstado)
+                .FirstOrDefaultAsync();
+
+        public async Task<bool> ExisteTarea(int idTarea)
+            => await _context.TbControlTicketTareas.AnyAsync(t => t.IdTarea == idTarea);
     }
 }

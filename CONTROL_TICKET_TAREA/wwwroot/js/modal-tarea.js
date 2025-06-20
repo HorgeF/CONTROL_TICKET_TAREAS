@@ -81,7 +81,10 @@ $(document).on('submit', '#formGuardarTarea', function (e) {
             }
         },
         error: function (err) {
-            AlertaUtils.mostrar('error', 'Error inesperado: ' + err.responseJSON.mensaje);
+            if (err.status == 404 || err.status == 409 || err.status == 400)
+                AlertaUtils.mostrar('error', err.responseJSON.mensaje);
+            else
+                AlertaUtils.mostrar('error', 'Error inesperado: ' + err.responseJSON.mensaje);
         },
         complete: function () {
             enviandoFormulario = false;

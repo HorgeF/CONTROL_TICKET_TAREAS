@@ -145,6 +145,12 @@ public partial class Usuario
 
     public string? AreaDesc { get; set; }
 
+    public virtual ICollection<CenterTicket> CenterTicketIdUsuarioNavigations { get; set; } = new List<CenterTicket>();
+
+    public virtual ICollection<CenterTicket> CenterTicketUsuActNavigations { get; set; } = new List<CenterTicket>();
+
+    public virtual ICollection<CenterTicket> CenterTicketUsuRegNavigations { get; set; } = new List<CenterTicket>();
+
     public virtual ICollection<Gep2Empresa> Gep2EmpresaIdUsuarioNavigations { get; set; } = new List<Gep2Empresa>();
 
     public virtual ICollection<Gep2Empresa> Gep2EmpresaUsuActNavigations { get; set; } = new List<Gep2Empresa>();

@@ -33,7 +33,7 @@ namespace CONTROL_TICKET_TAREA.Mappers
                 Flag = request.Flag,
                 UsuReg = request.UsuReg,
                 FecReg = request.FecReg,
-                FecAct = request.FecAct
+                FecCierre = request.FecCierre
             };
         }
 
@@ -91,7 +91,7 @@ namespace CONTROL_TICKET_TAREA.Mappers
                 Correo = response.Correo,
                 Whatsapp = response.Whatsapp,
                 FecReg = response.FecReg,
-                FecAct = response.FecAct
+                FecCierre = response.FecCierre
             };
         }
     }

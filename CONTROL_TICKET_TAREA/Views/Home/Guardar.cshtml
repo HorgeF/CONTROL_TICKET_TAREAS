@@ -3,6 +3,7 @@
 
 @{
     var colorClass = Model.IdTarea == 0 ? "bg-success" : "bg-info";
+    string desactivarBoton = Model.IdEstado == 1269 || Model.IdEstado == 1270 ? "disabled" : "";
 }
 
 <div class="modal fade" id="guardarTareaModal" tabindex="-1" aria-labelledby="guardarTareaModalLabel" aria-hidden="true">
@@ -18,7 +19,7 @@
                     <input asp-for="@Model.PeticionId" type="hidden" name="peticionId" />
                     <input type="hidden" asp-for="@Model.FechaTicketTarea">
                     <input type="hidden" asp-for="@Model.FecReg">
-                    <input type="hidden" asp-for="@Model.FecAct">
+                    <input type="hidden" asp-for="@Model.FecCierre">
 
                     <div class="col-md-4">
                         <label for="txtGE" class="form-label">Grupo Económico</label>
@@ -146,7 +147,7 @@
                             <div class="d-flex gap-2">
                                 <textarea asp-for="@Model.Descripcion" class="form-control text-uppercase" id="txtTarea" rows="8"></textarea>
                                 <div class="d-flex flex-column justify-content-end gap-2">
-                                    <button id="btnGuardar" type="submit" class="btn @colorClass text-white px-4 align-self-center d-flex align-items-center gap-1">
+                                    <button id="btnGuardar" type="submit" class="btn @colorClass text-white px-4 align-self-center d-flex align-items-center gap-1 @desactivarBoton">
                                         <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
                                         @(Model.IdTarea == 0 ? "Crear" : "Editar")
                                     </button>

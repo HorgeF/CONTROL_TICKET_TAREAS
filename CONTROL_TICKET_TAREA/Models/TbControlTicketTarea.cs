@@ -35,8 +35,6 @@ public partial class TbControlTicketTarea
 
     public string? Contacto { get; set; }
 
-    public string? Dni { get; set; }
-
     public int IdEstado { get; set; }
 
     public int? Flag { get; set; }
@@ -47,7 +45,7 @@ public partial class TbControlTicketTarea
 
     public int? UsuAct { get; set; }
 
-    public DateTime? FecAct { get; set; }
+    public DateTime? FecCierre { get; set; }
 
     public string? CorrelEmp { get; set; }
 
@@ -62,4 +60,6 @@ public partial class TbControlTicketTarea
     public string? Correo { get; set; }
 
     public string? Whatsapp { get; set; }
+
+    public string? Dni { get; set; }
 }

@@ -1,8 +1,6 @@
 ﻿using CONTROL_TICKET_TAREA.Dtos.Respuestas;
 using CONTROL_TICKET_TAREA.Models;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
 
 namespace CONTROL_TICKET_TAREA.Data;
 
@@ -16,6 +14,8 @@ public partial class AppDbContext : DbContext
         : base(options)
     {
     }
+
+    public virtual DbSet<CenterTicket> CenterTickets { get; set; }
 
     public virtual DbSet<General> Generals { get; set; }
 
@@ -35,6 +35,150 @@ public partial class AppDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<CenterTicket>(entity =>
+        {
+            entity.HasKey(e => e.IdTicket).HasName("PK__CENTER_T__129B4F22C870DE75");
+
+            entity.ToTable("CENTER_TICKET", tb => tb.HasTrigger("ENVIAR_TICKET_V1"));
+
+            entity.Property(e => e.IdTicket)
+                .ValueGeneratedNever()
+                .HasColumnName("ID_TICKET");
+            entity.Property(e => e.Autorizado)
+                .HasDefaultValue((short)0)
+                .HasColumnName("AUTORIZADO");
+            entity.Property(e => e.Cantidad).HasColumnName("CANTIDAD");
+            entity.Property(e => e.CodRds)
+                .HasMaxLength(50)
+                .IsUnicode(false)
+                .HasColumnName("COD_RDS");
+            entity.Property(e => e.CorrelCompletoExterno)
+                .HasMaxLength(500)
+                .IsUnicode(false)
+                .HasColumnName("CORREL_COMPLETO_EXTERNO");
+            entity.Property(e => e.CorrelEmp)
+                .HasMaxLength(500)
+                .IsUnicode(false)
+                .HasColumnName("CORREL_EMP");
+            entity.Property(e => e.CorrelEmpFormato)
+                .HasMaxLength(50)
+                .IsUnicode(false)
+                .HasColumnName("CORREL_EMP_FORMATO");
+            entity.Property(e => e.CorrelSupremoExterno)
+                .HasMaxLength(500)
+                .IsUnicode(false)
+                .HasColumnName("CORREL_SUPREMO_EXTERNO");
+            entity.Property(e => e.Correo)
+                .HasMaxLength(200)
+                .IsUnicode(false)
+                .HasColumnName("CORREO");
+            entity.Property(e => e.Defecto)
+                .HasDefaultValue((short)0)
+                .HasColumnName("DEFECTO");
+            entity.Property(e => e.Descripcion)
+                .HasMaxLength(1000)
+                .IsUnicode(false)
+                .HasColumnName("DESCRIPCION");
+            entity.Property(e => e.EstadoTicket).HasColumnName("ESTADO_TICKET");
+            entity.Property(e => e.FecAct)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime")
+                .HasColumnName("FEC_ACT");
+            entity.Property(e => e.FecReg)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime")
+                .HasColumnName("FEC_REG");
+            entity.Property(e => e.FechaCierre)
+                .HasColumnType("datetime")
+                .HasColumnName("FECHA_CIERRE");
+            entity.Property(e => e.FechaCorreo)
+                .HasColumnType("datetime")
+                .HasColumnName("FECHA_CORREO");
+            entity.Property(e => e.FechaTicket)
+                .HasColumnType("datetime")
+                .HasColumnName("FECHA_TICKET");
+            entity.Property(e => e.Flag)
+                .HasDefaultValue(1)
+                .HasColumnName("FLAG");
+            entity.Property(e => e.FlagCorreo).HasColumnName("FLAG_CORREO");
+            entity.Property(e => e.Formato)
+                .HasMaxLength(500)
+                .IsUnicode(false)
+                .HasColumnName("FORMATO");
+            entity.Property(e => e.Habilitado)
+                .HasDefaultValue((short)1)
+                .HasColumnName("HABILITADO");
+            entity.Property(e => e.IdCategoria).HasColumnName("ID_CATEGORIA");
+            entity.Property(e => e.IdEmpresa).HasColumnName("ID_EMPRESA");
+            entity.Property(e => e.IdGe).HasColumnName("ID_GE");
+            entity.Property(e => e.IdMedioContacto).HasColumnName("ID_MEDIO_CONTACTO");
+            entity.Property(e => e.IdMotivo).HasColumnName("ID_MOTIVO");
+            entity.Property(e => e.IdNivel).HasColumnName("ID_NIVEL");
+            entity.Property(e => e.IdPrioridad).HasColumnName("ID_PRIORIDAD");
+            entity.Property(e => e.IdProyecto).HasColumnName("ID_PROYECTO");
+            entity.Property(e => e.IdSite).HasColumnName("ID_SITE");
+            entity.Property(e => e.IdSubProyecto).HasColumnName("ID_SUB_PROYECTO");
+            entity.Property(e => e.IdUsuario).HasColumnName("ID_USUARIO");
+            entity.Property(e => e.IdWebExt).HasColumnName("ID_WEB_EXT");
+            entity.Property(e => e.Img)
+                .IsUnicode(false)
+                .HasColumnName("IMG");
+            entity.Property(e => e.MensajeCierre)
+                .HasMaxLength(1000)
+                .IsUnicode(false)
+                .HasColumnName("MENSAJE_CIERRE");
+            entity.Property(e => e.MensajeCorreo)
+                .HasMaxLength(50)
+                .IsUnicode(false)
+                .HasColumnName("MENSAJE_CORREO");
+            entity.Property(e => e.Nombre)
+                .HasMaxLength(50)
+                .IsUnicode(false)
+                .HasColumnName("NOMBRE");
+            entity.Property(e => e.NombreContacto)
+                .HasMaxLength(100)
+                .IsUnicode(false)
+                .HasColumnName("NOMBRE_CONTACTO");
+            entity.Property(e => e.NumDoc)
+                .HasMaxLength(50)
+                .IsUnicode(false)
+                .HasColumnName("NUM_DOC");
+            entity.Property(e => e.OrdenEmp)
+                .HasMaxLength(50)
+                .IsUnicode(false)
+                .HasColumnName("ORDEN_EMP");
+            entity.Property(e => e.Serie)
+                .HasMaxLength(200)
+                .IsUnicode(false)
+                .HasColumnName("SERIE");
+            entity.Property(e => e.Sigla)
+                .HasMaxLength(10)
+                .IsUnicode(false)
+                .HasColumnName("SIGLA");
+            entity.Property(e => e.Telefono)
+                .HasMaxLength(200)
+                .IsUnicode(false)
+                .HasColumnName("TELEFONO");
+            entity.Property(e => e.Ubicacion)
+                .HasMaxLength(200)
+                .IsUnicode(false)
+                .HasColumnName("UBICACION");
+            entity.Property(e => e.UsuAct).HasColumnName("USU_ACT");
+            entity.Property(e => e.UsuReg).HasColumnName("USU_REG");
+
+            entity.HasOne(d => d.IdUsuarioNavigation).WithMany(p => p.CenterTicketIdUsuarioNavigations)
+                .HasForeignKey(d => d.IdUsuario)
+                .HasConstraintName("FK__CENTER_TI__ID_US__6AE5BEB7");
+
+            entity.HasOne(d => d.UsuActNavigation).WithMany(p => p.CenterTicketUsuActNavigations)
+                .HasForeignKey(d => d.UsuAct)
+                .HasConstraintName("FK__CENTER_TI__USU_A__0D3AD6BB");
+
+            entity.HasOne(d => d.UsuRegNavigation).WithMany(p => p.CenterTicketUsuRegNavigations)
+                .HasForeignKey(d => d.UsuReg)
+                .HasConstraintName("FK__CENTER_TI__USU_R__0E2EFAF4");
+        });
+
         modelBuilder.Entity<General>(entity =>
         {
             entity.HasKey(e => e.IdGeneral).HasName("PK__GENERAL__C1106EFEE07D0F8C");
@@ -430,7 +574,7 @@ public partial class AppDbContext : DbContext
         {
             entity.HasKey(e => e.IdTarea).HasName("PK__TB_CONTR__3484F0F9C46D185E");
 
-            entity.ToTable("TB_CONTROL_TICKET_TAREA");
+            entity.ToTable("TB_CONTROL_TICKET_TAREA", tb => tb.HasTrigger("ENVIAR_TAREAS_V1"));
 
             entity.Property(e => e.IdTarea).HasColumnName("ID_TAREA");
             entity.Property(e => e.CantidadItems).HasColumnName("CANTIDAD_ITEMS");
@@ -459,16 +603,15 @@ public partial class AppDbContext : DbContext
                 .IsUnicode(false)
                 .HasColumnName("CORREO");
             entity.Property(e => e.Descripcion)
-                .HasMaxLength(1000)
-                .IsUnicode(false)
+                .HasColumnType("text")
                 .HasColumnName("DESCRIPCION");
             entity.Property(e => e.Dni)
-                .HasMaxLength(9)
+                .HasMaxLength(8)
                 .IsUnicode(false)
                 .HasColumnName("DNI");
-            entity.Property(e => e.FecAct)
+            entity.Property(e => e.FecCierre)
                 .HasColumnType("datetime")
-                .HasColumnName("FEC_ACT");
+                .HasColumnName("FEC_CIERRE");
             entity.Property(e => e.FecReg)
                 .HasColumnType("datetime")
                 .HasColumnName("FEC_REG");
@@ -745,7 +888,7 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.Dni).HasColumnName("DNI");
 
             entity.Property(e => e.FecReg).HasColumnName("FEC_REG");
-            entity.Property(e => e.FecAct).HasColumnName("FEC_ACT");
+            entity.Property(e => e.FecCierre).HasColumnName("FEC_CIERRE");
         });
 
         modelBuilder.Entity<TicketResponse>(entity =>

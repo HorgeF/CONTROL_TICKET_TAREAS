@@ -75,7 +75,7 @@ namespace CONTROL_TICKET_TAREA.Dtos.Peticiones
 
         public DateTime? FecReg { get; set; }
 
-        public DateTime? FecAct { get; set; }
+        public DateTime? FecCierre { get; set; }
 
         public Guid PeticionId { get; set; }
     }

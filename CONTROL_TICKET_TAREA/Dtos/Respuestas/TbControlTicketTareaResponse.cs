@@ -33,6 +33,6 @@
         public string? Whatsapp { get; set; } = string.Empty;
         public string? Dni { get; set; } = string.Empty;
         public DateTime? FecReg { get; set; }
-        public DateTime? FecAct { get; set; }
+        public DateTime? FecCierre { get; set; }
     }
 }
