@@ -179,7 +179,7 @@ namespace CONTROL_TICKET_TAREA.Repository.Impl
         public async Task Actualizar(TbControlTicketTarea entidad)
         {
             // Fecha de actualización será usado como fecha de cierre
-            if(entidad.IdEstado == ESTADO_CERRADO)
+            if(entidad.FecAct == null && entidad.IdEstado == ESTADO_CERRADO)
                 entidad.FecAct = DateTime.Now;
 
             _context.TbControlTicketTareas.Update(entidad);

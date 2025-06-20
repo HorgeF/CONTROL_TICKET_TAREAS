@@ -246,7 +246,7 @@ tr.selected {
     display: inline-block !important;
     min-height: 1em !important;
     vertical-align: middle !important;
-    cursor: wait !important;
+    cursor: pointer !important;
     background-color: #fff;
     opacity: .5 !important;
 }

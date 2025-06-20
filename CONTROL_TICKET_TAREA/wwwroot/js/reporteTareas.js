@@ -4,8 +4,6 @@
 
     const data = $('#filtroForm').serialize();
 
-    console.log("DATA A ENVIAR:", data);
-
     $.ajax({
         url: "/Home/GenerarReporteSemanal",
         type: "GET",
@@ -30,7 +28,7 @@
             $btn.prop('disabled', false);
             $spinner.addClass('d-none');
             console.error("Error inesperado: " + err);
-            alert('Error al cargar el formulario');
+            AlertaUtils.mostrar('error','Error al cargar el reporte');
         },
     });
 });

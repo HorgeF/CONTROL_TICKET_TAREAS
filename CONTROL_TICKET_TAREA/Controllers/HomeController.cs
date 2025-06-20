@@ -37,12 +37,12 @@ namespace CONTROL_TICKET_TAREA.Controllers
             var prioridades = await _cache.ObtenerListaAsync(
                 "ComunPrioridades", 
                 () => _generalRepository.ListarGeneralesPorSeccionAsync(IdSecundaria.Prioridad, ordenarPorNombre: false, descendente: true),
-                TimeSpan.FromDays(1));
+                TimeSpan.FromHours(12));
 
             var niveles = await _cache.ObtenerListaAsync(
                 "ComunNiveles", 
                 () => _generalRepository.ListarGeneralesPorSeccionAsync(IdSecundaria.Nivel, descendente: true), 
-                TimeSpan.FromDays(1));
+                TimeSpan.FromHours(12));
 
             var receptores = await _cache.ObtenerListaAsync(
                 "IndexUsuarios",
@@ -52,7 +52,7 @@ namespace CONTROL_TICKET_TAREA.Controllers
             var estados = await _cache.ObtenerListaAsync(
                 "IndexEstados",
                 () => _generalRepository.ListarGeneralesPorSeccionAsync(IdSecundaria.Estado),
-                TimeSpan.FromHours(12));
+                TimeSpan.FromHours(2));
 
 
             if (filtro.PrioridadInd.HasValue || filtro.NivelInd.HasValue)
@@ -65,8 +65,6 @@ namespace CONTROL_TICKET_TAREA.Controllers
                 ViewBag.FiltroNivel = filtro.Nivel;
                 ViewBag.FiltroReceptor = filtro.IdsReceptores;
                 ViewBag.FiltroEstado = filtro.IdEstado;
-                //ViewBag.NombreReceptor = filtro.Receptor;
-                //ViewBag.IdReceptorSeleccionado = filtro.IdReceptor;
             }
 
             ViewBag.Receptores = new SelectList(receptores, "IdUsuario", "Nombre", filtro.IdsReceptores);
@@ -212,7 +210,7 @@ namespace CONTROL_TICKET_TAREA.Controllers
                 return NotFound(new { exito = false, mensaje = "Tarea no encontrada" });
 
             if (!string.IsNullOrWhiteSpace(ticketTarea.CodTicket))
-                return Conflict(new { exito = false, mensaje = "Esta tarea ya tiene un ticket creado", ticketTarea.CodTicket });
+                return Conflict(new { exito = false, mensaje = "Esta tarea ya tiene un ticket creado que es " + ticketTarea.CodTicket, ticketTarea.CodTicket });
 
             if(!_cache.IntentarGuardar(cacheKey, TimeSpan.FromSeconds(40)))
                 return Conflict(new { exito = false, mensaje = "Ya se esta procesando la solicitud, espere unos segundos para volver a enviar" });
@@ -244,8 +242,9 @@ namespace CONTROL_TICKET_TAREA.Controllers
 
         private async Task CargarCombos()
         {
-            var expiracionLarga = TimeSpan.FromDays(1);
-            var expiracionCorta = TimeSpan.FromHours(12);
+            var expiracionLarga = TimeSpan.FromHours(12);
+            var expiracionMedia = TimeSpan.FromHours(2);
+            var expiracionCorta = TimeSpan.FromHours(1);
 
             var selectPrioridad = await _cache.ObtenerListaAsync(
                 "Prioridades", 
@@ -259,8 +258,8 @@ namespace CONTROL_TICKET_TAREA.Controllers
 
             var selectEstados = await _cache.ObtenerListaAsync(
                 "Estados",
-                () => _generalRepository.ListarGeneralesPorSeccionAsync(IdSecundaria.Estado), 
-                expiracionLarga);
+                () => _generalRepository.ListarGeneralesPorSeccionAsync(IdSecundaria.Estado),
+                expiracionMedia);
 
             var selectTipos = await _cache.ObtenerListaAsync(
                 "Tipos", 
