@@ -126,6 +126,7 @@ $('#cboReceptor').SumoSelect({
     search: true,
     placeholder: "Buscar receptores...",
     searchText: 'Buscar receptores...',
-    noMatch: 'No se encontraron coincidencias'
+    noMatch: 'No se encontraron coincidencias',
+    triggerChangeCombined: false,
 });
 

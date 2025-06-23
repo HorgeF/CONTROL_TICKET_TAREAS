@@ -6,5 +6,6 @@ namespace CONTROL_TICKET_TAREA.Repository.Interfaces
     {
         Task<List<CboUsuario>> ListarUsuarios();
         Task<List<CboUsuario>> BuscarResponsables(string nombre);
+        Task<List<string>> ObtenerNombresPorIds(List<int> IdsReceptores);
     }
 }

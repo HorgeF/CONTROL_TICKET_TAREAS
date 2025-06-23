@@ -20,9 +20,8 @@
 
     var fecCreacion = ((DateTime.Now)).ToString("dddd dd/MM/yyyy", cultura);
 
-    var tecnicos = Model.Select(t => t.Receptor).Distinct().ToList();
-    var filtroTecnicos = ViewBag.filtroTecnicos as List<int> ?? new List<int>();
-    var tecnicosForm = filtroTecnicos.Count == 0 ? "TODOS" : string.Join(", ", tecnicos) + ".";
+    var filtroTecnicos = ViewBag.filtroTecnicos as List<string> ?? new List<string>();
+    var tecnicosForm = filtroTecnicos.Count == 0 ? "TODOS" : string.Join(", ", filtroTecnicos) + ".";
 }
 
 <div class="modal fade" id="reporteTareaModal" tabindex="-1" aria-labelledby="reporteTareaModalLabel">
@@ -31,24 +30,31 @@
             <header class="modal-header align-items-stretch row row-cols-auto">
                 <div class="col d-flex flex-column gap-2">
                     <span id="reporteTareaModalLabel" class="modal-title fw-bold my-auto">REPORTE TAREAS</span>
-                    <span class="h-sub my-auto">@(string.IsNullOrWhiteSpace(mensaje) ? $"{fecInicio.ToUpper()} - {fecFinal.ToUpper()}" : mensaje)</span>
+                    <span class="h-sub my-auto">@(string.IsNullOrWhiteSpace(mensaje) ? (fecInicio == fecFinal ? $"{fecInicio.ToUpper()}" : $"{fecInicio.ToUpper()} - {fecFinal.ToUpper()}") : mensaje)</span>
                     <span class="h-sub my-auto">TÉCNICO(S): @($"{tecnicosForm}")</span>
                 </div>
-                <div class="col d-flex flex-column">
-                    <span class="h-sub my-auto">Fec. Creación: @($"{fecCreacion.ToUpper()}")</span>
-                    <span class="h-sub my-auto">N° Resultados encontrados: @Model.Count</span>
+                <div class="col d-flex flex-column gap-2">
+                    <span class="h-sub my-auto">FEC. CREACIÓN: @($"{fecCreacion.ToUpper()}")</span>
+                    <span class="h-sub my-auto">N° TAREAS ENCONTRADAS: @Model.Count</span>
+                    <div class="d-flex gap-2">
+                        <button id="btnExportarExcelTarea" type="button" class="btn btn-success h-sub">
+                            Exportar Excel
+                        </button>
+                        <button id="btnExportarPdfTarea" type="button" class="btn btn-danger h-sub">
+                            Exportar Pdf
+                        </button>
+                    </div>
                 </div>
             </header>
             <div role="contentinfo" class="p-1 flex-grow-1 overflow-auto">
-                <table id="tabla-tareas-reporte" class="table table-striped tabla-ordenable table-hover w-100">
+                <table id="tabla-tareas-reporte" class="table table-bordered table-striped tabla-ordenable table-hover w-100">
                     <thead class="table-light">
                         <tr>
                             <th scope="col" style="width: 2.5%">N°</th>
                             <th scope="col" style="width: 2%">GE</th>
                             <th scope="col" style="width: 2%">EMP</th>
                             <th scope="col" class="d-none d-md-table-cell">FEC. REG.</th>
-                            <th scope="col">RECEPTOR</th>
-                            <th scope="col" class="d-none d-md-table-cell">MEDIO</th>
+                            <th scope="col">TÉCNICO</th>
                             <th scope="col" class="d-none d-lg-table-cell">CONTACTO</th>
                             <th scope="col">PRI</th>
                             <th scope="col">NIV</th>
@@ -72,7 +78,6 @@
                                     <td>@tarea.SiglaEmpresa</td>
                                     <td class="d-none d-md-table-cell">@($"{tarea.FecReg:dd-MM-yyyy}")</td>
                                     <td>@tarea.Receptor</td>
-                                    <td class="d-none d-md-table-cell">@tarea.Medio</td>
                                     <td class="d-none d-lg-table-cell">@tarea.Contacto</td>
                                     <td class="fw-bold @(
                                         tarea.IdPrioridad switch

@@ -1,10 +1,15 @@
 using CONTROL_TICKET_TAREA.Data;
+using CONTROL_TICKET_TAREA.Dtos.Respuestas;
 using CONTROL_TICKET_TAREA.Helpers;
+using CONTROL_TICKET_TAREA.Helpers.Reportes.Excel;
+using CONTROL_TICKET_TAREA.Helpers.Reportes.Pdf;
 using CONTROL_TICKET_TAREA.Repository.Impl;
 using CONTROL_TICKET_TAREA.Repository.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
+
+QuestPDF.Settings.License = QuestPDF.Infrastructure.LicenseType.Community;
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
@@ -18,6 +23,8 @@ builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 builder.Services.AddScoped<IGeneralRepository, GeneralRepository>();
 builder.Services.AddScoped<ICenterTicketRepository, CenterTicketRepository>();
 builder.Services.AddScoped<IItemCenterRepository, ItemCenterRepository>();
+builder.Services.AddScoped<IExcelService<TbControlTicketTareaResponse>, ExcelTarea>();
+builder.Services.AddScoped<IPdfService<TbControlTicketTareaResponse>, PdfTareaService>();
 
 builder.Services.AddScoped<ICacheHelper, CacheHelper>();
 

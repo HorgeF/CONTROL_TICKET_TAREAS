@@ -35,5 +35,16 @@ namespace CONTROL_TICKET_TAREA.Repository.Impl
                 })
                 .OrderBy(u => u.Nombre)
                 .ToListAsync();
+
+        public async Task<List<string>> ObtenerNombresPorIds(List<int> IdsReceptores)
+        {
+            if (IdsReceptores == null || !IdsReceptores.Any())
+                return new List<string>();
+
+            return await _context.Usuarios
+                .Where(r => IdsReceptores.Contains(r.IdUsuario))
+                .Select(r => r.Nombres + " " + r.ApellidoP)
+                .ToListAsync();
+        }
     }
 }

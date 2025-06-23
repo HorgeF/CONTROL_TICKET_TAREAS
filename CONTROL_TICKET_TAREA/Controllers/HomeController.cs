@@ -1,7 +1,10 @@
 using CONTROL_TICKET_TAREA.Constants;
 using CONTROL_TICKET_TAREA.Dtos.Filtros;
 using CONTROL_TICKET_TAREA.Dtos.Peticiones;
+using CONTROL_TICKET_TAREA.Dtos.Respuestas;
 using CONTROL_TICKET_TAREA.Helpers;
+using CONTROL_TICKET_TAREA.Helpers.Reportes.Excel;
+using CONTROL_TICKET_TAREA.Helpers.Reportes.Pdf;
 using CONTROL_TICKET_TAREA.Mappers;
 using CONTROL_TICKET_TAREA.Models;
 using CONTROL_TICKET_TAREA.Repository.Interfaces;
@@ -19,6 +22,8 @@ namespace CONTROL_TICKET_TAREA.Controllers
         IGeneralRepository generalRepository,
         IItemCenterRepository itemCenterRepository,
         ICenterTicketRepository centerTicketRepository,
+        IExcelService<TbControlTicketTareaResponse> excelTarea,
+        IPdfService<TbControlTicketTareaResponse> pdfTarea,
         ICacheHelper cache) : Controller
     {
 
@@ -29,6 +34,8 @@ namespace CONTROL_TICKET_TAREA.Controllers
         private readonly IGeneralRepository _generalRepository = generalRepository;
         private readonly IItemCenterRepository _itemCenterRepository = itemCenterRepository;
         private readonly ICenterTicketRepository _centerTicketRepository = centerTicketRepository;
+        private readonly IExcelService<TbControlTicketTareaResponse> _excelTarea = excelTarea;
+        private readonly IPdfService<TbControlTicketTareaResponse> _pdfTarea = pdfTarea;
 
         private readonly ICacheHelper _cache = cache;
 
@@ -97,21 +104,50 @@ namespace CONTROL_TICKET_TAREA.Controllers
         public async Task<IActionResult> GenerarReporteSemanal(FiltroControlTicketTarea filtro)
         {
             var reporteTareas = await _controlTicketTareaRepository.ListarReporteTareasSemanal(filtro);
+            var nombresReceptores = new List<string>();
 
-            if (reporteTareas.Count != 0)
-            {
-                ViewBag.FecInicio = reporteTareas.Min(t => t.FechaTicketTarea);
-                ViewBag.FecFinal = reporteTareas.Max(t => t.FechaTicketTarea);
-            }
-            else
-            {
-                ViewBag.FecInicio = null;
-                ViewBag.FecFinal = null;
-            }
+            // Siempre sea Lunes a Viernes
+            var hoy = DateTime.Today;
+            var diaSemana = (int)hoy.DayOfWeek;
+            if (diaSemana == 0) diaSemana = 7;
+            var lunes = hoy.AddDays(1 - diaSemana);
+            var viernes = lunes.AddDays(4);
+            ViewBag.FecInicio = lunes;
+            ViewBag.FecFinal = viernes;
 
-            ViewBag.filtroTecnicos = filtro.IdsReceptores;
+            if(filtro.IdsReceptores.Count != 0)
+                nombresReceptores = await _usuarioRepository.ObtenerNombresPorIds(filtro.IdsReceptores);
+
+            ViewBag.filtroTecnicos = nombresReceptores;
 
             return PartialView("ReporteTareas", reporteTareas);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> ExportarExcelReporteTarea(FiltroControlTicketTarea filtro)
+        {
+            var reporteTareas = await _controlTicketTareaRepository.ListarReporteTareasSemanal(filtro);
+            var bytes = _excelTarea.GenerarExcel(reporteTareas);
+            var fechaRegistro = $"{DateTime.Now:ddMMyyyy}";
+
+            return File(bytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"Reporte tareas - {fechaRegistro}.xlsx");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> ExportarPdfReporteTarea(FiltroControlTicketTarea filtro)
+        {
+            var reporteTareas = await _controlTicketTareaRepository.ListarReporteTareasSemanal(filtro);
+            var nombresReceptores = new List<string>();
+
+            if(filtro.IdsReceptores.Count != 0)
+            {
+                nombresReceptores = await _usuarioRepository.ObtenerNombresPorIds(filtro.IdsReceptores);
+            }
+
+            var bytes = _pdfTarea.GenerarPdf(reporteTareas, nombresReceptores);
+            var fechaRegistro = $"{DateTime.Now:ddMMyyyy}";
+
+            return File(bytes, "application/pdf", $"Reporte tareas - {fechaRegistro}.pdf");
         }
 
         [HttpGet]

@@ -145,7 +145,7 @@ tr.selected {
 }
 
 .h-sub{
-    font-size: 9px;
+    font-size: 10px;
 }
 
 .h-sub button{
@@ -156,6 +156,18 @@ tr.selected {
     .h-sub {
         font-size: 11px;
     }
+}
+
+.h-header{
+    font-size: 10px;
+}
+
+.h-header button {
+    font-size: inherit;
+}
+
+.h-header {
+    font-size: 12px;
 }
 
 /* Para la carga del registro seleccionado para editar */
@@ -240,6 +252,37 @@ tr.selected {
 .SumoSelect > .CaptionCont > span.placeholder {
     color: #6a6767 !important;
     font-style: normal !important;
+}
+
+/* Responsive controles header index */
+
+.text-resultado{
+    text-align: end;
+}
+
+@media(max-width:580px) {
+    #cboFiltroEstado{
+        width: 100%;
+    }
+
+    .cbo-content {
+        width: 100%;
+    }
+} 
+
+@media(max-width: 640px){
+    .section-graf-buttons {
+        flex-direction: column;
+    }
+
+    .text-resultado{
+        text-align: left;
+        margin: auto 0;
+    }
+
+    .btn-index{
+        width: 100%;
+    }
 }
 
 .placeholder {
