@@ -1,4 +1,23 @@
-﻿// Cambio de estilos al seleccionar los botones que filtran la lista
+﻿$(document).on("click", '.btnOk', function () {
+    // Reiniciar filtros individuales
+    $('input[name="prioridadInd"], input[name="nivelInd"]').prop('checked', false);
+    $('button[data-target^="prioridadGrafico"], button[data-target^="nivelGrafico"]').removeClass('active btn-primary btn-outline-primary');
+
+    // Enviar formulario
+    $('#filtroForm')[0].submit();
+});
+
+$('#cboReceptor').SumoSelect({
+    selectAll: true,
+    search: true,
+    okCancelInMulti: true,
+    placeholder: "Buscar receptores...",
+    searchText: 'Buscar receptores...',
+    noMatch: 'No se encontraron coincidencias',
+    forceCustomRendering: true
+});
+
+// Cambio de estilos al seleccionar los botones que filtran la lista
 $('button[data-target]').on('click', function () {
     const $button = $(this);
     const targetId = $button.data('target').replace('#', '');
@@ -113,20 +132,3 @@ $("#cboFiltroEstado").on('change', function () {
 
     $('#filtroForm')[0].submit();
 });
-
-$("#cboReceptor").on("change", function () {
-    $('input[name="prioridadInd"], input[name="nivelInd"]').prop('checked', false);
-    $('button[data-target^="prioridadGrafico"], button[data-target^="nivelGrafico"]').removeClass('active btn-primary btn-outline-primary');
-
-    $('#filtroForm')[0].submit();
-})
-
-$('#cboReceptor').SumoSelect({
-    selectAll: true,
-    search: true,
-    placeholder: "Buscar receptores...",
-    searchText: 'Buscar receptores...',
-    noMatch: 'No se encontraron coincidencias',
-    triggerChangeCombined: false,
-});
-

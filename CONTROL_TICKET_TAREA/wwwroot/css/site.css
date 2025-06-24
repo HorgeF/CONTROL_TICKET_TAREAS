@@ -152,12 +152,6 @@ tr.selected {
     font-size: inherit;
 }
 
-@media (min-width: 1366px) {
-    .h-sub {
-        font-size: 11px;
-    }
-}
-
 .h-header{
     font-size: 10px;
 }
@@ -166,9 +160,16 @@ tr.selected {
     font-size: inherit;
 }
 
-.h-header {
-    font-size: 12px;
+@media (min-width: 1366px) {
+    .h-sub {
+        font-size: 11px;
+    }
+
+    .h-header {
+        font-size: 12px;
+    }
 }
+
 
 /* Para la carga del registro seleccionado para editar */
 .loading-border {
