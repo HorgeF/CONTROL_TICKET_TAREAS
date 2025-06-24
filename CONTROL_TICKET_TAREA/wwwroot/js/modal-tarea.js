@@ -94,7 +94,11 @@ $(document).on('submit', '#formGuardarTarea', function (e) {
     });
 });
 
-$(document).on('dblclick', '.fila-editable', function () {
+const esMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+
+const evento = esMobile ? 'click' : 'dblclick';
+
+$(document).on(evento, '.fila-editable', function () {
     const $fila = $(this);
     const id = $(this).data('id');
 

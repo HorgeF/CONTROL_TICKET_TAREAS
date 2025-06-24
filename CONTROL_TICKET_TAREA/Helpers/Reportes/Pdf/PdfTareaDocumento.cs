@@ -17,7 +17,10 @@ namespace CONTROL_TICKET_TAREA.Helpers.Reportes.Pdf
                 {
                     page.Margin(20);
 
-                    page.Header().Element(ComponenteEncabezado);
+                    page.Header().Element(container =>
+                    {
+                        container.ShowOnce().Element(ComponenteEncabezado);
+                    });
                     page.Content().Element(ComponenteContenido);
                     page.Footer().AlignRight().Text(x =>
                     {
@@ -110,56 +113,59 @@ namespace CONTROL_TICKET_TAREA.Helpers.Reportes.Pdf
                         columns.RelativeColumn(1); // EMP
                         columns.RelativeColumn(1.7f); // FEC. REG
                         columns.RelativeColumn(2); // TÉCNICO
-                        columns.RelativeColumn(2); // CONTACTO
-                        columns.RelativeColumn(1.8f); // PRI
+                        columns.RelativeColumn(2.5f); // CONTACTO
+                        columns.RelativeColumn(1.3f); // PRI
                         columns.RelativeColumn(0.8f); // NIV
-                        columns.RelativeColumn(1.3f); // ITEMS
-                        columns.RelativeColumn(); // SERIE
-                        columns.RelativeColumn(2); // TIPO
+                        columns.RelativeColumn(1f); // ITEMS
+                        columns.RelativeColumn(2); // SERIE
+                        columns.RelativeColumn(2.5f); // TIPO
                         columns.RelativeColumn(3.4f); // ITEM
                         columns.RelativeColumn(6.5f); // DESCRIPCIÓN
                         columns.RelativeColumn(2); // TICKET
                         columns.RelativeColumn(2); // ESTADO
                     });
 
+                    var columnas = new[]
+                    {
+                        "ID", "GE", "EMP", "FEC. REG.", "TÉCNICO", "CONTACTO", "PRI", "NIV",
+                        "ITEMS", "SERIE", "TIPO", "ITEM", "DESCRIPCIÓN", "TICKET", "ESTADO"
+                    };
+
+
                     table.Header(header =>
                     {
-                        header.Cell().Background("#d50").Border(0.1f).BorderColor(colorBorder).Padding(2).Text("ID").FontColor("#fff").AlignCenter().FontSize(fontSizeEncabezado);
-                        header.Cell().Background("#d50").Border(0.1f).BorderColor(colorBorder).Padding(2).Text("GE").FontColor("#fff").AlignCenter().FontSize(fontSizeEncabezado);
-                        header.Cell().Background("#d50").Border(0.1f).BorderColor(colorBorder).Padding(2).Text("EMP").FontColor("#fff").AlignCenter().FontSize(fontSizeEncabezado);
-                        header.Cell().Background("#d50").Border(0.1f).BorderColor(colorBorder).Padding(2).Text("FEC. REG.").FontColor("#fff").AlignCenter().FontSize(fontSizeEncabezado);
-                        header.Cell().Background("#d50").Border(0.1f).BorderColor(colorBorder).Padding(2).Text("TÉCNICO").FontColor("#fff").AlignCenter().FontSize(fontSizeEncabezado);
-                        header.Cell().Background("#d50").Border(0.1f).BorderColor(colorBorder).Padding(2).Text("CONTACTO").FontColor("#fff").AlignCenter().FontSize(fontSizeEncabezado);
-                        header.Cell().Background("#d50").Border(0.1f).BorderColor(colorBorder).Padding(2).Text("PRI").FontColor("#fff").AlignCenter().FontSize(fontSizeEncabezado);
-                        header.Cell().Background("#d50").Border(0.1f).BorderColor(colorBorder).Padding(2).Text("NIV").FontColor("#fff").AlignCenter().FontSize(fontSizeEncabezado);
-                        header.Cell().Background("#d50").Border(0.1f).BorderColor(colorBorder).Padding(2).Text("ITEMS").FontColor("#fff").AlignCenter().FontSize(fontSizeEncabezado);
-                        header.Cell().Background("#d50").Border(0.1f).BorderColor(colorBorder).Padding(2).Text("SERIE").FontColor("#fff").AlignCenter().FontSize(fontSizeEncabezado);
-                        header.Cell().Background("#d50").Border(0.1f).BorderColor(colorBorder).Padding(2).Text("TIPO").FontColor("#fff").AlignCenter().FontSize(fontSizeEncabezado);
-                        header.Cell().Background("#d50").Border(0.1f).BorderColor(colorBorder).Padding(2).Text("ITEM").FontColor("#fff").AlignCenter().FontSize(fontSizeEncabezado);
-                        header.Cell().Background("#d50").Border(0.1f).BorderColor(colorBorder).Padding(2).Text("DESCRIPCIÓN").FontColor("#fff").AlignCenter().FontSize(fontSizeEncabezado);
-                        header.Cell().Background("#d50").Border(0.1f).BorderColor(colorBorder).Padding(2).Text("TICKET").FontColor("#fff").AlignCenter().FontSize(fontSizeEncabezado);
-                        header.Cell().Background("#d50").Border(0.1f).BorderColor(colorBorder).Padding(2).Text("ESTADO").FontColor("#fff").AlignCenter().FontSize(fontSizeEncabezado);
+                        foreach (var titulo in columnas)
+                        {
+                            header.Cell()
+                                .Background("#d50")
+                                .Border(0.1f).BorderColor(colorBorder)
+                                .Padding(2)
+                                .Text(titulo)
+                                .FontColor("#fff")
+                                .AlignCenter()
+                                .FontSize(fontSizeEncabezado);
+                        }
                     });
 
-                    if(_tareas.Count != 0)
+                    if (_tareas.Count != 0)
                     {
                         foreach(var tarea in _tareas)
                         {
-                            table.Cell().Border(0.1f).BorderColor(colorBorder).Padding(2).Text(tarea.IdTarea.ToString()).FontSize(fontSizeContenido);
-                            table.Cell().Border(0.1f).BorderColor(colorBorder).Padding(2).Text(tarea.SiglaGE).FontSize(fontSizeContenido);
-                            table.Cell().Border(0.1f).BorderColor(colorBorder).Padding(2).Text(tarea.SiglaEmpresa).FontSize(fontSizeContenido);
-                            table.Cell().Border(0.1f).BorderColor(colorBorder).Padding(2).Text($"{tarea.FecReg:dd-MM-yyyy}").FontSize(fontSizeContenido);
-                            table.Cell().Border(0.1f).BorderColor(colorBorder).Padding(2).Text(tarea.Receptor).FontSize(fontSizeContenido);
-                            table.Cell().Border(0.1f).BorderColor(colorBorder).Padding(2).Text(tarea.Contacto).FontSize(fontSizeContenido);
-                            table.Cell().Border(0.1f).BorderColor(colorBorder).Padding(2).Text(tarea.Prioridad).FontSize(fontSizeContenido);
-                            table.Cell().Border(0.1f).BorderColor(colorBorder).Padding(2).Text(tarea.Nivel).FontSize(fontSizeContenido);
-                            table.Cell().Border(0.1f).BorderColor(colorBorder).Padding(2).Text(tarea.CantidadItems.ToString()).FontSize(fontSizeContenido);
-                            table.Cell().Border(0.1f).BorderColor(colorBorder).Padding(2).Text(tarea.NSerie).FontSize(fontSizeContenido);
-                            table.Cell().Border(0.1f).BorderColor(colorBorder).Padding(2).Text(tarea.Tipo).FontSize(fontSizeContenido);
-                            table.Cell().Border(0.1f).BorderColor(colorBorder).Padding(2).Text(tarea.IdItemCenterDesc).FontSize(fontSizeContenido);
-                            table.Cell().Border(0.1f).BorderColor(colorBorder).Padding(2).Text(tarea.Descripcion).FontSize(fontSizeContenido);
-                            table.Cell().Border(0.1f).BorderColor(colorBorder).Padding(2).Text(tarea.CodTicket).FontSize(fontSizeContenido);
-                            table.Cell().Border(0.1f).BorderColor(colorBorder).Padding(2).Text(tarea.Estado).FontSize(fontSizeContenido);
+                            DibujarFila(table, tarea.IdTarea.ToString());
+                            DibujarFila(table, tarea.SiglaGE);
+                            DibujarFila(table, tarea.SiglaEmpresa);
+                            DibujarFila(table, $"{tarea.FecReg:dd-MM-yyyy}");
+                            DibujarFila(table, tarea.Receptor);
+                            DibujarFila(table, tarea.Contacto);
+                            DibujarFila(table, tarea.Prioridad);
+                            DibujarFila(table, tarea.Nivel);
+                            DibujarFila(table, tarea.CantidadItems.ToString());
+                            DibujarFila(table, tarea.NSerie);
+                            DibujarFila(table, tarea.Tipo);
+                            DibujarFila(table, tarea.IdItemCenterDesc);
+                            DibujarFila(table, tarea.Descripcion);
+                            DibujarFila(table, tarea.CodTicket);
+                            DibujarFila(table, tarea.Estado);
                         }
                     } else
                     {
@@ -174,6 +180,11 @@ namespace CONTROL_TICKET_TAREA.Helpers.Reportes.Pdf
                      col.Spacing(10);
                 });
             });
+
+            void DibujarFila(TableDescriptor table, string? data)
+            {
+                table.Cell().Border(0.1f).BorderColor(Colors.Grey.Darken2).Padding(2).Text(data).FontSize(4.5f);
+            }
 
         }
     }

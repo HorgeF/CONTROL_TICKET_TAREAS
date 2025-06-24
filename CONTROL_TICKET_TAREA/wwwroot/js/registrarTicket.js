@@ -2,10 +2,11 @@
 
 $(document).on("click", ".btn-registrar-ticket", function (e) {
     e.preventDefault();
+    const idTarea = $(this).closest("tr").data('id');
 
     Swal.fire({
-        title: "¿Estás seguro de crear un ticket para esta tarea?",
-        text: "No serás capaz de revertir esto una vez creado",
+        title: `¿Deseas crear un ticket para la tarea con ID ${idTarea}?`,
+        text: "Una vez creado, no podrás revertir esta acción.",
         icon: "warning",
         showCancelButton: true,
         confirmButtonText: "Si",
@@ -17,7 +18,6 @@ $(document).on("click", ".btn-registrar-ticket", function (e) {
             if (crearTicketCargando) return;
             crearTicketCargando = true;
 
-            const idTarea = $(this).closest("tr").data('id');
             const $btnRegistrarTicketPorId = $(`#btn-registrar-ticket-${idTarea}`);
             const $spinner = $btnRegistrarTicketPorId.find(".spinner-border");
 

@@ -3,6 +3,7 @@
 
 @{
     var colorClass = Model.IdTarea == 0 ? "bg-success" : "bg-info";
+    var btnColor = Model.IdTarea == 0 ? "btn-success" : "btn-info";
     string desactivarBoton = Model.IdEstado == 1269 || Model.IdEstado == 1270 ? "disabled" : "";
 }
 
@@ -147,11 +148,11 @@
                             <div class="d-flex gap-2">
                                 <textarea asp-for="@Model.Descripcion" class="form-control text-uppercase" id="txtTarea" rows="8"></textarea>
                                 <div class="d-flex flex-column justify-content-end gap-2">
-                                    <button id="btnGuardar" type="submit" class="btn @colorClass text-white px-4 align-self-center d-flex align-items-center gap-1 @desactivarBoton">
+                                    <button id="btnGuardar" type="submit" class="btn @btnColor text-white align-self-center d-flex align-items-center gap-1 @desactivarBoton">
                                         <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
                                         @(Model.IdTarea == 0 ? "Crear" : "Editar")
                                     </button>
-                                    <button type="button" class="btn btn-secondary px-4 align-self-center" data-bs-dismiss="modal">Cerrar</button>
+                                    <button type="button" class="btn btn-secondary align-self-center" data-bs-dismiss="modal">Cerrar</button>
                                 </div>
                             </div>
                             <span asp-validation-for="@Model.Descripcion" class="text-danger pb-2"></span>
