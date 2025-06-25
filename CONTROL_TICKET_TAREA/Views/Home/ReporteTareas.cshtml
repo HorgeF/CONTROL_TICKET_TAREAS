@@ -50,19 +50,21 @@
                 <table id="tabla-tareas-reporte" class="table table-bordered table-striped tabla-ordenable table-hover w-100">
                     <thead class="table-light">
                         <tr>
-                            <th scope="col" style="width: 2.5%">N°</th>
+                            <th scope="col" style="width: 1%">N°</th>
                             <th scope="col" class="text-nowrap">GE</th>
                             <th scope="col" class="text-nowrap">EMP</th>
-                            <th scope="col" class="d-none d-md-table-cell">FEC. REG.</th>
-                            <th scope="col">TÉCNICO</th>
-                            <th scope="col" class="d-none d-lg-table-cell">CONTACTO</th>
+                            <th scope="col" class="text-nowrap">PRO</th>
+                            <th scope="col" class="text-nowrap">SPRO</th>
+                            <th scope="col" class="text-nowrap">FEC. REG.</th>
+                            <th scope="col" class="text-nowrap">TÉCNICO</th>
+                            <th scope="col" class="text-nowrap">CONTACTO</th>
                             <th scope="col">PRI</th>
                             <th scope="col">NIV</th>
-                            <th scope="col" class="d-none d-md-table-cell" style="width: 1%;">ITEMS</th>
-                            <th scope="col" class="d-none d-lg-table-cell">SERIE</th>
-                            <th scope="col" class="d-none d-lg-table-cell">TIPO</th>
-                            <th scope="col" class="d-none d-md-table-cell">ITEM</th>
-                            <th scope="col" class="d-none d-md-table-cell" style="width: 20%">DESCRIPCIÓN</th>
+                            <th scope="col" style="width: 1%;">ITEMS</th>
+                            <th scope="col">SERIE</th>
+                            <th scope="col">TIPO</th>
+                            <th scope="col">ITEM</th>
+                            <th scope="col" style="width: 20%">DESCRIPCIÓN</th>
                             <th scope="col">TICKET</th>
                             <th scope="col">ESTADO</th>
                         </tr>
@@ -76,9 +78,11 @@
                                     <td>@tarea.IdTarea</td>
                                     <td>@tarea.SiglaGE</td>
                                     <td>@tarea.SiglaEmpresa</td>
-                                    <td class="d-none d-md-table-cell">@($"{tarea.FecReg:dd-MM-yyyy}")</td>
-                                    <td>@tarea.Receptor</td>
-                                    <td class="d-none d-lg-table-cell">@tarea.Contacto</td>
+                                    <td class="text-nowrap">@tarea.SiglaProyecto</td>
+                                    <td class="text-nowrap">@tarea.SiglaSubProyecto</td>
+                                    <td class="text-nowrap">@($"{tarea.FecReg:dd-MM-yyyy}")</td>
+                                    <td class="text-nowrap">@tarea.Receptor</td>
+                                    <td class="text-nowrap">@tarea.Contacto</td>
                                     <td class="fw-bold @(
                                         tarea.IdPrioridad switch
                                         {
@@ -93,12 +97,12 @@
                                         var claseNivel = $"row-nivel nivel-{tarea.IdNivel} fw-bold";
                                     }
                                     <td class="@claseNivel">@tarea.Nivel</td>
-                                    <td class="d-none d-md-table-cell">@tarea.CantidadItems</td>
-                                    <td class="d-none d-lg-table-cell">@tarea.NSerie</td>
-                                    <td class="d-none d-lg-table-cell">@tarea.Tipo</td>
-                                    <td class="d-none d-md-table-cell">@tarea.IdItemCenterDesc</td>
-                                    <td class="d-none d-md-table-cell">@tarea.Descripcion</td>
-                                    <td>
+                                    <td>@tarea.CantidadItems</td>
+                                    <td>@tarea.NSerie</td>
+                                    <td>@tarea.Tipo</td>
+                                    <td>@tarea.IdItemCenterDesc</td>
+                                    <td>@tarea.Descripcion</td>
+                                    <td class="text-nowrap">
                                         @if (string.IsNullOrWhiteSpace(tarea.CodTicket))
                                         {
                                             <span class="text-muted fst-italic">Sin asignar</span>
@@ -107,7 +111,7 @@
                                             @tarea.CodTicket
                                         }
                                     </td>
-                                    <td>@tarea.Estado</td>
+                                    <td class="text-nowrap">@tarea.Estado</td>
                                 </tr>            
                             }
                         } else

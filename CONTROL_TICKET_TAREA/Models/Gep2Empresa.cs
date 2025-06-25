@@ -75,6 +75,10 @@ public partial class Gep2Empresa
 
     public string? CodAbrv { get; set; }
 
+    public virtual ICollection<Gep3Proyecto> Gep3Proyectos { get; set; } = new List<Gep3Proyecto>();
+
+    public virtual ICollection<Gep4Subproyecto> Gep4Subproyectos { get; set; } = new List<Gep4Subproyecto>();
+
     public virtual General? IdDocumentoNavigation { get; set; }
 
     public virtual General? IdPersoneriaNavigation { get; set; }

@@ -62,4 +62,8 @@ public partial class TbControlTicketTarea
     public string? Whatsapp { get; set; }
 
     public string? Dni { get; set; }
+
+    public int? IdProyecto { get; set; }
+
+    public int? IdSubProyecto { get; set; }
 }

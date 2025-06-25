@@ -101,9 +101,9 @@ $(document).on('click', '#suggestions-GE a', function (e) {
     $('#cboEntidad').empty().append('<option value="0">Cargando...</option>');
 
     $.ajax({
-        url: '/Home/ListarEmpresasParaSelect',
+        url: '/Empresa/ObtenerEmpresasPorGE',
         type: 'GET',
-        data: { grupoId: idGE },
+        data: { idGE : idGE },
         success: function (data) {
             $('#cboEntidad').empty().append('<option value="0">-SELECCIONAR-</option>');
             data.forEach(function (empresa) {
@@ -112,6 +112,52 @@ $(document).on('click', '#suggestions-GE a', function (e) {
         },
         error: function () {
             $('#cboEntidad').empty().append('<option value="0">Error al cargar</option>');
+        }
+    });
+});
+
+$(document).on('change', '#cboEntidad', function (e) {
+    e.preventDefault();
+
+    const idEmpresa = $(this).val();
+
+    $('#cboProyecto').empty().append('<option value="0">Cargando...</option>');
+
+    $.ajax({
+        url: '/Proyecto/ObtenerProyectosPorEmpresa',
+        type: 'GET',
+        data: { idEmpresa : idEmpresa },
+        success: function (data) {
+            $('#cboProyecto').empty().append('<option value="0">-SELECCIONAR-</option>');
+            data.forEach(function (proyecto) {
+                $('#cboProyecto').append(`<option value="${proyecto.value}">${proyecto.text}</option>`);
+            });
+        },
+        error: function () {
+            $('#cboProyecto').empty().append('<option value="0">Error al cargar</option>');
+        }
+    });
+});
+
+$(document).on('change', '#cboProyecto', function (e) {
+    e.preventDefault();
+
+    const idProyecto = $(this).val();
+
+    $('#cboSubProyecto').empty().append('<option value="0">Cargando...</option>');
+
+    $.ajax({
+        url: '/SubProyecto/ObtenerSubProyectosPorProyecto',
+        type: 'GET',
+        data: { idProyecto: idProyecto },
+        success: function (data) {
+            $('#cboSubProyecto').empty().append('<option value="0">-SELECCIONAR-</option>');
+            data.forEach(function (subProyecto) {
+                $('#cboSubProyecto').append(`<option value="${subProyecto.value}">${subProyecto.text}</option>`);
+            });
+        },
+        error: function () {
+            $('#cboSubProyecto').empty().append('<option value="0">Error al cargar</option>');
         }
     });
 });

@@ -22,6 +22,8 @@ namespace CONTROL_TICKET_TAREA.Controllers
         IGeneralRepository generalRepository,
         IItemCenterRepository itemCenterRepository,
         ICenterTicketRepository centerTicketRepository,
+        IProyectoRepository proyectoRepository,
+        ISubProyectoRepository subProyectoRepository,
         IExcelService<TbControlTicketTareaResponse> excelTarea,
         IPdfService<TbControlTicketTareaResponse> pdfTarea,
         ICacheHelper cache) : Controller
@@ -34,6 +36,8 @@ namespace CONTROL_TICKET_TAREA.Controllers
         private readonly IGeneralRepository _generalRepository = generalRepository;
         private readonly IItemCenterRepository _itemCenterRepository = itemCenterRepository;
         private readonly ICenterTicketRepository _centerTicketRepository = centerTicketRepository;
+        private readonly IProyectoRepository _proyectoRepository = proyectoRepository;
+        private readonly ISubProyectoRepository _subProyectoRepository = subProyectoRepository;
         private readonly IExcelService<TbControlTicketTareaResponse> _excelTarea = excelTarea;
         private readonly IPdfService<TbControlTicketTareaResponse> _pdfTarea = pdfTarea;
 
@@ -84,20 +88,6 @@ namespace CONTROL_TICKET_TAREA.Controllers
             ViewBag.GrafNiveles = await _controlTicketTareaRepository.ListarGrupoConCantidadAsync(IdSecundaria.Nivel, g => g.IdNivel);
 
             return View(ticketTareas);
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> ListarEmpresasParaSelect(int grupoId)
-        {
-            var empresas = await _empresaRepository.ListarEmpresas(grupoId);
-
-            var resultado = empresas.Select(e => new
-            {
-                value = e.IdEmpresa,
-                text = e.RazonSocial
-            });
-
-            return Json(resultado);
         }
 
         [HttpGet]
@@ -182,7 +172,11 @@ namespace CONTROL_TICKET_TAREA.Controllers
             {
                 var ticketObtenido = await _controlTicketTareaRepository.ObtenerTicketTarea(idTarea);
                 var selectEmpresas = await _empresaRepository.ListarEmpresas(ticketObtenido!.IdGE);
+                var selectProyectos = await _proyectoRepository.ListarProyectos(ticketObtenido.IdEmpresa);
+                var selectSubProyectos = await _subProyectoRepository.ListarSubProyectos(ticketObtenido.IdProyecto);
                 ViewBag.Empresas = new SelectList(selectEmpresas, "IdEmpresa", "RazonSocial");
+                ViewBag.Proyectos = new SelectList(selectProyectos, "IdProyecto", "Proyecto");
+                ViewBag.SubProyectos = new SelectList(selectSubProyectos, "IdSubProyecto", "SubProyecto");
                 ticketTarea = ticketObtenido.ToRequest();
             } else
             {
@@ -238,6 +232,18 @@ namespace CONTROL_TICKET_TAREA.Controllers
                 {
                     var selectEmpresas = await _empresaRepository.ListarEmpresas(peticion.IdGe);
                     ViewBag.Empresas = new SelectList(selectEmpresas, "IdEmpresa", "RazonSocial");
+                }
+
+                if(peticion.IdEmpresa != 0)
+                {
+                    var selectProyectos = await _proyectoRepository.ListarProyectos(peticion.IdEmpresa);
+                    ViewBag.Proyectos = new SelectList(selectProyectos, "IdProyecto", "Proyecto");
+                }
+
+                if (peticion.IdProyecto != 0)
+                {
+                    var selectSubProyectos = await _subProyectoRepository.ListarSubProyectos(peticion.IdProyecto);
+                    ViewBag.SubProyectos = new SelectList(selectSubProyectos, "IdSubProyecto", "SubProyecto");
                 }
                 return PartialView("Guardar", peticion);
             }

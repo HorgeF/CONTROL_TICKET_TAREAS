@@ -23,6 +23,10 @@ public partial class AppDbContext : DbContext
 
     public virtual DbSet<Gep2Empresa> Gep2Empresas { get; set; }
 
+    public virtual DbSet<Gep3Proyecto> Gep3Proyectos { get; set; }
+
+    public virtual DbSet<Gep4Subproyecto> Gep4Subproyectos { get; set; }
+
     public virtual DbSet<ItemCenter> ItemCenters { get; set; }
 
     public virtual DbSet<TbControlTicketTarea> TbControlTicketTareas { get; set; }
@@ -39,7 +43,11 @@ public partial class AppDbContext : DbContext
         {
             entity.HasKey(e => e.IdTicket).HasName("PK__CENTER_T__129B4F22C870DE75");
 
-            entity.ToTable("CENTER_TICKET", tb => tb.HasTrigger("ENVIAR_TICKET_V1"));
+            entity.ToTable("CENTER_TICKET", tb =>
+                {
+                    tb.HasTrigger("CAMBIAR_ESTADO_TAREAS_V1");
+                    tb.HasTrigger("ENVIAR_TICKET_V1");
+                });
 
             entity.Property(e => e.IdTicket)
                 .ValueGeneratedNever()
@@ -94,6 +102,9 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.FechaCorreo)
                 .HasColumnType("datetime")
                 .HasColumnName("FECHA_CORREO");
+            entity.Property(e => e.FechaSustentado)
+                .HasColumnType("datetime")
+                .HasColumnName("FECHA_SUSTENTADO");
             entity.Property(e => e.FechaTicket)
                 .HasColumnType("datetime")
                 .HasColumnName("FECHA_TICKET");
@@ -389,6 +400,131 @@ public partial class AppDbContext : DbContext
                 .HasConstraintName("FK_EMPRESA_USUARIO_REG");
         });
 
+        modelBuilder.Entity<Gep3Proyecto>(entity =>
+        {
+            entity.HasKey(e => e.IdProyecto).HasName("PK__GEP_3_PR__6D661D313DCFD214");
+
+            entity.ToTable("GEP_3_PROYECTO");
+
+            entity.Property(e => e.IdProyecto)
+                .ValueGeneratedNever()
+                .HasColumnName("ID_PROYECTO");
+            entity.Property(e => e.CodAbrv)
+                .HasMaxLength(8)
+                .IsUnicode(false)
+                .HasColumnName("COD_ABRV");
+            entity.Property(e => e.Defecto).HasColumnName("DEFECTO");
+            entity.Property(e => e.Descripcion)
+                .HasMaxLength(250)
+                .IsUnicode(false)
+                .HasColumnName("DESCRIPCION");
+            entity.Property(e => e.FecAct)
+                .HasColumnType("datetime")
+                .HasColumnName("FEC_ACT");
+            entity.Property(e => e.FecReg)
+                .HasColumnType("datetime")
+                .HasColumnName("FEC_REG");
+            entity.Property(e => e.FechaFinal)
+                .HasColumnType("datetime")
+                .HasColumnName("FECHA_FINAL");
+            entity.Property(e => e.FechaInicio)
+                .HasColumnType("datetime")
+                .HasColumnName("FECHA_INICIO");
+            entity.Property(e => e.Flag).HasColumnName("FLAG");
+            entity.Property(e => e.IdEmpresa).HasColumnName("ID_EMPRESA");
+            entity.Property(e => e.IdEstado).HasColumnName("ID_ESTADO");
+            entity.Property(e => e.IdGe).HasColumnName("ID_GE");
+            entity.Property(e => e.IdTipo).HasColumnName("ID_TIPO");
+            entity.Property(e => e.IdUsuario).HasColumnName("ID_USUARIO");
+            entity.Property(e => e.Logo)
+                .HasMaxLength(300)
+                .IsUnicode(false)
+                .HasColumnName("LOGO");
+            entity.Property(e => e.NomAbrv)
+                .HasMaxLength(300)
+                .IsUnicode(false)
+                .HasColumnName("NOM_ABRV");
+            entity.Property(e => e.Nombre)
+                .HasMaxLength(50)
+                .IsUnicode(false)
+                .HasColumnName("NOMBRE");
+            entity.Property(e => e.Orden).HasColumnName("ORDEN");
+            entity.Property(e => e.Sigla)
+                .HasMaxLength(5)
+                .IsUnicode(false)
+                .HasColumnName("SIGLA");
+            entity.Property(e => e.UsuAct).HasColumnName("USU_ACT");
+            entity.Property(e => e.UsuReg).HasColumnName("USU_REG");
+
+            entity.HasOne(d => d.IdEmpresaNavigation).WithMany(p => p.Gep3Proyectos)
+                .HasForeignKey(d => d.IdEmpresa)
+                .HasConstraintName("FK_PROYECTO_EMPRESA");
+
+            entity.HasOne(d => d.IdUsuarioNavigation).WithMany(p => p.Gep3Proyectos)
+                .HasForeignKey(d => d.IdUsuario)
+                .HasConstraintName("FK_PROYECTO_USUARIO");
+        });
+
+        modelBuilder.Entity<Gep4Subproyecto>(entity =>
+        {
+            entity.HasKey(e => e.IdSubProyecto).HasName("PK__GEP_4_SU__9E5758C474503851");
+
+            entity.ToTable("GEP_4_SUBPROYECTO");
+
+            entity.Property(e => e.IdSubProyecto)
+                .ValueGeneratedNever()
+                .HasColumnName("ID_SUB_PROYECTO");
+            entity.Property(e => e.CodAbrv)
+                .HasMaxLength(8)
+                .IsUnicode(false)
+                .HasColumnName("COD_ABRV");
+            entity.Property(e => e.Defecto).HasColumnName("DEFECTO");
+            entity.Property(e => e.Descripcion)
+                .HasMaxLength(250)
+                .IsUnicode(false)
+                .HasColumnName("DESCRIPCION");
+            entity.Property(e => e.FecAct)
+                .HasColumnType("datetime")
+                .HasColumnName("FEC_ACT");
+            entity.Property(e => e.FecReg)
+                .HasColumnType("datetime")
+                .HasColumnName("FEC_REG");
+            entity.Property(e => e.Flag).HasColumnName("FLAG");
+            entity.Property(e => e.IdEmpresa).HasColumnName("ID_EMPRESA");
+            entity.Property(e => e.IdGe).HasColumnName("ID_GE");
+            entity.Property(e => e.IdProyecto).HasColumnName("ID_PROYECTO");
+            entity.Property(e => e.NomAbrv)
+                .HasMaxLength(300)
+                .IsUnicode(false)
+                .HasColumnName("NOM_ABRV");
+            entity.Property(e => e.Nombre)
+                .HasMaxLength(50)
+                .IsUnicode(false)
+                .HasColumnName("NOMBRE");
+            entity.Property(e => e.Sigla)
+                .HasMaxLength(5)
+                .IsUnicode(false)
+                .HasColumnName("SIGLA");
+            entity.Property(e => e.UsuAct).HasColumnName("USU_ACT");
+            entity.Property(e => e.UsuReg).HasColumnName("USU_REG");
+
+            entity.HasOne(d => d.IdEmpresaNavigation).WithMany(p => p.Gep4Subproyectos)
+                .HasForeignKey(d => d.IdEmpresa)
+                .HasConstraintName("FK_SUBPROYECTO_EMPRESA");
+
+            entity.HasOne(d => d.IdProyectoNavigation).WithMany(p => p.Gep4Subproyectos)
+                .HasForeignKey(d => d.IdProyecto)
+                .HasConstraintName("FK_SUBPROYECTO_PROYECTO");
+
+            entity.HasOne(d => d.UsuActNavigation).WithMany(p => p.Gep4SubproyectoUsuActNavigations)
+                .HasForeignKey(d => d.UsuAct)
+                .HasConstraintName("FK_SUBPROYECTO_USUARIO_ACT");
+
+            entity.HasOne(d => d.UsuRegNavigation).WithMany(p => p.Gep4SubproyectoUsuRegNavigations)
+                .HasForeignKey(d => d.UsuReg)
+                .HasConstraintName("FK_SUBPROYECTO_USUARIO_REG");
+        });
+
         modelBuilder.Entity<ItemCenter>(entity =>
         {
             entity.HasKey(e => e.IdItemCenter).HasName("PK__ITEM_CEN__23CAA599E0FF6985");
@@ -630,8 +766,10 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.IdMedio).HasColumnName("ID_MEDIO");
             entity.Property(e => e.IdNivel).HasColumnName("ID_NIVEL");
             entity.Property(e => e.IdPrioridad).HasColumnName("ID_PRIORIDAD");
+            entity.Property(e => e.IdProyecto).HasColumnName("ID_PROYECTO");
             entity.Property(e => e.IdReceptor).HasColumnName("ID_RECEPTOR");
             entity.Property(e => e.IdRef).HasColumnName("ID_REF");
+            entity.Property(e => e.IdSubProyecto).HasColumnName("ID_SUB_PROYECTO");
             entity.Property(e => e.IdTipo).HasColumnName("ID_TIPO");
             entity.Property(e => e.NSerie)
                 .HasMaxLength(50)
@@ -858,6 +996,12 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.IdEmpresa).HasColumnName("ID_EMPRESA");
             entity.Property(e => e.Empresa).HasColumnName("EMPRESA");
             entity.Property(e => e.SiglaEmpresa).HasColumnName("SIGLA_EMPRESA");
+            entity.Property(e => e.IdProyecto).HasColumnName("ID_PROYECTO");
+            entity.Property(e => e.Proyecto).HasColumnName("PROYECTO");
+            entity.Property(e => e.SiglaProyecto).HasColumnName("SIGLA_PROYECTO");
+            entity.Property(e => e.IdSubProyecto).HasColumnName("ID_SUB_PROYECTO");
+            entity.Property(e => e.SubProyecto).HasColumnName("SUBPROYECTO");
+            entity.Property(e => e.SiglaSubProyecto).HasColumnName("SIGLA_SUB_PROYECTO");
             entity.Property(e => e.IdReceptor).HasColumnName("ID_RECEPTOR");
             entity.Property(e => e.Receptor).HasColumnName("RECEPTOR");
             entity.Property(e => e.IdMedio).HasColumnName("ID_MEDIO");

@@ -23,6 +23,8 @@ builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 builder.Services.AddScoped<IGeneralRepository, GeneralRepository>();
 builder.Services.AddScoped<ICenterTicketRepository, CenterTicketRepository>();
 builder.Services.AddScoped<IItemCenterRepository, ItemCenterRepository>();
+builder.Services.AddScoped<IProyectoRepository, ProyectoRepository>();
+builder.Services.AddScoped<ISubProyectoRepository,  SubProyectoRepository>();
 builder.Services.AddScoped<IExcelService<TbControlTicketTareaResponse>, ExcelTarea>();
 builder.Services.AddScoped<IPdfService<TbControlTicketTareaResponse>, PdfTareaService>();
 

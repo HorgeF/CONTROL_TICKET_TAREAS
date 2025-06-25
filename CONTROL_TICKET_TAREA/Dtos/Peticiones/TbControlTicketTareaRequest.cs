@@ -15,6 +15,14 @@ namespace CONTROL_TICKET_TAREA.Dtos.Peticiones
         [Range(1, int.MaxValue, ErrorMessage = "Seleccionar una empresa / entidad.")]
         public int IdEmpresa { get; set; }
 
+        [Required(ErrorMessage = "Seleccionar un proyecto.")]
+        [Range(1, int.MaxValue, ErrorMessage = "Seleccionar un proyecto.")]
+        public int? IdProyecto { get; set; }
+
+        [Required(ErrorMessage = "Seleccionar un sub proyecto.")]
+        [Range(1, int.MaxValue, ErrorMessage = "Seleccionar un sub proyecto.")]
+        public int? IdSubProyecto { get; set; }
+
         public DateTime FechaTicketTarea { get; set; }
 
         [Range(1, int.MaxValue, ErrorMessage = "Seleccionar un receptor.")]

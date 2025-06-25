@@ -157,6 +157,12 @@ public partial class Usuario
 
     public virtual ICollection<Gep2Empresa> Gep2EmpresaUsuRegNavigations { get; set; } = new List<Gep2Empresa>();
 
+    public virtual ICollection<Gep3Proyecto> Gep3Proyectos { get; set; } = new List<Gep3Proyecto>();
+
+    public virtual ICollection<Gep4Subproyecto> Gep4SubproyectoUsuActNavigations { get; set; } = new List<Gep4Subproyecto>();
+
+    public virtual ICollection<Gep4Subproyecto> Gep4SubproyectoUsuRegNavigations { get; set; } = new List<Gep4Subproyecto>();
+
     public virtual ICollection<ItemCenter> ItemCenterUsuActNavigations { get; set; } = new List<ItemCenter>();
 
     public virtual ICollection<ItemCenter> ItemCenterUsuRegNavigations { get; set; } = new List<ItemCenter>();

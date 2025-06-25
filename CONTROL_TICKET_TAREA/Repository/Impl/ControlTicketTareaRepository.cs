@@ -1,4 +1,5 @@
 ﻿using CONTROL_TICKET_TAREA.Data;
+using CONTROL_TICKET_TAREA.Dtos;
 using CONTROL_TICKET_TAREA.Dtos.Filtros;
 using CONTROL_TICKET_TAREA.Dtos.Peticiones;
 using CONTROL_TICKET_TAREA.Dtos.Respuestas;
@@ -23,23 +24,18 @@ namespace CONTROL_TICKET_TAREA.Repository.Impl
                 ? string.Join(",", filtro.IdsReceptores)
                 : "%";
 
-            if(filtro.PrioridadInd == null && filtro.NivelInd == null)
-            {
-                string prioridadesCsv = filtro.Prioridad != null && filtro.Prioridad.Any()
-                    ? string.Join(",", filtro.Prioridad)
-                    : "%";
+            // Prioridades
+            string? prioridadesCsv = filtro.PrioridadInd != null
+                ? filtro.PrioridadInd.ToString()
+                : (filtro.Prioridad != null && filtro.Prioridad.Count != 0 ? string.Join(",", filtro.Prioridad) : "%");
 
-                string nivelesCsv = filtro.Nivel != null && filtro.Nivel.Any()
-                    ? string.Join(",", filtro.Nivel)
-                    : "%";
-
-                return await _context.TbControlTicketTareaResponses
-                .FromSqlInterpolated($"EXEC SP_LISTAR_TICKET_TAREA @ID_PRIORIDAD={prioridadesCsv},@ID_NIVEL={nivelesCsv},@ID_RESPONSABLE={receptoresCsv},@ID_ESTADO={IdEstado}")
-                .ToListAsync();
-            }
+            // Niveles
+            string? nivelesCsv = filtro.NivelInd != null
+                ? filtro.NivelInd.ToString()
+                : (filtro.Nivel != null && filtro.Nivel.Count != 0 ? string.Join(",", filtro.Nivel) : "%");
 
             return await _context.TbControlTicketTareaResponses
-                .FromSqlInterpolated($"EXEC SP_LISTAR_TICKET_TAREA @ID_PRIORIDAD={filtro.PrioridadInd},@ID_NIVEL={filtro.NivelInd},@ID_RESPONSABLE={receptoresCsv},@ID_ESTADO={IdEstado}")
+                .FromSqlInterpolated($"EXEC SP_LISTAR_TICKET_TAREA_TEST @ID_PRIORIDAD={prioridadesCsv},@ID_NIVEL={nivelesCsv},@ID_RESPONSABLE={receptoresCsv},@ID_ESTADO={IdEstado}")
                 .ToListAsync();
         }
 
@@ -166,7 +162,7 @@ namespace CONTROL_TICKET_TAREA.Repository.Impl
         public async Task<TbControlTicketTareaResponse?> ObtenerTicketTarea(int idTarea)
         {
             var result = await _context.TbControlTicketTareaResponses
-                .FromSqlRaw("EXEC SP_OBTENER_TICKET_TAREA @p0", idTarea)
+                .FromSqlRaw("EXEC SP_LISTAR_TICKET_TAREA_TEST @p0", idTarea)
                 .AsNoTracking()
                 .ToListAsync();
 

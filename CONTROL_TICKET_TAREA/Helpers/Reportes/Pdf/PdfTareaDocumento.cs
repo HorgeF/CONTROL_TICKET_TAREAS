@@ -111,6 +111,8 @@ namespace CONTROL_TICKET_TAREA.Helpers.Reportes.Pdf
                         columns.RelativeColumn(1); // ID
                         columns.RelativeColumn(1); // GE
                         columns.RelativeColumn(1); // EMP
+                        columns.RelativeColumn(1); // PROY
+                        columns.RelativeColumn(1); // SUB_PROY
                         columns.RelativeColumn(1.7f); // FEC. REG
                         columns.RelativeColumn(2); // TÉCNICO
                         columns.RelativeColumn(2.5f); // CONTACTO
@@ -127,7 +129,7 @@ namespace CONTROL_TICKET_TAREA.Helpers.Reportes.Pdf
 
                     var columnas = new[]
                     {
-                        "ID", "GE", "EMP", "FEC. REG.", "TÉCNICO", "CONTACTO", "PRI", "NIV",
+                        "ID", "GE", "EMP","PRO", "SPRO" , "FEC. REG.", "TÉCNICO", "CONTACTO", "PRI", "NIV",
                         "ITEMS", "SERIE", "TIPO", "ITEM", "DESCRIPCIÓN", "TICKET", "ESTADO"
                     };
 
@@ -154,6 +156,8 @@ namespace CONTROL_TICKET_TAREA.Helpers.Reportes.Pdf
                             DibujarFila(table, tarea.IdTarea.ToString());
                             DibujarFila(table, tarea.SiglaGE);
                             DibujarFila(table, tarea.SiglaEmpresa);
+                            DibujarFila(table, tarea.SiglaProyecto);
+                            DibujarFila(table, tarea.SiglaSubProyecto);
                             DibujarFila(table, $"{tarea.FecReg:dd-MM-yyyy}");
                             DibujarFila(table, tarea.Receptor);
                             DibujarFila(table, tarea.Contacto);

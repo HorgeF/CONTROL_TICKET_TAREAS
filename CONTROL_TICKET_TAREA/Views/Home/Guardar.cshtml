@@ -39,6 +39,22 @@
                     </div>
 
                     <div class="col-md-4">
+                        <label for="cboProyecto" class="form-label">Proyecto</label>
+                        <select asp-for="@Model.IdProyecto" class="form-select" id="cboProyecto" asp-items="@ViewBag.Proyectos">
+                            <option selected value="0">-SELECCIONAR-</option>
+                        </select>
+                        <span asp-validation-for="@Model.IdProyecto" class="text-danger pb-2"></span>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label for="cboSubProyecto" class="form-label">Sub Proyecto</label>
+                        <select asp-for="@Model.IdSubProyecto" class="form-select" id="cboSubProyecto" asp-items="@ViewBag.SubProyectos">
+                            <option selected value="0">-SELECCIONAR-</option>
+                        </select>
+                        <span asp-validation-for="@Model.IdSubProyecto" class="text-danger pb-2"></span>
+                    </div>
+
+                    <div class="col-md-6">
                         <label for="txtResponsable" class="form-label">Responsable</label>
                         <input asp-for="@Model.Receptor" type="text" class="form-control text-uppercase" id="txtResponsable" autocomplete="off" placeholder="Buscar responsable..." />
                         <input asp-for="@Model.IdReceptor" type="hidden" id="IdReceptor" name="IdReceptor" />

@@ -97,6 +97,8 @@ public partial class CenterTicket
 
     public string? MensajeCierre { get; set; }
 
+    public DateTime? FechaSustentado { get; set; }
+
     public virtual Usuario? IdUsuarioNavigation { get; set; }
 
     public virtual Usuario? UsuActNavigation { get; set; }

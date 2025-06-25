@@ -8,8 +8,14 @@
         public string? SiglaGE { get; set; } = string.Empty;
         public int IdEmpresa { get; set; }
         public string? Empresa { get; set; } = string.Empty;
-        public DateTime FechaTicketTarea { get; set; }
         public string? SiglaEmpresa { get; set; } = string.Empty;
+        public int? IdProyecto { get; set; }
+        public string? Proyecto { get; set; } = string.Empty;
+        public string? SiglaProyecto { get; set; } = string.Empty;
+        public int? IdSubProyecto { get; set; }
+        public string? SubProyecto { get; set; } = string.Empty;
+        public string? SiglaSubProyecto { get; set; } = string.Empty;
+        public DateTime FechaTicketTarea { get; set; }
         public int IdReceptor { get; set; }
         public string? Receptor { get; set; } = string.Empty;
         public int IdMedio { get; set; }

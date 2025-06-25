@@ -171,13 +171,15 @@
                     <th scope="col" style="width: 1%">N°</th>
                     <th scope="col" class="text-nowrap">GE</th>
                     <th scope="col" class="text-nowrap">EMP</th>
+                    <th scope="col" class="text-nowrap">PRO</th>
+                    <th scope="col" class="text-nowrap">SPRO</th>
                     <th scope="col" class="text-nowrap">FEC. REG.</th>
                     <th scope="col" class="text-nowrap">TÉCNICO</th>
                     <th scope="col" class="text-nowrap">MEDIO</th>
                     <th scope="col" class="text-nowrap">CONTACTO</th>
                     <th scope="col">PRI</th>
                     <th scope="col">NIV</th>
-                    <th scope="col" class="text-nowrap">ITEMS</th>
+                    <th scope="col" style="width: 1%;">ITEMS</th>
                     <th scope="col">SERIE</th>
                     <th scope="col">TIPO</th>
                     <th scope="col">ITEM</th>
@@ -196,6 +198,8 @@
                             <td>@item.IdTarea</td>
                             <td>@item.SiglaGE</td>
                             <td>@item.SiglaEmpresa</td>
+                            <td>@item.SiglaProyecto</td>
+                            <td>@item.SiglaSubProyecto</td>
                             <td class="text-nowrap">@($"{item.FecReg:dd-MM-yyyy}")</td>
                             <td class="text-nowrap">@item.Receptor</td>
                             <td class="text-nowrap">@item.Medio</td>
@@ -218,7 +222,7 @@
                             <td>@item.NSerie</td>
                             <td>@item.Tipo</td>
                             <td>@item.IdItemCenterDesc</td>
-                            <td>@item.Descripcion</td>
+                            <td style="width: 20%">@item.Descripcion</td>
                             <td class="text-nowrap">
                                 @if (string.IsNullOrWhiteSpace(item.CodTicket))
                                 {
@@ -239,7 +243,7 @@
                 else
                 {
                     <tr>
-                        <td colspan="16" class="text-center text-muted">No se encontraron resultados.</td>
+                        <td colspan="18" class="text-center text-muted">No se encontraron resultados.</td>
                     </tr>
                 }
             </tbody>
