@@ -8,7 +8,7 @@
 
   <ItemGroup>
     <Folder Include="Services\" />
-    <Folder Include="Views\Home\NewFolder\" />
+    <Folder Include="Views\TicketTarea\NewFolder\" />
   </ItemGroup>
 
   <!--Evitar duplicidad de archivos-->

@@ -13,7 +13,7 @@ $(document).on('input', '#txtResponsable', function () {
     suggestions.html('<span class="list-group-item list-group-item-action">Cargando...</span>');
 
     $.ajax({
-        url: "/Home/BuscarResponsables",
+        url: "/Usuario/Buscar",
         type: "GET",
         data: { nombre: nombre },
         success: function (data) {
@@ -65,7 +65,7 @@ $(document).on('input', '#txtGE', function () {
     suggestions.html('<span class="list-group-item list-group-item-action">Cargando...</span>');
 
     $.ajax({
-        url: "/Home/BuscarGE",
+        url: "/GrupoEconomico/Buscar",
         type: "GET",
         data: { nombre: nombre },
         success: function (data) {
@@ -185,7 +185,7 @@ $(document).on('input', '#txtItem', function () {
     suggestions.html('<span class="list-group-item list-group-item-action">Cargando...</span>');
 
     $.ajax({
-        url: "/Home/BuscarItems",
+        url: "/Item/Buscar",
         type: "GET",
         data: { nombre: nombre },
         success: function (data) {

@@ -1,9 +1,9 @@
 ﻿$(document).on('click', '#btnExportarExcelTarea', function () {
     const query = $('#filtroForm').serialize();
-    window.location.href = "/Home/ExportarExcelReporteTarea?" + query;
+    window.location.href = "/TicketTarea/ExportarExcel?" + query;
 });
 
 $(document).on('click', '#btnExportarPdfTarea', function () {
     const query = $('#filtroForm').serialize();
-    window.location.href = "/Home/ExportarPdfReporteTarea?" + query;
+    window.location.href = "/TicketTarea/ExportarPdf?" + query;
 });

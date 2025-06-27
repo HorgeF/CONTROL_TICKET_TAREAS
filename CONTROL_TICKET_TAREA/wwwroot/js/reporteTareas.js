@@ -5,7 +5,7 @@
     const data = $('#filtroForm').serialize();
 
     $.ajax({
-        url: "/Home/GenerarReporteSemanal",
+        url: "/TicketTarea/GenerarReporteSemanal",
         type: "GET",
         data: data,
         beforeSend: function () {

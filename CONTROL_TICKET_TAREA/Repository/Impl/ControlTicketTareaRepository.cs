@@ -35,7 +35,7 @@ namespace CONTROL_TICKET_TAREA.Repository.Impl
                 : (filtro.Nivel != null && filtro.Nivel.Count != 0 ? string.Join(",", filtro.Nivel) : "%");
 
             return await _context.TbControlTicketTareaResponses
-                .FromSqlInterpolated($"EXEC SP_LISTAR_TICKET_TAREA_TEST @ID_PRIORIDAD={prioridadesCsv},@ID_NIVEL={nivelesCsv},@ID_RESPONSABLE={receptoresCsv},@ID_ESTADO={IdEstado}")
+                .FromSqlInterpolated($"EXEC SP_LISTAR_TICKET_TAREA @ID_PRIORIDAD={prioridadesCsv},@ID_NIVEL={nivelesCsv},@ID_RESPONSABLE={receptoresCsv},@ID_ESTADO={IdEstado}")
                 .ToListAsync();
         }
 
@@ -188,28 +188,6 @@ namespace CONTROL_TICKET_TAREA.Repository.Impl
 
             _context.TbControlTicketTareas.Update(entidad);
             await _context.SaveChangesAsync();
-        }
-
-        public async Task<bool> ActualizarEstado(string codTicket, int idNuevoEstado)
-        {
-            var entidad = await _context.TbControlTicketTareas
-                .FirstOrDefaultAsync(t => t.CodTicket == codTicket);
-
-            if(entidad == null)
-            {
-                _logger.LogWarning("No se encontro la tarea con el cod ticket: '{@codTicket}' - {Time}", codTicket,DateTime.Now);
-                return false;
-            }
-
-            entidad.IdEstado = idNuevoEstado;
-
-            // Fecha de actualización será usado como fecha de cierre
-            if (idNuevoEstado == ESTADO_CERRADO)
-                entidad.FecCierre = DateTime.Now;
-
-            await _context.SaveChangesAsync();
-            _logger.LogInformation("Se logro actualizar el estado de la tarea con el codTicket: '{@codTicket}' - {Time}", codTicket, DateTime.Now);
-            return true;
         }
 
         public async Task<int> ObtenerEstado(int idTarea)

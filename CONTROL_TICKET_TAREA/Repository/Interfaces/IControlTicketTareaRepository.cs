@@ -17,6 +17,5 @@ namespace CONTROL_TICKET_TAREA.Repository.Interfaces
         Task<TbControlTicketTareaResponse?> ObtenerTicketTarea(int idTarea);
         Task Insertar(TbControlTicketTarea entidad);
         Task Actualizar(TbControlTicketTarea entidad);
-        Task<bool> ActualizarEstado(string codTicket, int idNuevoEstado);
     }
 }

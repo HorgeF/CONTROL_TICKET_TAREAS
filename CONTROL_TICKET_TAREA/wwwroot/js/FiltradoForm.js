@@ -75,56 +75,6 @@ $('button[data-target]').on('click', function () {
     $('#filtroForm')[0].submit();
 });
 
-
-$("#txtFiltroReceptor").on('input', function () {
-    let suggestions = $('#suggestions-filtroReceptor');
-    let nombre = $(this).val();
-    $('#IdFiltroReceptor').val("0");
-
-    if (nombre.length < 3) {
-        suggestions.empty();
-        return;
-    }
-
-    suggestions.html('<span class="list-group-item list-group-item-action">Cargando...</span>');
-
-    $.ajax({
-        url: "/Home/BuscarResponsables",
-        type: "GET",
-        data: { nombre: nombre },
-        success: function (data) {
-            suggestions.empty();
-
-            if (data.length > 0) {
-                data.forEach(item => {
-                    suggestions.append(`<a href="#" class="list-group-item list-group-item-action" data-id="${item.idUsuario}">${item.nombre}</a>`);
-                });
-            } else {
-                suggestions.append('<span class="list-group-item list-group-item-action">Sin resultados</span>');
-            }
-        },
-        error: function (err) {
-            suggestions.html('<span class="list-group-item list-group-item-action">Error al buscar...</span>');
-            console.error("Error al buscar responsables: " + err);
-        }
-    });
-});
-
-// Selección con click
-$(document).on('click', '#suggestions-filtroReceptor a', function (e) {
-    e.preventDefault();
-    $('#txtFiltroReceptor').val($(this).text());
-    $('#IdFiltroReceptor').val($(this).data('id'));
-    $('#suggestions-filtroReceptor').empty();
-});
-
-// Ocultar sugerencias al hacer clic fuera
-$(document).on('click', function (e) {
-    if (!$(e.target).closest('#suggestions-filtroReceptor, #txtFiltroReceptor').length) {
-        $('#suggestions-filtroReceptor').empty();
-    }
-});
-
 $("#cboFiltroEstado").on('change', function () {
 
     $('input[name="prioridadInd"], input[name="nivelInd"]').prop('checked', false);

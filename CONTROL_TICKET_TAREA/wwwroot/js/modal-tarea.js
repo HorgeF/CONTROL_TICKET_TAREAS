@@ -4,7 +4,7 @@ $(document).on('click','#btnNuevaTarea',function () {
     const $spinner = $btn.find('.spinner-border');
 
     $.ajax({
-        url: "/Home/FormTicketTarea/0",
+        url: "/TicketTarea/FormGuardar/0",
         type: "GET",
         beforeSend: function () {
             $btn.prop('disabled', true);
@@ -106,7 +106,7 @@ $(document).on(evento, '.fila-editable', function () {
     $('.fila-editable').removeClass('loading-border').addClass('disabled-row pe-none');
     $fila.removeClass('disabled-row').addClass('loading-border');
 
-    $.get(`/Home/FormTicketTarea/${id}`, function (modalHtml) {
+    $.get(`/TicketTarea/FormGuardar/${id}`, function (modalHtml) {
         $('#guardarTareaModalContainer').html(modalHtml);
         const modalEl = document.getElementById('guardarTareaModal');
         if (modalEl) {

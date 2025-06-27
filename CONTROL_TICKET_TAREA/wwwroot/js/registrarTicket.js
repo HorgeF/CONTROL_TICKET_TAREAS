@@ -22,7 +22,7 @@ $(document).on("click", ".btn-registrar-ticket", function (e) {
             const $spinner = $btnRegistrarTicketPorId.find(".spinner-border");
 
             $.ajax({
-                url: "/Home/RegistrarTicket",
+                url: "/TicketTarea/RegistrarTicket",
                 type: "POST",
                 data: { idTarea: idTarea },
                 beforeSend: function () {

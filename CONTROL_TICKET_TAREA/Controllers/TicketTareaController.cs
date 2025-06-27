@@ -14,7 +14,7 @@ using System.Diagnostics;
 
 namespace CONTROL_TICKET_TAREA.Controllers
 {
-    public class HomeController(
+    public class TicketTareaController(
         IControlTicketTareaRepository controlTicketTareaRepository,
         IGrupoEconomicoRepository grupoEconomicoRepository,
         IEmpresaRepository empresaRepository,
@@ -114,7 +114,7 @@ namespace CONTROL_TICKET_TAREA.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> ExportarExcelReporteTarea(FiltroControlTicketTarea filtro)
+        public async Task<IActionResult> ExportarExcel(FiltroControlTicketTarea filtro)
         {
             var reporteTareas = await _controlTicketTareaRepository.ListarReporteTareasSemanal(filtro);
             var bytes = _excelTarea.GenerarExcel(reporteTareas);
@@ -124,7 +124,7 @@ namespace CONTROL_TICKET_TAREA.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> ExportarPdfReporteTarea(FiltroControlTicketTarea filtro)
+        public async Task<IActionResult> ExportarPdf(FiltroControlTicketTarea filtro)
         {
             var reporteTareas = await _controlTicketTareaRepository.ListarReporteTareasSemanal(filtro);
             var nombresReceptores = new List<string>();
@@ -140,29 +140,8 @@ namespace CONTROL_TICKET_TAREA.Controllers
             return File(bytes, "application/pdf", $"Reporte tareas - {fechaRegistro}.pdf");
         }
 
-        [HttpGet]
-        public async Task<IActionResult> BuscarResponsables(string nombre)
-        {
-            var responsables = await _usuarioRepository.BuscarResponsables(nombre);
-            return Json(responsables);
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> BuscarGE(string nombre)
-        {
-            var gruposEconomicos = await _grupoEconomicoRepository.BuscarGE(nombre);
-            return Json(gruposEconomicos);
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> BuscarItems(string nombre)
-        {
-            var items = await _itemCenterRepository.BuscarItems(nombre);
-            return Json(items);
-        }
-
-        [HttpGet("/Home/FormTicketTarea/{idTarea}")]
-        public async Task<IActionResult> FormTicketTarea(int idTarea)
+        [HttpGet("/TicketTarea/FormGuardar/{idTarea}")]
+        public async Task<IActionResult> FormGuardar(int idTarea)
         {
             var ticketTarea = new TbControlTicketTareaRequest();
 
@@ -288,16 +267,6 @@ namespace CONTROL_TICKET_TAREA.Controllers
             await _controlTicketTareaRepository.Actualizar(ticketTarea.ToRequest().ToEntity());
 
             return Json(new { ticketTarea.CodTicket });
-        }
-
-        [HttpPatch("/api/ticket-tarea/actualizar-estado")]
-        public async Task<IActionResult> ActualizarEstado([FromBody] TbControlTicketTareaEstadoRequest peticion)
-        {
-            bool estaActualizado = await _controlTicketTareaRepository.ActualizarEstado(peticion.CodTicket, peticion.IdEstado);
-            if (!estaActualizado)
-                return BadRequest(new { mensaje = "No se logro actualizar el ticket" });
-
-            return Ok(new { mensaje = "Estado de la tarea ticket actualizado" });
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
