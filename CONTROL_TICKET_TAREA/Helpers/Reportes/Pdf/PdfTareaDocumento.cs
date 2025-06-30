@@ -173,7 +173,7 @@ namespace CONTROL_TICKET_TAREA.Helpers.Reportes.Pdf
                         }
                     } else
                     {
-                        table.Cell().ColumnSpan(15)
+                        table.Cell().ColumnSpan(17)
                             .Border(0.5f).BorderColor(colorBorder)
                             .AlignCenter().PaddingVertical(10)
                             .Text("No se encontraron tareas")

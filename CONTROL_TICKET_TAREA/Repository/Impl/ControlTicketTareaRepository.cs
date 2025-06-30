@@ -1,5 +1,4 @@
 ﻿using CONTROL_TICKET_TAREA.Data;
-using CONTROL_TICKET_TAREA.Dtos;
 using CONTROL_TICKET_TAREA.Dtos.Filtros;
 using CONTROL_TICKET_TAREA.Dtos.Peticiones;
 using CONTROL_TICKET_TAREA.Dtos.Respuestas;
@@ -9,10 +8,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CONTROL_TICKET_TAREA.Repository.Impl
 {
-    public class ControlTicketTareaRepository(AppDbContext context, ILogger<ControlTicketTareaRepository> logger) : IControlTicketTareaRepository
+    public class ControlTicketTareaRepository(AppDbContext context) : IControlTicketTareaRepository
     {
         private readonly AppDbContext _context = context;
-        private readonly ILogger<ControlTicketTareaRepository> _logger = logger;
 
         private const int ESTADO_CERRADO = 1269;
 
