@@ -62,6 +62,7 @@ namespace CONTROL_TICKET_TAREA.Mappers
                 V_NOMBRE_CONTACTO = request.Contacto,
                 V_ESTADO_TICKET = 1057, // REGISTRADO
                 V_ID_MEDIO_CONTACTO = request.IdMedio,
+                V_ID_TIPO = request.IdTipo,
                 V_ID_PRIORIDAD = request.IdPrioridad,
                 V_FECHA_TICKET = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
             };

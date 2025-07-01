@@ -120,7 +120,7 @@ namespace CONTROL_TICKET_TAREA.Helpers.Reportes.Pdf
                         columns.RelativeColumn(0.8f); // NIV
                         columns.RelativeColumn(1f); // ITEMS
                         columns.RelativeColumn(2); // SERIE
-                        columns.RelativeColumn(2.5f); // TIPO
+                        columns.RelativeColumn(2.7f); // TIPO
                         columns.RelativeColumn(3.4f); // ITEM
                         columns.RelativeColumn(6.5f); // DESCRIPCIÓN
                         columns.RelativeColumn(2); // TICKET

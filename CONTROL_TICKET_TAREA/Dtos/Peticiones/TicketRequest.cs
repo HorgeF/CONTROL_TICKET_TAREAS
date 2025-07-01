@@ -29,6 +29,7 @@
         public int V_ID_SUBPROYECTO { get; set; } = 0;
         public int V_ID_SITE { get; set; } = 0;
         public int V_ID_MEDIO_CONTACTO { get; set; } = 0;
+        public int V_ID_TIPO { get; set; } = 0;
         public int V_ID_PRIORIDAD { get; set; } = 0;
         public int V_ID_NIVEL { get; set; } = 0;
         public string? V_FECHA_TICKET { get; set; }

@@ -142,7 +142,8 @@ namespace CONTROL_TICKET_TAREA.Repository.Impl
                 @V_ID_MOTIVO = {ticket.V_ID_MOTIVO}, 
                 @V_ID_PROYECTO = {ticket.V_ID_PROYECTO}, 
                 @V_ID_SUBPROYECTO = {ticket.V_ID_SUBPROYECTO}, 
-                @V_ID_SITE = {ticket.V_ID_SITE}, 
+                @V_ID_SITE = {ticket.V_ID_SITE},
+                @V_ID_TIPO = {ticket.V_ID_TIPO},
                 @V_ID_MEDIO_CONTACTO = {ticket.V_ID_MEDIO_CONTACTO}, 
                 @V_ID_PRIORIDAD = {ticket.V_ID_PRIORIDAD}, 
                 @V_ID_NIVEL = {ticket.V_ID_NIVEL}, 
@@ -160,7 +161,7 @@ namespace CONTROL_TICKET_TAREA.Repository.Impl
         public async Task<TbControlTicketTareaResponse?> ObtenerTicketTarea(int idTarea)
         {
             var result = await _context.TbControlTicketTareaResponses
-                .FromSqlRaw("EXEC SP_LISTAR_TICKET_TAREA_TEST @p0", idTarea)
+                .FromSqlRaw("EXEC SP_LISTAR_TICKET_TAREA @p0", idTarea)
                 .AsNoTracking()
                 .ToListAsync();
 
