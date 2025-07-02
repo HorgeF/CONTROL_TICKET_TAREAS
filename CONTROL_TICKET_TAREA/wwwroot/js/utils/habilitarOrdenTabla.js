@@ -42,8 +42,24 @@ TablaUtils.habilitarOrdenTabla = function ($tabla) {
             const aText = $(a).children().eq(index).text().trim();
             const bText = $(b).children().eq(index).text().trim();
 
-            const aVal = parseFloat(aText.replace(',', '.')) || aText.toLowerCase();
-            const bVal = parseFloat(bText.replace(',', '.')) || bText.toLowerCase();
+            let aVal = aText;
+            let bVal = bText;
+
+            // Intenta parsear como fecha (formato dd/MM/yyyy o dd-MM-yyyy)
+            const fechaRegex = /^(\d{2})[\/\-](\d{2})[\/\-](\d{4})$/;
+
+            if (fechaRegex.test(aText) && fechaRegex.test(bText)) {
+                const aParts = aText.match(fechaRegex);
+                const bParts = bText.match(fechaRegex);
+                if (aParts && bParts) {
+                    aVal = new Date(aParts[3], aParts[2] - 1, aParts[1]); // yyyy, MM-1, dd
+                    bVal = new Date(bParts[3], bParts[2] - 1, bParts[1]);
+                }
+            } else {
+                // Fallback a número o texto
+                aVal = parseFloat(aText.replace(',', '.')) || aText.toLowerCase();
+                bVal = parseFloat(bText.replace(',', '.')) || bText.toLowerCase();
+            }
 
             if (aVal < bVal) return nuevoEstado === 'asc' ? -1 : 1;
             if (aVal > bVal) return nuevoEstado === 'asc' ? 1 : -1;
